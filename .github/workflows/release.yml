@@ -32,7 +32,7 @@ jobs:
         run: pnpm install
 
       - name: Build Packages
-        run: pnpm run build --filter create-headless
+        run: pnpm run build
 
       - name: Create Release Pull Request or Publish to npm
         id: changesets
