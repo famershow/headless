@@ -3,6 +3,9 @@
   "license": "MIT",
   "version": "0.0.1",
   "packageManager": "pnpm@8.6.2",
+  "workspaces": [
+    "packages/cli"
+  ],
   "scripts": {
     "build": "turbo build",
     "dev": "turbo dev",
