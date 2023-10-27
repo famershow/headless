@@ -1,0 +1,21 @@
+{
+  "name": "create-headless",
+  "type": "module",
+  "version": "0.0.4",
+  "main": "dist/index.cjs",
+  "bin": {
+    "create-headless": "dist/index.cjs"
+  },
+  "scripts": {
+    "dev": "tsup index.ts --watch",
+    "build": "tsup index.ts",
+    "version": "pnpm run build && changeset version"
+  },
+  "devDependencies": {
+    "typescript": "^5.2.2"
+  },
+  "dependencies": {
+    "@clack/prompts": "^0.7.0",
+    "colors": "^1.4.0"
+  }
+}

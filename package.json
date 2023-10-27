@@ -1,0 +1,17 @@
+{
+  "name": "headless.build",
+  "license": "MIT",
+  "version": "0.0.1",
+  "packageManager": "pnpm@8.6.2",
+  "scripts": {
+    "build": "turbo build",
+    "dev": "turbo dev",
+    "changeset": "changeset add",
+    "version": "changeset version"
+  },
+  "devDependencies": {
+    "@changesets/cli": "^2.26.2",
+    "tsup": "^7.2.0",
+    "turbo": "^1.10.16"
+  }
+}
