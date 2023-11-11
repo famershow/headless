@@ -7,6 +7,7 @@ import recursiveReaddir from "recursive-readdir";
 import fse from "fs-extra";
 import { template_options } from "~/consts";
 import { cancel } from "~/utils";
+import { Context } from "~/types";
 
 export const IGNORED_TEMPLATE_DIRECTORIES = [".git", "node_modules"];
 
@@ -38,7 +39,9 @@ async function getDirectoryFilesRecursive(dir: string) {
   return files.map((f) => stripDirectoryFromPath(dir, f));
 }
 
-export default async function template(dir: string) {
+export default async function template(ctx: Context) {
+  const { name } = ctx;
+
   const template =
     template_options.length === 1
       ? template_options[0].value
@@ -72,10 +75,10 @@ export default async function template(dir: string) {
     tempDir = path.resolve(result.localTemplateDirectory);
   }
 
-  await ensureDirectory(dir);
+  await ensureDirectory(name);
 
   let files1 = await getDirectoryFilesRecursive(tempDir);
-  let files2 = await getDirectoryFilesRecursive(dir);
+  let files2 = await getDirectoryFilesRecursive(name);
   let collisions = files1
     .filter((f) => files2.includes(f))
     .sort((a, b) => a.localeCompare(b));
@@ -105,7 +108,7 @@ export default async function template(dir: string) {
     }
   }
 
-  await fse.copy(tempDir, dir, {
+  await fse.copy(tempDir, name, {
     filter(src, dest) {
       // We never copy .git/ or node_modules/ directories since it's highly
       // unlikely we want them copied

@@ -1,12 +1,13 @@
 #!/usr/bin/env node
 
-import { projectName, intro, outro, template } from "./src/steps";
+import steps from "~/steps";
+import { Context } from "~/types";
+import { generateName } from "~/utils";
 
-async function main() {
-  intro();
-  const name = String(await projectName());
-  await template(name);
-  outro(name);
-}
+const main = async (ctx: Context = { name: generateName() }) => {
+  for (const step of steps) {
+    await step(ctx);
+  }
+};
 
 main();

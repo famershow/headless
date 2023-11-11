@@ -3,4 +3,4 @@ import outro from "./outro";
 import projectName from "./project-name";
 import template from "./template";
 
-export { projectName, intro, outro, template };
+export default [intro, projectName, template, outro];

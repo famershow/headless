@@ -1,15 +1,7 @@
 import { text } from "@clack/prompts";
 import { directoryExists } from "./template";
-import { adjectives, nouns } from "~/consts";
 import { cancel } from "~/utils";
-
-function generateName(): string {
-  const randomAdjective: string =
-    adjectives[Math.floor(Math.random() * adjectives.length)];
-  const randomName: string = nouns[Math.floor(Math.random() * nouns.length)];
-
-  return `${randomAdjective}-${randomName}`;
-}
+import { Context } from "~/types";
 
 function isValidProjectName(projectName: string) {
   return /^(?:@[a-z\d\-*~][a-z\d\-*._~]*\/)?[a-z\d\-~][a-z\d\-._~]*$/.test(
@@ -17,8 +9,8 @@ function isValidProjectName(projectName: string) {
   );
 }
 
-export default async function projectName() {
-  const defaultValue = generateName();
+export default async function projectName(ctx: Context) {
+  const { name: defaultValue } = ctx;
   const name = await text({
     message: "Where do you want the project?",
     initialValue: defaultValue,

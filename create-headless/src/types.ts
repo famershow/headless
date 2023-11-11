@@ -1,3 +1,7 @@
+export interface Context {
+  name: string;
+}
+
 export interface CopyTemplateOptions {
   debug?: boolean;
   token?: string;
