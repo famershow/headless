@@ -1,0 +1,33 @@
+{
+  "name": "create-headless",
+  "type": "module",
+  "version": "0.0.5",
+  "main": "dist/index.cjs",
+  "bin": {
+    "create-headless": "dist/index.cjs"
+  },
+  "scripts": {
+    "dev": "bun index.ts",
+    "build": "tsup index.ts",
+    "start": "bun dist/index.cjs",
+    "version": "bun run build && changeset version"
+  },
+  "devDependencies": {
+    "@types/fs-extra": "^11.0.4",
+    "@types/gunzip-maybe": "^1.4.2",
+    "@types/recursive-readdir": "^2.2.4",
+    "@types/tar-fs": "^2.0.4",
+    "tsup": "^7.2.0"
+  },
+  "dependencies": {
+    "@clack/core": "^0.3.3",
+    "@clack/prompts": "^0.7.0",
+    "fs-extra": "^11.1.1",
+    "gunzip-maybe": "^1.4.2",
+    "node-fetch": "^3.3.2",
+    "picocolors": "^1.0.0",
+    "proxy-agent": "^6.3.1",
+    "recursive-readdir": "^2.2.3",
+    "tar-fs": "^3.0.4"
+  }
+}
