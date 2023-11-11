@@ -39,10 +39,13 @@ async function getDirectoryFilesRecursive(dir: string) {
 }
 
 export default async function template(dir: string) {
-  const template = await select({
-    message: "Choose a template",
-    options: template_options,
-  });
+  const template =
+    template_options.length === 1
+      ? template_options[0].value
+      : await select({
+          message: "Choose a template",
+          options: template_options,
+        });
 
   cancel(template);
 

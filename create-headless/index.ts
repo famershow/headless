@@ -4,7 +4,9 @@ import { projectName, intro, outro, template } from "./src/steps";
 
 async function main() {
   intro();
-  await template(String(await projectName()));
+  const name = String(await projectName());
+  await template(name);
+  outro(name);
 }
 
-main().then(() => outro());
+main();
