@@ -26,5 +26,5 @@ export default async function projectName(ctx: Context) {
 
   cancel(name);
 
-  return name;
+  ctx.name = String(name);
 }
