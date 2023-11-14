@@ -1,4 +1,4 @@
-import { confirm, log, select, spinner } from "@clack/prompts";
+import { confirm, log, select, spinner, text } from "@clack/prompts";
 import { copyTemplate } from "./copy-template";
 import path from "node:path";
 import fs from "node:fs";
@@ -9,35 +9,7 @@ import { template_options } from "~/consts";
 import { cancel } from "~/utils";
 import { Context } from "~/types";
 
-export const IGNORED_TEMPLATE_DIRECTORIES = [".git", "node_modules"];
-
-export function stripDirectoryFromPath(dir: string, filePath: string) {
-  // Can't just do a regexp replace here since the windows paths mess it up :/
-  let stripped = filePath;
-  if (
-    (dir.endsWith(path.sep) && filePath.startsWith(dir)) ||
-    (!dir.endsWith(path.sep) && filePath.startsWith(dir + path.sep))
-  ) {
-    stripped = filePath.slice(dir.length);
-    if (stripped.startsWith(path.sep)) {
-      stripped = stripped.slice(1);
-    }
-  }
-  return stripped;
-}
-
-async function getDirectoryFilesRecursive(dir: string) {
-  let files = await recursiveReaddir(dir, [
-    (file) => {
-      let strippedFile = stripDirectoryFromPath(dir, file);
-      let parts = strippedFile.split(path.sep);
-      return (
-        parts.length > 1 && IGNORED_TEMPLATE_DIRECTORIES.includes(parts[0])
-      );
-    },
-  ]);
-  return files.map((f) => stripDirectoryFromPath(dir, f));
-}
+const tSpinner = spinner();
 
 export default async function template(ctx: Context) {
   const { name } = ctx;
@@ -51,8 +23,6 @@ export default async function template(ctx: Context) {
         });
 
   cancel(template);
-
-  const tSpinner = spinner();
 
   tSpinner.start();
   tSpinner.message("Creating your project");
@@ -108,20 +78,22 @@ export default async function template(ctx: Context) {
     }
   }
 
-  await fse.copy(tempDir, name, {
-    filter(src, dest) {
-      // We never copy .git/ or node_modules/ directories since it's highly
-      // unlikely we want them copied
-      let file = stripDirectoryFromPath(tempDir, src);
-      let isIgnored = IGNORED_TEMPLATE_DIRECTORIES.includes(file);
-      if (isIgnored) {
-        return false;
-      }
-      return true;
-    },
-  });
-
-  tSpinner.stop("Project created!");
+  await fse
+    .copy(tempDir, name, {
+      filter(src, dest) {
+        // We never copy .git/ or node_modules/ directories since it's highly
+        // unlikely we want them copied
+        let file = stripDirectoryFromPath(tempDir, src);
+        let isIgnored = IGNORED_TEMPLATE_DIRECTORIES.includes(file);
+        if (isIgnored) {
+          return false;
+        }
+        return true;
+      },
+    })
+    .then(() => {
+      tSpinner.stop("Project created!");
+    });
 }
 
 export function directoryExists(p: string) {
@@ -133,8 +105,38 @@ export function directoryExists(p: string) {
   }
 }
 
-export async function ensureDirectory(dir: string) {
+async function ensureDirectory(dir: string) {
   if (!directoryExists(dir)) {
     await fs.promises.mkdir(dir, { recursive: true });
   }
+}
+
+const IGNORED_TEMPLATE_DIRECTORIES = [".git", "node_modules"];
+
+function stripDirectoryFromPath(dir: string, filePath: string) {
+  // Can't just do a regexp replace here since the windows paths mess it up :/
+  let stripped = filePath;
+  if (
+    (dir.endsWith(path.sep) && filePath.startsWith(dir)) ||
+    (!dir.endsWith(path.sep) && filePath.startsWith(dir + path.sep))
+  ) {
+    stripped = filePath.slice(dir.length);
+    if (stripped.startsWith(path.sep)) {
+      stripped = stripped.slice(1);
+    }
+  }
+  return stripped;
+}
+
+async function getDirectoryFilesRecursive(dir: string) {
+  let files = await recursiveReaddir(dir, [
+    (file) => {
+      let strippedFile = stripDirectoryFromPath(dir, file);
+      let parts = strippedFile.split(path.sep);
+      return (
+        parts.length > 1 && IGNORED_TEMPLATE_DIRECTORIES.includes(parts[0])
+      );
+    },
+  ]);
+  return files.map((f) => stripDirectoryFromPath(dir, f));
 }

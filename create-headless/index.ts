@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 
+import { execSync } from "child_process";
 import steps from "~/steps";
 import { Context } from "~/types";
 import { generateName } from "~/utils";
