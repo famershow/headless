@@ -4,7 +4,8 @@
   "version": "0.0.1",
   "packageManager": "pnpm@8.6.2",
   "workspaces": [
-    "packages/cli"
+    "create-headless",
+    "apps/*"
   ],
   "scripts": {
     "build": "turbo build",
