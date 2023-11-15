@@ -1,3 +1,5 @@
 packages:
   - "apps/*"
   - "packages/*"
+  - "templates/hydrogen-theme"
+  - "templates/hydrogen-theme/studio"

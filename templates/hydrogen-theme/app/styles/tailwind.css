@@ -1,0 +1,24 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    font-family: var(--body-font-family), var(--body-font-type);
+    -webkit-font-smoothing: var(--body-font-webkit-font-smoothing);
+    -moz-osx-font-smoothing: var(--body-font-moz-osx-font-smoothing);
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family: var(--heading-font-family), var(--heading-font-type);
+    font-size: theme("fontSize.6xl");
+    font-weight: theme("fontWeight.black");
+    -webkit-font-smoothing: var(--heading-font-webkit-font-smoothing);
+    -moz-osx-font-smoothing: var(--heading-font-moz-osx-font-smoothing);
+  }
+}

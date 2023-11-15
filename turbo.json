@@ -3,6 +3,7 @@
   "pipeline": {
     "build": {},
     "dev": { "cache": false, "persistent": true },
-    "release": {}
+    "release": {},
+    "deploy": {}
   }
 }
