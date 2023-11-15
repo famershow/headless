@@ -4,11 +4,15 @@
   "version": "0.0.1",
   "packageManager": "pnpm@8.6.2",
   "workspaces": [
-    "packages/cli"
+    "packages/cli",
+    "templates/*",
+    "templates/hydrogen-theme/studio"
   ],
   "scripts": {
     "build": "turbo build",
     "dev": "turbo dev",
+    "dev:theme": "turbo dev --filter=hydrogen-theme --filter=sanity-studio",
+    "deploy:studio": "turbo run deploy --filter=sanity-studio",
     "changeset": "changeset add",
     "version": "changeset version"
   },

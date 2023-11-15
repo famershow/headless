@@ -1,0 +1,228 @@
+import {
+  COLLECTION_METAFIELDS_FRAGMENT,
+  MEDIA_FRAGMENT,
+  PRODUCT_CARD_FRAGMENT,
+  PRODUCT_METAFIELDS_FRAGMENT,
+  PRODUCT_VARIANT_FRAGMENT,
+} from "./fragments";
+
+/*
+|--------------------------------------------------------------------------
+| Products Queries
+|--------------------------------------------------------------------------
+*/
+export const PRODUCT_QUERY = `#graphql
+query Product(
+  $country: CountryCode
+  $language: LanguageCode
+  $handle: String!
+  $selectedOptions: [SelectedOptionInput!]!
+) @inContext(country: $country, language: $language) {
+  product(handle: $handle) {
+    id
+    title
+    vendor
+    handle
+    descriptionHtml
+    description
+    ...ProductMetafields
+    options {
+      name
+      values
+    }
+    selectedVariant: variantBySelectedOptions(selectedOptions: $selectedOptions) {
+      ...ProductVariantFragment
+    }
+    media(first: 7) {
+      nodes {
+        ...Media
+      }
+    }
+    variants(first: 1) {
+      nodes {
+        ...ProductVariantFragment
+      }
+    }
+  }
+}
+${MEDIA_FRAGMENT}
+${PRODUCT_VARIANT_FRAGMENT}
+${PRODUCT_METAFIELDS_FRAGMENT}
+` as const;
+
+export const RECOMMENDED_PRODUCTS_QUERY = `#graphql
+  query productRecommendations(
+    $productId: ID!
+    $count: Int
+    $country: CountryCode
+    $language: LanguageCode
+  ) @inContext(country: $country, language: $language) {
+    recommended: productRecommendations(productId: $productId) {
+      ...ProductCard
+    }
+    additional: products(first: $count, sortKey: BEST_SELLING) {
+      nodes {
+        ...ProductCard
+      }
+    }
+  }
+  ${PRODUCT_CARD_FRAGMENT}
+` as const;
+
+export const ALL_PRODUCTS_QUERY = `#graphql
+  query AllProducts(
+    $country: CountryCode
+    $language: LanguageCode
+    $first: Int
+    $last: Int
+    $startCursor: String
+    $endCursor: String
+  ) @inContext(country: $country, language: $language) {
+    products(first: $first, last: $last, before: $startCursor, after: $endCursor) {
+      nodes {
+        ...ProductCard
+      }
+      pageInfo {
+        hasPreviousPage
+        hasNextPage
+        startCursor
+        endCursor
+      }
+    }
+  }
+  ${PRODUCT_CARD_FRAGMENT}
+` as const;
+
+/*
+|--------------------------------------------------------------------------
+| Variants Queries
+|--------------------------------------------------------------------------
+*/
+export const VARIANTS_QUERY = `#graphql
+  query variants(
+    $country: CountryCode
+    $language: LanguageCode
+    $handle: String!
+  ) @inContext(country: $country, language: $language) {
+    product(handle: $handle) {
+      variants(first: 250) {
+        nodes {
+          ...ProductVariantFragment
+        }
+      }
+    }
+  }
+  ${PRODUCT_VARIANT_FRAGMENT}
+` as const;
+
+/*
+|--------------------------------------------------------------------------
+| Collections Queries
+|--------------------------------------------------------------------------
+*/
+export const COLLECTIONS_QUERY = `#graphql
+  query Collections(
+    $country: CountryCode
+    $language: LanguageCode
+    $first: Int
+    $last: Int
+    $startCursor: String
+    $endCursor: String
+  ) @inContext(country: $country, language: $language) {
+    collections(first: $first, last: $last, before: $startCursor, after: $endCursor) {
+      nodes {
+        id
+        title
+        description
+        handle
+        ...CollectionMetafields
+        seo {
+          description
+          title
+        }
+        image {
+          id
+          url
+          width
+          height
+          altText
+        }
+      }
+      pageInfo {
+        hasPreviousPage
+        hasNextPage
+        startCursor
+        endCursor
+      }
+    }
+  }
+  ${COLLECTION_METAFIELDS_FRAGMENT}
+`;
+
+export const COLLECTION_QUERY = `#graphql
+  query CollectionDetails(
+    $handle: String!
+    $country: CountryCode
+    $language: LanguageCode
+    $filters: [ProductFilter!]
+    $sortKey: ProductCollectionSortKeys!
+    $reverse: Boolean
+    $first: Int
+    $last: Int
+    $startCursor: String
+    $endCursor: String
+  ) @inContext(country: $country, language: $language) {
+    collection(handle: $handle) {
+      id
+      handle
+      title
+      description
+      image {
+        id
+        url
+        width
+        height
+        altText
+      }
+      products(
+        first: $first,
+        last: $last,
+        before: $startCursor,
+        after: $endCursor,
+        filters: $filters,
+        sortKey: $sortKey,
+        reverse: $reverse
+      ) {
+        filters {
+          id
+          label
+          type
+          values {
+            id
+            label
+            count
+            input
+          }
+        }
+        nodes {
+          ...ProductCard
+        }
+        pageInfo {
+          hasPreviousPage
+          hasNextPage
+          endCursor
+          startCursor
+        }
+      }
+    }
+    collections(first: 100) {
+      edges {
+        node {
+          title
+          handle
+        }
+      }
+    }
+  }
+  ${PRODUCT_CARD_FRAGMENT}
+` as const;
