@@ -14,7 +14,7 @@ Hydrogen is Shopify’s stack for headless commerce. Hydrogen is designed to dov
 - ESLint
 - Prettier
 - GraphQL generator
-- TypeScript & JavaScript flavors
+- TypeScript and JavaScript flavors
 - Minimal setup of components and routes
 
 ## Getting started
