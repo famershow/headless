@@ -45,6 +45,7 @@ jobs:
           fi
 
       - name: Check Existing Comments
+        if: github.event_name == 'pull_request'
         id: check-comments
         uses: actions/github-script@v7
         with:

@@ -9,7 +9,7 @@
     "templates/hydrogen-theme/studio"
   ],
   "scripts": {
-    "build": "turbo build",
+    "build": "turbo build --filter=create-headless",
     "dev": "turbo dev",
     "dev:theme": "turbo dev --filter=hydrogen-theme --filter=sanity-studio",
     "deploy:studio": "turbo run deploy --filter=sanity-studio",
