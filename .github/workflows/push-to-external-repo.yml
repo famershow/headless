@@ -73,7 +73,7 @@ jobs:
             core.setOutput("existingCommentId", existingComment ? existingComment.id : '');
 
       - name: Comment on Pull Request
-        if: steps.check-comments.outputs.existingCommentFound != 'true' && steps.changed-files-yaml.outputs.hydrogen-theme_any_changed == 'true'
+        if: github.event_name == 'pull_request' && steps.check-comments.outputs.existingCommentFound != 'true' && steps.changed-files-yaml.outputs.hydrogen-theme_any_changed == 'true'
         uses: actions/github-script@v7
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
