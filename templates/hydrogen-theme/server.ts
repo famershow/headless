@@ -54,6 +54,7 @@ export default {
         i18n: { language: locale.language, country: locale.country },
         publicStorefrontToken: env.PUBLIC_STOREFRONT_API_TOKEN,
         privateStorefrontToken: env.PRIVATE_STOREFRONT_API_TOKEN,
+        storefrontApiVersion: env.PUBLIC_STOREFRONT_API_VERSION || "2023-10",
         storeDomain: env.PUBLIC_STORE_DOMAIN,
         storefrontId: env.PUBLIC_STOREFRONT_ID,
         storefrontHeaders: getStorefrontHeaders(request),
