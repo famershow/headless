@@ -1,3 +1,4 @@
+import type { InferType } from "groqd";
 import type { LoaderFunctionArgs, MetaFunction } from "@shopify/remix-oxygen";
 import type { ShouldRevalidateFunction } from "@remix-run/react";
 import type { CustomerAccessToken } from "@shopify/hydrogen/storefront-api-types";
@@ -14,8 +15,6 @@ import {
   ScrollRestoration,
   isRouteErrorResponse,
 } from "@remix-run/react";
-import { makeSafeQueryRunner } from "groqd";
-import { PreviewProvider, getPreview } from "hydrogen-sanity";
 
 import type { HydrogenSession } from "./lib/hydrogen.session.server";
 import favicon from "../public/favicon.svg";
@@ -25,8 +24,15 @@ import { Layout } from "~/components/Layout";
 import { Fonts } from "./components/Fonts";
 import { CMS_SETTINGS_QUERY } from "./qroq/queries";
 import { generateFontsPreloadLinks } from "./lib/fonts";
-import { envVariables } from "./lib/env.server";
 import { useLocale } from "./hooks/useLocale";
+import { Suspense, lazy } from "react";
+import { useIsInIframe } from "./hooks/useIsInIframe";
+
+const VisualEditing = lazy(() =>
+  import("~/components/sanity/VisualEditing").then((mod) => ({
+    default: mod.VisualEditing,
+  }))
+);
 
 // This is important to avoid re-fetching root queries on sub-navigations
 export const shouldRevalidate: ShouldRevalidateFunction = ({
@@ -67,7 +73,7 @@ export const meta: MetaFunction<typeof loader> = (loaderData) => {
   const { data } = loaderData;
   // Preload fonts files to avoid FOUT (flash of unstyled text)
   const fontsPreloadLinks = generateFontsPreloadLinks({
-    fontsData: data?.cmsSettings.fonts,
+    fontsData: data?.cms.initial.data?.fonts,
   });
 
   return [
@@ -82,17 +88,12 @@ export const meta: MetaFunction<typeof loader> = (loaderData) => {
 };
 
 export async function loader({ context }: LoaderFunctionArgs) {
-  const { session, cart, env, sanity, locale, isDev, storefront } = context;
+  const { session, cart, env, sanity, locale } = context;
   const customerAccessToken = await session.get("customerAccessToken");
-  const envVars = envVariables(env);
-  const preview = getPreview(context);
-  const cache = isDev ? storefront.CacheNone() : storefront.CacheShort();
 
-  const runSanityQuery = makeSafeQueryRunner(
-    (query, params: Record<string, unknown> = {}) =>
-      sanity.query({ query, params, cache })
-  );
-  const cmsSettings = await runSanityQuery(CMS_SETTINGS_QUERY);
+  const cmsSettings = await sanity.query({
+    groqdQuery: CMS_SETTINGS_QUERY,
+  });
 
   // validate the customer access token is valid
   const { isLoggedIn, headers } = await validateCustomerAccessToken(
@@ -106,19 +107,26 @@ export async function loader({ context }: LoaderFunctionArgs) {
   return defer(
     {
       locale,
-      cmsSettings,
-      preview,
+      cms: {
+        initial: cmsSettings,
+        query: CMS_SETTINGS_QUERY.query,
+        params: {},
+      },
+      query: CMS_SETTINGS_QUERY.query,
+      params: {},
+      // preview,
       cart: cartPromise,
       isLoggedIn,
       env: {
         /*
          * Be careful not to expose any sensitive environment variables here.
          */
-        NODE_ENV: envVars.NODE_ENV,
-        SANITY_STUDIO_PROJECT_ID: envVars.SANITY_STUDIO_PROJECT_ID,
-        SANITY_STUDIO_DATASET: envVars.SANITY_STUDIO_DATASET,
-        SANITY_STUDIO_PORT: envVars.SANITY_STUDIO_PORT,
-        SANITY_STUDIO_API_VERSION: envVars.SANITY_STUDIO_API_VERSION,
+        NODE_ENV: env.NODE_ENV,
+        SANITY_STUDIO_URL: env.SANITY_STUDIO_URL,
+        SANITY_STUDIO_USE_STEGA: env.SANITY_STUDIO_USE_STEGA,
+        SANITY_STUDIO_PROJECT_ID: env.SANITY_STUDIO_PROJECT_ID,
+        SANITY_STUDIO_DATASET: env.SANITY_STUDIO_DATASET,
+        SANITY_STUDIO_API_VERSION: env.SANITY_STUDIO_API_VERSION,
       },
     },
     { headers }
@@ -127,8 +135,8 @@ export async function loader({ context }: LoaderFunctionArgs) {
 
 export default function App() {
   const nonce = useNonce();
-  const data = useLoaderData<typeof loader>();
-  const { preview } = data;
+  const { env } = useLoaderData<typeof loader>();
+  const isInIframe = useIsInIframe();
 
   return (
     <html lang="en">
@@ -140,12 +148,15 @@ export default function App() {
         <Links />
       </head>
       <body className="flex min-h-screen flex-col [&_main]:flex-1">
-        <PreviewProvider previewConfig={preview}>
-          <Layout {...data}>
-            <Outlet />
-          </Layout>
-        </PreviewProvider>
+        <Layout>
+          <Outlet />
+        </Layout>
         <ScrollRestoration nonce={nonce} />
+        {env.SANITY_STUDIO_USE_STEGA && isInIframe ? (
+          <Suspense>
+            <VisualEditing />
+          </Suspense>
+        ) : null}
         <Scripts nonce={nonce} />
         <LiveReload nonce={nonce} />
       </body>

@@ -1,24 +1,15 @@
 import {DefaultDocumentNodeResolver, StructureResolver} from 'sanity/desk'
+import {ComposeIcon} from '@sanity/icons'
 
 import {SINGLETONS, singleton} from './singletons'
-import {previewView} from './previewView'
-import {getAllLanguages} from '../../countries'
 import {intDocumentList} from './intDocumentList'
 import {IconPage} from '../icons/Page'
 import {IconTag} from '../icons/Tag'
 import {IconCollectionTag} from '../icons/CollectionTag'
-import {ComposeIcon} from '@sanity/icons'
 
-export const defaultDocumentNode: DefaultDocumentNodeResolver = (S, {schemaType}) => {
-  switch (schemaType) {
-    case 'page':
-      return S.document().views(previewView(S))
-    default:
-      return S.document().views([S.view.form()])
-  }
+export const defaultDocumentNode: DefaultDocumentNodeResolver = (S) => {
+  return S.document().views([S.view.form()])
 }
-
-const languages = getAllLanguages()
 
 export const structure: StructureResolver = (S) => {
   return S.list()

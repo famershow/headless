@@ -1,15 +1,13 @@
-import {StructureBuilder} from 'sanity/desk'
-import {getAllLanguages} from '../../countries'
 import {CogIcon, EarthGlobeIcon, HomeIcon, InsertAboveIcon, InsertBelowIcon} from '@sanity/icons'
-import {ForwardRefExoticComponent, RefAttributes, SVGProps} from 'react'
-import {previewView} from './previewView'
+import {StructureBuilder} from 'sanity/desk'
+
+import {getAllLanguages} from '../../countries'
 
 type Singleton = {
   id: string
   _type: string
   title: string
   needsTranslations: boolean
-  needsPreview: boolean
   icon?: any
 }
 
@@ -23,7 +21,6 @@ export const SINGLETONS: {
     _type: 'home',
     title: 'Home',
     needsTranslations: true,
-    needsPreview: true,
     icon: HomeIcon,
   },
   header: {
@@ -31,7 +28,6 @@ export const SINGLETONS: {
     _type: 'header',
     title: 'Header',
     needsTranslations: true,
-    needsPreview: false,
     icon: InsertBelowIcon,
   },
   footer: {
@@ -39,7 +35,6 @@ export const SINGLETONS: {
     _type: 'footer',
     title: 'Footer',
     needsTranslations: true,
-    needsPreview: false,
     icon: InsertAboveIcon,
   },
   themeContent: {
@@ -47,14 +42,12 @@ export const SINGLETONS: {
     _type: 'themeContent',
     title: 'Theme Content',
     needsTranslations: true,
-    needsPreview: false,
     icon: EarthGlobeIcon,
   },
   typography: {
     id: 'typography',
     _type: 'typography',
     needsTranslations: false,
-    needsPreview: false,
     title: 'Typography',
   },
   settings: {
@@ -62,7 +55,6 @@ export const SINGLETONS: {
     _type: 'settings',
     title: 'Settings',
     needsTranslations: false,
-    needsPreview: false,
     icon: CogIcon,
   },
 }
@@ -90,7 +82,7 @@ export const singleton = (S: StructureBuilder, singleton: Singleton) =>
                       .title(docTile)
                       .schemaType(singleton._type)
                       .id(`${singleton._type}-${language.id}`)
-                      .views(singleton.needsPreview ? previewView(S) : [S.view.form()]),
+                      .views([S.view.form()]),
                   )
               }),
             )
@@ -106,5 +98,5 @@ export const singleton = (S: StructureBuilder, singleton: Singleton) =>
             .title(singleton.title)
             .schemaType(singleton._type)
             .documentId(singleton._type)
-            .views(singleton.needsPreview ? previewView(S) : [S.view.form()]),
+            .views([S.view.form()]),
         )

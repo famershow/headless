@@ -1,17 +1,18 @@
+import { useEnvironmentVariables } from "~/hooks/useEnvironmentVariables";
 import { useIsDev } from "~/hooks/useIsDev";
 import { useIsInIframe } from "~/hooks/useIsInIframe";
 
-export function SanityStudioLink(props: { port?: string }) {
+export function SanityStudioLink() {
   const isDev = useIsDev();
   const isInIframe = useIsInIframe();
-  const { port } = props;
-  const studioLink = `http://localhost:${port}`;
+  const env = useEnvironmentVariables();
+  const sanityStudioUrl = env?.SANITY_STUDIO_URL;
 
-  if (!isDev || isInIframe || !port) return null;
+  if (!isDev || isInIframe || !sanityStudioUrl) return null;
 
   return (
     <div className="fixed bottom-1 right-1 z-50 rounded-full bg-white">
-      <a href={studioLink} target="_blank" rel="noreferrer">
+      <a href={sanityStudioUrl} target="_blank" rel="noreferrer">
         <SanitySymbol />
       </a>
     </div>

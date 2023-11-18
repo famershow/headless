@@ -28,19 +28,19 @@ export function Fonts() {
 
 export function getFonts({ fontsData }: { fontsData: FontsQuery }) {
   const headingFonts =
-    fontsData.heading &&
+    fontsData?.heading &&
     fontsData.heading.length > 0 &&
     fontsData.heading[0].fontAssets?.length > 0
       ? fontsData.heading[0].fontAssets
       : [];
   const bodyFonts =
-    fontsData.body &&
+    fontsData?.body &&
     fontsData.body?.length > 0 &&
     fontsData.body[0].fontAssets?.length > 0
       ? fontsData.body[0].fontAssets
       : [];
   const extraFonts =
-    fontsData.extra &&
+    fontsData?.extra &&
     fontsData.extra?.length > 0 &&
     fontsData.extra[0]?.fontAssets?.length > 0
       ? fontsData.extra[0]?.fontAssets
@@ -89,19 +89,19 @@ function generateCssFontVariables({ fontsData }: { fontsData: FontsQuery }) {
     antialiased: boolean | null;
   }> = [];
 
-  fontsData.heading &&
+  fontsData?.heading &&
     fontsData.heading?.length > 0 &&
     fontCategories.push({
       categoryName: "heading",
       ...fontsData.heading[0],
     });
-  fontsData.body &&
+  fontsData?.body &&
     fontsData.body?.length > 0 &&
     fontCategories.push({
       categoryName: "body",
       ...fontsData.body[0],
     });
-  fontsData.extra &&
+  fontsData?.extra &&
     fontsData.extra?.length > 0 &&
     fontCategories.push({
       categoryName: "extra",

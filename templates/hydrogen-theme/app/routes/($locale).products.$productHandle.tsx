@@ -11,27 +11,27 @@ import {
   RECOMMENDED_PRODUCTS_QUERY,
   VARIANTS_QUERY,
 } from "~/graphql/queries";
-import { makeSafeQueryRunner } from "groqd";
 import { PRODUCT_QUERY as CMS_PRODUCT_QUERY } from "~/qroq/queries";
+import { useSanityQuery } from "~/hooks/useSanityQuery";
 
 export async function loader({ context, params, request }: LoaderFunctionArgs) {
   const { productHandle } = params;
-  const { storefront, sanity, locale, isDev } = context;
+  const { storefront, sanity, locale } = context;
   const language = locale?.language.toLowerCase();
 
   invariant(productHandle, "Missing productHandle param, check route filename");
 
   const selectedOptions = getSelectedProductOptions(request);
-  const cache = isDev ? storefront.CacheNone() : storefront.CacheShort();
-  const runSanityQuery = makeSafeQueryRunner(
-    (query, params: Record<string, unknown> = {}) =>
-      sanity.query({ query, params, cache })
-  );
+
+  const queryParams = {
+    productHandle,
+    language,
+  };
 
   const productData = Promise.all([
-    runSanityQuery(CMS_PRODUCT_QUERY, {
-      productHandle,
-      language,
+    sanity.query({
+      groqdQuery: CMS_PRODUCT_QUERY,
+      params: queryParams,
     }),
     storefront.query<ProductQuery>(PRODUCT_QUERY, {
       variables: {
@@ -76,7 +76,11 @@ export async function loader({ context, params, request }: LoaderFunctionArgs) {
   return defer({
     variants,
     product,
-    cmsProduct,
+    cms: {
+      initial: cmsProduct,
+      params: queryParams,
+      query: CMS_PRODUCT_QUERY.query,
+    },
     recommended,
   });
 }
@@ -101,12 +105,19 @@ function redirectToFirstVariant({
 }
 
 export default function Product() {
-  const { product, cmsProduct } = useLoaderData<typeof loader>();
+  const { product, cms } = useLoaderData<typeof loader>();
+  const { data, loading } = useSanityQuery(cms);
+
+  // `data` should contain the initial data from the loader
+  // `loading` will only be true when Visual Editing is enabled
+  if (loading && !data) {
+    return <div>Sanity Visual Editing is loading...</div>;
+  }
 
   return (
     <div className="container">
       <h1>{product.title}</h1>
-      <h2>Data from Sanity: {cmsProduct.title}</h2>
+      <h2>Data from Sanity: {data?.title}</h2>
     </div>
   );
 }
