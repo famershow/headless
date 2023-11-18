@@ -1,4 +1,3 @@
-import type { InferType } from "groqd";
 import type { LoaderFunctionArgs, MetaFunction } from "@shopify/remix-oxygen";
 import type { ShouldRevalidateFunction } from "@remix-run/react";
 import type { CustomerAccessToken } from "@shopify/hydrogen/storefront-api-types";
@@ -11,7 +10,6 @@ import {
   Scripts,
   LiveReload,
   useRouteError,
-  useLoaderData,
   ScrollRestoration,
   isRouteErrorResponse,
 } from "@remix-run/react";
@@ -26,7 +24,7 @@ import { CMS_SETTINGS_QUERY } from "./qroq/queries";
 import { generateFontsPreloadLinks } from "./lib/fonts";
 import { useLocale } from "./hooks/useLocale";
 import { Suspense, lazy } from "react";
-import { useIsInIframe } from "./hooks/useIsInIframe";
+import { useSanityVisualEditing } from "./hooks/useSanityVisualEditing";
 
 const VisualEditing = lazy(() =>
   import("~/components/sanity/VisualEditing").then((mod) => ({
@@ -135,8 +133,7 @@ export async function loader({ context }: LoaderFunctionArgs) {
 
 export default function App() {
   const nonce = useNonce();
-  const { env } = useLoaderData<typeof loader>();
-  const isInIframe = useIsInIframe();
+  const displaySanityVisualEditing = useSanityVisualEditing();
 
   return (
     <html lang="en">
@@ -152,7 +149,7 @@ export default function App() {
           <Outlet />
         </Layout>
         <ScrollRestoration nonce={nonce} />
-        {env.SANITY_STUDIO_USE_STEGA && isInIframe ? (
+        {displaySanityVisualEditing ? (
           <Suspense>
             <VisualEditing />
           </Suspense>
