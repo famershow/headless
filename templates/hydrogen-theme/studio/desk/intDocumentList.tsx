@@ -1,5 +1,5 @@
-import {getAllLanguages} from '../../countries'
 import {StructureBuilder} from 'sanity/desk'
+import {getAllLanguages} from '../../countries'
 
 type IntDocument = {
   _type: string

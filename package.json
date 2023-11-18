@@ -16,7 +16,7 @@
     "changeset": "changeset add",
     "version": "changeset version"
   },
-  "devDependencies": {
+  "dependencies": {
     "@changesets/cli": "^2.26.2",
     "tsup": "^7.2.0",
     "turbo": "^1.10.16"

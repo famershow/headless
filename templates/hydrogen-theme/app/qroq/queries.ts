@@ -28,7 +28,8 @@ export const PAGE_QUERY = q("*")
       .nullable(),
     sections: SECTIONS_FRAGMENT,
   })
-  .slice(0);
+  .slice(0)
+  .nullable();
 
 /*
 |--------------------------------------------------------------------------
@@ -50,7 +51,8 @@ export const PRODUCT_QUERY = q("*")
     title: q.string(),
     sections: SECTIONS_FRAGMENT,
   })
-  .slice(0);
+  .slice(0)
+  .nullable();
 
 /*
 |--------------------------------------------------------------------------
@@ -71,7 +73,8 @@ export const FONTS_QUERY = q("*")
       .nullable(),
   })
   .order("_createdAt asc")
-  .slice(0);
+  .slice(0)
+  .nullable();
 
 export const DEFAULT_COLOR_SCHEME_QUERY = q("*")
   .filter("_type == 'colorScheme'")
@@ -79,7 +82,9 @@ export const DEFAULT_COLOR_SCHEME_QUERY = q("*")
   .order("_createdAt asc")
   .slice(0);
 
-export const CMS_SETTINGS_QUERY = q("").grab({
-  defaultColorScheme: DEFAULT_COLOR_SCHEME_QUERY,
-  fonts: FONTS_QUERY,
-});
+export const CMS_SETTINGS_QUERY = q("")
+  .grab({
+    defaultColorScheme: DEFAULT_COLOR_SCHEME_QUERY,
+    fonts: FONTS_QUERY,
+  })
+  .nullable();

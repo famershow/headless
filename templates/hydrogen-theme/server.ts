@@ -11,13 +11,12 @@ import {
   createRequestHandler,
   getStorefrontHeaders,
 } from "@shopify/remix-oxygen";
-import { createSanityClient } from "hydrogen-sanity";
 
 import { getLocaleFromRequest } from "countries";
+import { createSanityClient } from "./app/lib/sanity/sanity.server";
 import { CART_QUERY_FRAGMENT } from "~/graphql/fragments";
 import { envVariables } from "~/lib/env.server";
 import { HydrogenSession } from "~/lib/hydrogen.session.server";
-import { PreviewSession } from "~/lib/sanity.session.server";
 
 /*
  * Export a fetch handler in module format.
@@ -41,10 +40,9 @@ export default {
       const origin = new URL(request.url).origin;
       const locale = getLocaleFromRequest(request);
       const waitUntil = executionContext.waitUntil.bind(executionContext);
-      const [cache, session, previewSession] = await Promise.all([
+      const [cache, session] = await Promise.all([
         caches.open("hydrogen"),
         HydrogenSession.init(request, [env.SESSION_SECRET]),
-        PreviewSession.init(request, [env.SESSION_SECRET]),
       ]);
 
       /*
@@ -78,22 +76,13 @@ export default {
       const sanity = createSanityClient({
         cache,
         waitUntil,
-        preview:
-          envVars.SANITY_STUDIO_PREVIEW_SECRET &&
-          envVars.PRIVATE_SANITY_API_READ_TOKEN
-            ? {
-                session: previewSession,
-                token: envVars.PRIVATE_SANITY_API_READ_TOKEN,
-                // Optionally, provide an alternative to the default `previewDrafts` perspective when in preview mode
-                // See https://www.sanity.io/docs/perspectives
-                // perspective: "raw"
-              }
-            : undefined,
         config: {
           projectId: envVars.SANITY_STUDIO_PROJECT_ID,
           dataset: envVars.SANITY_STUDIO_DATASET,
-          apiVersion: envVars.SANITY_STUDIO_API_VERSION ?? "2023-10-01",
+          apiVersion: envVars.SANITY_STUDIO_API_VERSION,
           useCdn: envVars.NODE_ENV === "production",
+          useStega: envVars.SANITY_STUDIO_USE_STEGA,
+          studioUrl: envVars.SANITY_STUDIO_URL,
         },
       });
 
@@ -108,7 +97,7 @@ export default {
           session,
           storefront,
           cart,
-          env,
+          env: envVars,
           waitUntil,
           sanity,
           locale,

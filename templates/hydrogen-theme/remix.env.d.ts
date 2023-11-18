@@ -6,7 +6,7 @@
 
 import type { Storefront, HydrogenCart } from "@shopify/hydrogen";
 import type { CustomerAccessToken } from "@shopify/hydrogen/storefront-api-types";
-import type { Sanity } from "hydrogen-sanity";
+import type { Sanity } from "./app/lib/sanity/sanity.server";
 
 import type { HydrogenSession } from "./server";
 import type { I18nLocale } from "~/lib/type";
@@ -28,12 +28,12 @@ declare global {
     PUBLIC_STORE_DOMAIN: string;
     PUBLIC_STOREFRONT_ID: string;
     PRIVATE_STOREFRONT_API_TOKEN: string;
-    PRIVATE_SANITY_API_READ_TOKEN: string;
     SANITY_STUDIO_PORT: string;
     SANITY_STUDIO_PROJECT_ID: string;
     SANITY_STUDIO_DATASET: string;
     SANITY_STUDIO_API_VERSION: string;
-    SANITY_STUDIO_PREVIEW_SECRET: string;
+    SANITY_STUDIO_URL: string;
+    SANITY_STUDIO_USE_STEGA: string;
     NODE_ENV: "production" | "development";
   }
 }

@@ -1,24 +1,23 @@
 import type { LoaderFunctionArgs } from "@shopify/remix-oxygen";
 import { defer } from "@shopify/remix-oxygen";
+
 import PageRoute from "./($locale).$";
-import { makeSafeQueryRunner } from "groqd";
 import { PAGE_QUERY } from "~/qroq/queries";
 
 export async function loader({ context }: LoaderFunctionArgs) {
-  const { sanity, locale, isDev, storefront } = context;
+  const { sanity, locale } = context;
   const language = locale?.language.toLowerCase();
-  const cache = isDev ? storefront.CacheNone() : storefront.CacheShort();
-
-  const runSanityQuery = makeSafeQueryRunner(
-    (query, params: Record<string, unknown> = {}) =>
-      sanity.query({ query, params, cache })
-  );
-  const cmsPage = await runSanityQuery(PAGE_QUERY, {
+  const queryParams = {
     handle: "home",
     language,
+  };
+
+  const cmsPage = await sanity.query({
+    groqdQuery: PAGE_QUERY,
+    params: queryParams,
   });
 
-  if (!cmsPage) {
+  if (!cmsPage.data) {
     throw new Response(null, {
       status: 404,
       statusText: "Not Found",
@@ -26,7 +25,11 @@ export async function loader({ context }: LoaderFunctionArgs) {
   }
 
   return defer({
-    cmsPage,
+    cms: {
+      initial: cmsPage,
+      params: queryParams,
+      query: PAGE_QUERY.query,
+    },
   });
 }
 

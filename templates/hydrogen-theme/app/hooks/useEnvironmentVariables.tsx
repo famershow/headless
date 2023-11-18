@@ -1,7 +1,7 @@
 import { useRootLoaderData } from "./useRootLoaderData";
 
-export function usePreview() {
+export function useEnvironmentVariables() {
   const data = useRootLoaderData();
 
-  return data?.preview;
+  return data?.env;
 }

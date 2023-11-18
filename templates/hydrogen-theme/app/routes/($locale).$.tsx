@@ -1,29 +1,30 @@
 import type { LoaderFunctionArgs } from "@shopify/remix-oxygen";
-import { useLoaderData, useLocation, useParams } from "@remix-run/react";
+import { useLoaderData } from "@remix-run/react";
 import { defer } from "@shopify/remix-oxygen";
 import { Suspense } from "react";
 
 import type { I18nLocale } from "~/lib/type";
 import { CmsSection } from "~/components/CmsSection";
-import { useLocale } from "~/hooks/useLocale";
-import { makeSafeQueryRunner } from "groqd";
 import { PAGE_QUERY } from "~/qroq/queries";
-import { SanityPreview } from "hydrogen-sanity";
+import { useSanityQuery } from "~/hooks/useSanityQuery";
 
 export async function loader({ context, params, request }: LoaderFunctionArgs) {
-  const { sanity, locale, isDev, storefront } = context;
+  const { sanity, locale } = context;
   const pathname = new URL(request.url).pathname;
   const handle = getPageHandle({ params, locale, pathname });
   const language = locale?.language.toLowerCase();
-  const cache = isDev ? storefront.CacheNone() : storefront.CacheShort();
 
-  const runSanityQuery = makeSafeQueryRunner(
-    (query, params: Record<string, unknown> = {}) =>
-      sanity.query({ query, params, cache })
-  );
-  const cmsPage = await runSanityQuery(PAGE_QUERY, { handle, language });
+  const queryParams = {
+    handle,
+    language,
+  };
 
-  if (!cmsPage) {
+  const cmsPage = await sanity.query({
+    groqdQuery: PAGE_QUERY,
+    params: queryParams,
+  });
+
+  if (!cmsPage.data) {
     throw new Response(null, {
       status: 404,
       statusText: "Not Found",
@@ -31,34 +32,32 @@ export async function loader({ context, params, request }: LoaderFunctionArgs) {
   }
 
   return defer({
-    cmsPage,
+    cms: {
+      initial: cmsPage,
+      params: queryParams,
+      query: PAGE_QUERY.query,
+    },
   });
 }
 
 export default function PageRoute() {
-  const { cmsPage } = useLoaderData<typeof loader>();
-  const locale = useLocale();
-  const params = useParams();
-  const { pathname } = useLocation();
-  const language = locale?.language.toLowerCase();
-  const handle = locale && getPageHandle({ params, locale, pathname });
+  const { cms } = useLoaderData<typeof loader>();
+  const { data, loading } = useSanityQuery(cms);
+
+  // `data` should contain the initial data from the loader
+  // `loading` will only be true when Visual Editing is enabled
+  if (loading && !data) {
+    return <div>Sanity Visual Editing is loading...</div>;
+  }
 
   return (
-    <SanityPreview
-      data={cmsPage}
-      query={PAGE_QUERY.query}
-      params={{ handle, language }}
-    >
-      {(page) => (
-        <Suspense>
-          {page?.sections && page?.sections?.length > 0
-            ? page.sections.map((section) => (
-                <CmsSection key={section._key} data={section} />
-              ))
-            : null}
-        </Suspense>
-      )}
-    </SanityPreview>
+    <Suspense>
+      {data?.sections && data?.sections?.length > 0
+        ? data.sections.map((section) => (
+            <CmsSection key={section._key} data={section} />
+          ))
+        : null}
+    </Suspense>
   );
 }
 
