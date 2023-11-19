@@ -15,7 +15,8 @@ export class SanitySession {
       cookie: {
         name: "sanityPreview",
         httpOnly: true,
-        sameSite: "lax",
+        sameSite: "none",
+        secure: true,
         secrets,
       },
     });
