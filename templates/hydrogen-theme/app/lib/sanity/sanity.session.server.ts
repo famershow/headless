@@ -15,6 +15,7 @@ export class SanitySession {
       cookie: {
         name: "sanityPreview",
         httpOnly: true,
+        // samesite must be none so Sanity Studio can access the cookie
         sameSite: "none",
         secure: true,
         secrets,
