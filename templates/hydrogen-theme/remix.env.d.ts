@@ -8,7 +8,8 @@ import type { Storefront, HydrogenCart } from "@shopify/hydrogen";
 import type { CustomerAccessToken } from "@shopify/hydrogen/storefront-api-types";
 import type { Sanity } from "./app/lib/sanity/sanity.server";
 
-import type { HydrogenSession } from "./server";
+import type { HydrogenSession } from "~/lib/hydrogen.session.server";
+import type { SanitySession } from "~/lib/sanity/sanity.session.server";
 import type { I18nLocale } from "~/lib/type";
 
 import "@total-typescript/ts-reset";
@@ -47,6 +48,7 @@ declare module "@shopify/remix-oxygen" {
     cart: HydrogenCart;
     storefront: Storefront;
     session: HydrogenSession;
+    sanitySession: SanitySession;
     waitUntil: ExecutionContext["waitUntil"];
     sanity: Sanity;
     locale: I18nLocale;

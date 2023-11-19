@@ -17,6 +17,7 @@ import { createSanityClient } from "./app/lib/sanity/sanity.server";
 import { CART_QUERY_FRAGMENT } from "~/graphql/fragments";
 import { envVariables } from "~/lib/env.server";
 import { HydrogenSession } from "~/lib/hydrogen.session.server";
+import { SanitySession } from "~/lib/sanity/sanity.session.server";
 
 /*
  * Export a fetch handler in module format.
@@ -40,9 +41,10 @@ export default {
       const origin = new URL(request.url).origin;
       const locale = getLocaleFromRequest(request);
       const waitUntil = executionContext.waitUntil.bind(executionContext);
-      const [cache, session] = await Promise.all([
+      const [cache, session, sanitySession] = await Promise.all([
         caches.open("hydrogen"),
         HydrogenSession.init(request, [env.SESSION_SECRET]),
+        SanitySession.init(request, [env.SESSION_SECRET]),
       ]);
 
       /*
@@ -96,6 +98,7 @@ export default {
         mode: process.env.NODE_ENV,
         getLoadContext: () => ({
           session,
+          sanitySession,
           storefront,
           cart,
           env: envVars,
