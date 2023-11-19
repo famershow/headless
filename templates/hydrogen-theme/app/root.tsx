@@ -81,6 +81,7 @@ export async function loader({ context }: LoaderFunctionArgs) {
   const { session, cart, env, sanity, locale, sanitySession } = context;
   const customerAccessToken = await session.get("customerAccessToken");
   const sanityPreviewMode = await sanitySession.has("previewMode");
+  console.log("sanityPreviewMode", sanityPreviewMode);
 
   const cmsSettings = await sanity.query({
     groqdQuery: CMS_SETTINGS_QUERY,
