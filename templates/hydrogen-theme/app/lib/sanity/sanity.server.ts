@@ -9,12 +9,13 @@ import type {
 } from "@sanity/client/stega";
 import { CacheShort, createWithCache } from "@shopify/hydrogen";
 
-import { queryStore } from "./sanity.loader";
 import { getSanityClient } from "./client";
+import { createQueryStore } from "@sanity/react-loader";
 
 type CreateSanityClientOptions = {
   cache: Cache;
   waitUntil: ExecutionContext["waitUntil"];
+  sanityPreviewMode: boolean;
   config: {
     projectId: string;
     dataset: string;
@@ -45,13 +46,10 @@ export type Sanity = {
   }>;
 };
 
-let sanityServerClientHasBeenInitialized = false;
-
 export function createSanityClient(options: CreateSanityClientOptions) {
-  const { cache, waitUntil, config } = options;
+  const { cache, waitUntil, config, sanityPreviewMode } = options;
   const { projectId, dataset, useStega, useCdn, studioUrl, apiVersion } =
     config;
-  const { loadQuery } = queryStore;
 
   const { client } = getSanityClient({
     projectId,
@@ -60,12 +58,13 @@ export function createSanityClient(options: CreateSanityClientOptions) {
     apiVersion,
     useStega,
     studioUrl,
+    sanityPreviewMode,
   });
 
-  if (!sanityServerClientHasBeenInitialized) {
-    queryStore.setServerClient(client);
-    sanityServerClientHasBeenInitialized = true;
-  }
+  const queryStore = createQueryStore({
+    client,
+    ssr: false,
+  });
 
   const sanity: Sanity = {
     client,
@@ -75,8 +74,9 @@ export function createSanityClient(options: CreateSanityClientOptions) {
       cache: strategy = CacheShort(),
       queryOptions,
     }) {
+      const { loadQuery } = queryStore;
       const { query } = groqdQuery as GroqdQuery;
-      const queryHash = await hashQuery(query, params);
+      const queryHash = await hashQuery(query, params, sanityPreviewMode);
       const withCache = createWithCache({
         cache,
         waitUntil,
@@ -119,8 +119,16 @@ export async function sha256(message: string): Promise<string> {
  * Hash query and its parameters for use as cache key
  * NOTE: Oxygen deployment will break if the cache key is long or contains `\n`
  */
-function hashQuery(query: GroqdQuery["query"], params?: QueryParams) {
+function hashQuery(
+  query: GroqdQuery["query"],
+  params?: QueryParams,
+  sanityPreviewMode?: boolean
+) {
   let hash = query;
+
+  if (sanityPreviewMode) {
+    hash += "previewMode";
+  }
 
   if (params !== null) {
     hash += JSON.stringify(params);

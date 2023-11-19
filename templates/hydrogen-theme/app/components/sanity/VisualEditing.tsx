@@ -5,9 +5,9 @@ import { enableOverlays } from "@sanity/overlays";
 import { cx } from "class-variance-authority";
 
 import { useEnvironmentVariables } from "~/hooks/useEnvironmentVariables";
-import { getSanityClient } from "~/lib/sanity/client";
-import { useLiveMode } from "~/lib/sanity/sanity.loader";
 import { useIsInIframe } from "~/hooks/useIsInIframe";
+import { useSanityClient } from "~/hooks/useSanityClient";
+import { useSanityLoader } from "~/hooks/useSanityLoader";
 
 export function VisualEditing() {
   const env = useEnvironmentVariables();
@@ -18,14 +18,8 @@ export function VisualEditing() {
     null
   );
   const sanityStudioUrl = env?.SANITY_STUDIO_URL!;
-  const { client } = getSanityClient({
-    projectId: env?.SANITY_STUDIO_PROJECT_ID!,
-    dataset: env?.SANITY_STUDIO_DATASET!,
-    studioUrl: sanityStudioUrl,
-    useStega: env?.SANITY_STUDIO_USE_STEGA!,
-    apiVersion: env?.SANITY_STUDIO_API_VERSION!,
-    useCdn: env?.NODE_ENV === "production",
-  });
+  const client = useSanityClient();
+  const { useLiveMode } = useSanityLoader();
 
   useEffect(() => {
     if (!sanityStudioUrl) return;
