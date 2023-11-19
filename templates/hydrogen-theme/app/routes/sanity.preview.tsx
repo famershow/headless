@@ -2,13 +2,14 @@ import type {
   ActionFunctionArgs,
   LoaderFunctionArgs,
 } from "@shopify/remix-oxygen";
-import { json, redirect } from "@shopify/remix-oxygen";
+import { json, redirectDocument } from "@shopify/remix-oxygen";
+
 import { notFound } from "~/lib/utils";
 
 const ROOT_PATH = "/" as const;
 
 export async function action({ context, request }: ActionFunctionArgs) {
-  const { sanitySession, env } = context;
+  const { sanitySession } = context;
 
   if (!(request.method === "POST" && sanitySession)) {
     return json({ message: "Method not allowed" }, 405);
@@ -18,7 +19,7 @@ export async function action({ context, request }: ActionFunctionArgs) {
   const slug = (body.get("slug") as string) ?? ROOT_PATH;
   const redirectTo = slug;
 
-  return redirect(redirectTo, {
+  return redirectDocument(redirectTo, {
     headers: {
       "Set-Cookie": await sanitySession.destroy(),
     },
@@ -43,7 +44,7 @@ export async function loader({ context, request }: LoaderFunctionArgs) {
     "Set-Cookie": useStega ? await sanitySession.commit() : "",
   };
 
-  return redirect(redirectTo, {
+  return redirectDocument(redirectTo, {
     status: 307,
     headers,
   });

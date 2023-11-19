@@ -49,6 +49,7 @@ declare module "@shopify/remix-oxygen" {
     storefront: Storefront;
     session: HydrogenSession;
     sanitySession: SanitySession;
+    sanityPreviewMode: boolean;
     waitUntil: ExecutionContext["waitUntil"];
     sanity: Sanity;
     locale: I18nLocale;

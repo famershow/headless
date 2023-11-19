@@ -46,6 +46,7 @@ export default {
         HydrogenSession.init(request, [env.SESSION_SECRET]),
         SanitySession.init(request, [env.SESSION_SECRET]),
       ]);
+      const sanityPreviewMode = await sanitySession.has("previewMode");
 
       /*
        * Create Hydrogen's Storefront client.
@@ -79,6 +80,7 @@ export default {
       const sanity = createSanityClient({
         cache,
         waitUntil,
+        sanityPreviewMode,
         config: {
           projectId: envVars.SANITY_STUDIO_PROJECT_ID,
           dataset: envVars.SANITY_STUDIO_DATASET,
@@ -99,6 +101,7 @@ export default {
         getLoadContext: () => ({
           session,
           sanitySession,
+          sanityPreviewMode,
           storefront,
           cart,
           env: envVars,

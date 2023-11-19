@@ -1,7 +1,6 @@
 import type { QueryParams } from "@sanity/client/stega";
 import type { QueryStoreState, UseQueryOptions } from "@sanity/react-loader";
-
-import { useQuery } from "~/lib/sanity/sanity.loader";
+import { useSanityLoader } from "./useSanityLoader";
 
 export function useSanityQuery<T>(cms: {
   initial: UseQueryOptions<T>["initial"];
@@ -9,6 +8,7 @@ export function useSanityQuery<T>(cms: {
   query: string;
 }): QueryStoreState<T, unknown> {
   const { initial, params, query } = cms;
+  const { useQuery } = useSanityLoader();
 
   return useQuery(query, params, {
     initial,
