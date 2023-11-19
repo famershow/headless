@@ -7,7 +7,6 @@ import type { I18nLocale } from "~/lib/type";
 import { CmsSection } from "~/components/CmsSection";
 import { PAGE_QUERY } from "~/qroq/queries";
 import { useSanityQuery } from "~/hooks/useSanityQuery";
-import { useSanityPreviewMode } from "~/hooks/useSanityPreviewMode";
 
 export async function loader({ context, params, request }: LoaderFunctionArgs) {
   const { sanity, locale } = context;

@@ -1,13 +1,13 @@
 import type { LoaderFunctionArgs } from "@shopify/remix-oxygen";
 import { json } from "@shopify/remix-oxygen";
 import { Link, useLoaderData } from "@remix-run/react";
-
-import type { CollectionsQuery } from "storefrontapi.generated";
 import {
   flattenConnection,
   getPaginationVariables,
   Image,
 } from "@shopify/hydrogen";
+
+import type { CollectionsQuery } from "storefrontapi.generated";
 import { COLLECTIONS_QUERY } from "~/graphql/queries";
 
 const PAGINATION_SIZE = 4;

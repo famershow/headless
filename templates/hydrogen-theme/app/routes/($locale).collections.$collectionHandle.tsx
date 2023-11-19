@@ -8,6 +8,7 @@ import {
 } from "@shopify/hydrogen";
 import { json } from "@shopify/remix-oxygen";
 import invariant from "tiny-invariant";
+
 import { ProductCardGrid } from "~/components/ProductCardGrid";
 import { COLLECTION_QUERY } from "~/graphql/queries";
 

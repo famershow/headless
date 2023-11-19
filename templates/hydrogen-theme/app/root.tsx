@@ -23,7 +23,6 @@ import { Fonts } from "./components/Fonts";
 import { CMS_SETTINGS_QUERY } from "./qroq/queries";
 import { generateFontsPreloadLinks } from "./lib/fonts";
 import { useLocale } from "./hooks/useLocale";
-import { vercelStegaCleanAll } from "@sanity/client/stega";
 
 // This is important to avoid re-fetching root queries on sub-navigations
 export const shouldRevalidate: ShouldRevalidateFunction = ({
@@ -100,9 +99,7 @@ export async function loader({ context }: LoaderFunctionArgs) {
       locale,
       sanityPreviewMode,
       cms: {
-        initial: sanityPreviewMode
-          ? cmsSettings
-          : vercelStegaCleanAll(cmsSettings),
+        initial: cmsSettings,
         query: CMS_SETTINGS_QUERY.query,
         params: {},
       },
