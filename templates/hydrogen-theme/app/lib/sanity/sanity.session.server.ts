@@ -1,12 +1,7 @@
 import type { Session, SessionStorage } from "@shopify/remix-oxygen";
 import { createCookieSessionStorage } from "@shopify/remix-oxygen";
 
-/**
- * This is a custom session implementation for your Hydrogen shop.
- * Feel free to customize it to your needs, add helper methods, or
- * swap out the cookie-based implementation with something else!
- */
-export class HydrogenSession {
+export class SanitySession {
   #sessionStorage;
   #session;
 
@@ -18,10 +13,9 @@ export class HydrogenSession {
   static async init(request: Request, secrets: string[]) {
     const storage = createCookieSessionStorage({
       cookie: {
-        name: "session",
+        name: "sanityPreview",
         httpOnly: true,
-        path: "/",
-        sameSite: "lax",
+        sameSite: true,
         secrets,
       },
     });
@@ -33,18 +27,6 @@ export class HydrogenSession {
 
   get has() {
     return this.#session.has;
-  }
-
-  get get() {
-    return this.#session.get;
-  }
-
-  get flash() {
-    return this.#session.flash;
-  }
-
-  get unset() {
-    return this.#session.unset;
   }
 
   get set() {

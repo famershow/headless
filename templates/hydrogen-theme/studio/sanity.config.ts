@@ -33,7 +33,7 @@ export default defineConfig({
     deskTool({structure, defaultDocumentNode}),
     presentationTool({
       // Required: set the base URL to the preview location in the front end
-      previewUrl: SANITY_STUDIO_PREVIEW_URL,
+      previewUrl: `${SANITY_STUDIO_PREVIEW_URL}/sanity/preview`,
     }),
     visionTool(),
     documentInternationalization({

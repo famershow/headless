@@ -23,14 +23,6 @@ import { Fonts } from "./components/Fonts";
 import { CMS_SETTINGS_QUERY } from "./qroq/queries";
 import { generateFontsPreloadLinks } from "./lib/fonts";
 import { useLocale } from "./hooks/useLocale";
-import { Suspense, lazy } from "react";
-import { useSanityVisualEditing } from "./hooks/useSanityVisualEditing";
-
-const VisualEditing = lazy(() =>
-  import("~/components/sanity/VisualEditing").then((mod) => ({
-    default: mod.VisualEditing,
-  }))
-);
 
 // This is important to avoid re-fetching root queries on sub-navigations
 export const shouldRevalidate: ShouldRevalidateFunction = ({
@@ -86,8 +78,9 @@ export const meta: MetaFunction<typeof loader> = (loaderData) => {
 };
 
 export async function loader({ context }: LoaderFunctionArgs) {
-  const { session, cart, env, sanity, locale } = context;
+  const { session, cart, env, sanity, locale, sanitySession } = context;
   const customerAccessToken = await session.get("customerAccessToken");
+  const sanityPreviewMode = await sanitySession.has("previewMode");
 
   const cmsSettings = await sanity.query({
     groqdQuery: CMS_SETTINGS_QUERY,
@@ -105,6 +98,7 @@ export async function loader({ context }: LoaderFunctionArgs) {
   return defer(
     {
       locale,
+      sanityPreviewMode,
       cms: {
         initial: cmsSettings,
         query: CMS_SETTINGS_QUERY.query,
@@ -133,7 +127,6 @@ export async function loader({ context }: LoaderFunctionArgs) {
 
 export default function App() {
   const nonce = useNonce();
-  const displaySanityVisualEditing = useSanityVisualEditing();
 
   return (
     <html lang="en">
@@ -149,11 +142,6 @@ export default function App() {
           <Outlet />
         </Layout>
         <ScrollRestoration nonce={nonce} />
-        {displaySanityVisualEditing ? (
-          <Suspense>
-            <VisualEditing />
-          </Suspense>
-        ) : null}
         <Scripts nonce={nonce} />
         <LiveReload nonce={nonce} />
       </body>
