@@ -43,6 +43,7 @@ jobs:
           external_repository: ${{ vars.EXTERNAL_REPO }}
           publish_branch: ${{ steps.branch.outputs.branch }}
           allow_empty_commit: true
+          exclude_assets: false
 
       - name: Generate pull request comment
         if: github.event_name == 'pull_request' && steps.changed-files-yaml.outputs.hydrogen-theme_any_changed == 'true'

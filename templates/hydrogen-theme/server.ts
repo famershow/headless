@@ -80,7 +80,6 @@ export default {
       const sanity = createSanityClient({
         cache,
         waitUntil,
-        sanityPreviewMode,
         config: {
           projectId: envVars.SANITY_STUDIO_PROJECT_ID,
           dataset: envVars.SANITY_STUDIO_DATASET,

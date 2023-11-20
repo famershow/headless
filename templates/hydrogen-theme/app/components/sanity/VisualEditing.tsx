@@ -7,7 +7,7 @@ import { cx } from "class-variance-authority";
 import { useEnvironmentVariables } from "~/hooks/useEnvironmentVariables";
 import { useIsInIframe } from "~/hooks/useIsInIframe";
 import { useSanityClient } from "~/hooks/useSanityClient";
-import { useSanityLoader } from "~/hooks/useSanityLoader";
+import { useLiveMode } from "~/lib/sanity/sanity.loader";
 
 export function VisualEditing() {
   const env = useEnvironmentVariables();
@@ -19,7 +19,6 @@ export function VisualEditing() {
   );
   const sanityStudioUrl = env?.SANITY_STUDIO_URL!;
   const client = useSanityClient();
-  const { useLiveMode } = useSanityLoader();
 
   useEffect(() => {
     if (!sanityStudioUrl) return;

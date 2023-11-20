@@ -10,12 +10,11 @@ import type {
 import { CacheShort, createWithCache } from "@shopify/hydrogen";
 
 import { getSanityClient } from "./client";
-import { createQueryStore } from "@sanity/react-loader";
+import { queryStore } from "./sanity.loader";
 
 type CreateSanityClientOptions = {
   cache: Cache;
   waitUntil: ExecutionContext["waitUntil"];
-  sanityPreviewMode: boolean;
   config: {
     projectId: string;
     dataset: string;
@@ -46,8 +45,10 @@ export type Sanity = {
   }>;
 };
 
+let sanityServerClientHasBeenInitialized = false;
+
 export function createSanityClient(options: CreateSanityClientOptions) {
-  const { cache, waitUntil, config, sanityPreviewMode } = options;
+  const { cache, waitUntil, config } = options;
   const { projectId, dataset, useStega, useCdn, studioUrl, apiVersion } =
     config;
 
@@ -58,13 +59,12 @@ export function createSanityClient(options: CreateSanityClientOptions) {
     apiVersion,
     useStega,
     studioUrl,
-    sanityPreviewMode,
   });
 
-  const queryStore = createQueryStore({
-    client,
-    ssr: false,
-  });
+  if (!sanityServerClientHasBeenInitialized) {
+    queryStore.setServerClient(client);
+    sanityServerClientHasBeenInitialized = true;
+  }
 
   const sanity: Sanity = {
     client,
@@ -76,7 +76,7 @@ export function createSanityClient(options: CreateSanityClientOptions) {
     }) {
       const { loadQuery } = queryStore;
       const { query } = groqdQuery as GroqdQuery;
-      const queryHash = await hashQuery(query, params, sanityPreviewMode);
+      const queryHash = await hashQuery(query, params);
       const withCache = createWithCache({
         cache,
         waitUntil,
@@ -119,16 +119,8 @@ export async function sha256(message: string): Promise<string> {
  * Hash query and its parameters for use as cache key
  * NOTE: Oxygen deployment will break if the cache key is long or contains `\n`
  */
-function hashQuery(
-  query: GroqdQuery["query"],
-  params?: QueryParams,
-  sanityPreviewMode?: boolean
-) {
+function hashQuery(query: GroqdQuery["query"], params?: QueryParams) {
   let hash = query;
-
-  if (sanityPreviewMode) {
-    hash += "previewMode";
-  }
 
   if (params !== null) {
     hash += JSON.stringify(params);

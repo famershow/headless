@@ -8,17 +8,8 @@ export const getSanityClient = (args: {
   studioUrl: string;
   apiVersion: string;
   useCdn: boolean;
-  sanityPreviewMode?: boolean;
 }) => {
-  const {
-    projectId,
-    dataset,
-    useStega,
-    studioUrl,
-    apiVersion,
-    useCdn,
-    sanityPreviewMode,
-  } = args;
+  const { projectId, dataset, useStega, studioUrl, apiVersion, useCdn } = args;
 
   return {
     client: createClient({
@@ -27,7 +18,7 @@ export const getSanityClient = (args: {
       useCdn,
       apiVersion: apiVersion || "2023-10-01",
       stega: {
-        enabled: sanityPreviewMode && useStega === "true" ? true : false,
+        enabled: useStega === "true" ? true : false,
         studioUrl,
       },
     }),
