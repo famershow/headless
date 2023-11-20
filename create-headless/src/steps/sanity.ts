@@ -6,7 +6,7 @@ import execa from "execa";
 async function initSanity(cwd: string) {
   // TODO: dynamically set the package manager
 
-  await execa("npx", ["sanity@latest", "init", "--env"], {
+  await execa("sanity", ["init", "--env"], {
     cwd,
     stdio: "inherit",
   });

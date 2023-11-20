@@ -7,9 +7,9 @@
     "create-headless": "dist/index.cjs"
   },
   "scripts": {
-    "dev": "bun index.ts",
-    "build": "tsup index.ts",
-    "start": "bun dist/index.cjs",
+    "dev": "tsup --watch",
+    "build": "tsup",
+    "start": "node dist/index.js",
     "version": "bun run build && changeset version"
   },
   "devDependencies": {
@@ -30,6 +30,7 @@
     "picocolors": "^1.0.0",
     "proxy-agent": "^6.3.1",
     "recursive-readdir": "^2.2.3",
+    "sanity": "^3.19.3",
     "tar-fs": "^3.0.4"
   }
 }
