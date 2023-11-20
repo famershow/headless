@@ -1,6 +1,5 @@
 import { isCancel, cancel as clackCancel } from "@clack/prompts";
-import { cancelMessages } from "./consts";
-import { adjectives, nouns } from "~/consts";
+import { adjectives, nouns, cancelMessages } from "~/consts";
 
 export function cancel(value: any) {
   if (isCancel(value)) {
@@ -12,9 +11,9 @@ export function cancel(value: any) {
 }
 
 export function generateName(): string {
-  const randomAdjective: string =
+  const randomAdjective =
     adjectives[Math.floor(Math.random() * adjectives.length)];
-  const randomName: string = nouns[Math.floor(Math.random() * nouns.length)];
+  const randomName = nouns[Math.floor(Math.random() * nouns.length)];
 
   return `${randomAdjective}-${randomName}`;
 }

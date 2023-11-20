@@ -1,4 +1,4 @@
-import { confirm, log, text } from "@clack/prompts";
+import { confirm } from "@clack/prompts";
 import type { Context } from "~/types";
 import { cancel } from "~/utils";
 import execa from "execa";
