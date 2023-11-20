@@ -1,7 +1,7 @@
 export const template_options = [
   {
-    value: "thomasKn/astro-shopify",
-    label: "Astro Shopify",
+    value: "buildheadless/headless/templates/hydrogen-theme",
+    label: "Sanity x Hydrogen",
   },
 ];
 
