@@ -1,5 +1,5 @@
 packages:
-  - "apps/*"
-  - "packages/*"
-  - "templates/hydrogen-theme"
-  - "templates/hydrogen-theme/studio"
+  - create-headless
+  - apps/*
+  - templates/hydrogen-theme
+  - templates/hydrogen-theme/studio

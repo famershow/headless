@@ -1,6 +1,10 @@
 node_modules
+bun.lockb
+pnpm-lock.yaml
+
 dist
 build
 .turbo
 .env
+
 .DS_Store
