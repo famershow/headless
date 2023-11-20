@@ -6,3 +6,5 @@ dist
 build
 .turbo
 .env
+
+.DS_Store

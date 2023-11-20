@@ -9,12 +9,16 @@
   "license": "MIT",
   "packageManager": "pnpm@8.9.2",
   "scripts": {
-    "build": "turbo build",
+    "build": "turbo build --filter=create-headless",
     "dev": "turbo dev",
+    "dev:theme": "turbo dev --filter=hydrogen-theme --filter=sanity-studio",
+    "deploy:studio": "turbo run deploy --filter=sanity-studio",
     "changeset": "changeset add",
     "version": "changeset version"
   },
   "dependencies": {
-    "sanity": "latest"
+    "@changesets/cli": "^2.26.2",
+    "tsup": "^7.2.0",
+    "turbo": "^1.10.16"
   }
 }
