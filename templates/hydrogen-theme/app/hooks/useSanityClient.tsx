@@ -1,6 +1,5 @@
 import { getSanityClient } from "~/lib/sanity/client";
 import { useEnvironmentVariables } from "./useEnvironmentVariables";
-import { useSanityPreviewMode } from "./useSanityPreviewMode";
 
 export function useSanityClient() {
   const env = useEnvironmentVariables();
