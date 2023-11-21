@@ -1,12 +1,12 @@
 import type { LoaderFunctionArgs } from "@shopify/remix-oxygen";
 import { defer } from "@shopify/remix-oxygen";
+import { useLoaderData } from "@remix-run/react";
 
 import type { I18nLocale } from "~/lib/type";
 import { CmsSection } from "~/components/CmsSection";
 import { PAGE_QUERY } from "~/qroq/queries";
-import { useLoaderData } from "@remix-run/react";
-import { useSanityData } from "~/components/sanity/SanityData";
 import { sanityPreviewPayload } from "~/lib/sanity/sanity.payload.server";
+import { useSanityData } from "~/hooks/useSanityData";
 
 export async function loader({ context, params, request }: LoaderFunctionArgs) {
   const { sanity, locale } = context;

@@ -7,7 +7,7 @@ type SanityPayload = {
   context: AppLoadContext;
 };
 /**
- * The `sanityPreviewPayload` object is used by `SanityData` component and `useSanityData` hook.
+ * The `sanityPreviewPayload` object is used by the `useSanityData` hook.
  * It is used to pass the query and params to the Sanity client and fetch live data from Sanity Studio.
  * The payload will be returned as `null` if the `sanityPreviewMode` is false.
  **/
