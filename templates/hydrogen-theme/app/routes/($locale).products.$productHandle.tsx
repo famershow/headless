@@ -12,8 +12,8 @@ import {
   VARIANTS_QUERY,
 } from "~/graphql/queries";
 import { PRODUCT_QUERY as CMS_PRODUCT_QUERY } from "~/qroq/queries";
-import { SanityData } from "~/components/sanity/SanityData";
 import { sanityPreviewPayload } from "~/lib/sanity/sanity.payload.server";
+import { useSanityData } from "~/hooks/useSanityData";
 
 export async function loader({ context, params, request }: LoaderFunctionArgs) {
   const { productHandle } = params;
@@ -108,16 +108,13 @@ function redirectToFirstVariant({
 
 export default function Product() {
   const { product, cmsProduct } = useLoaderData<typeof loader>();
+  const { data } = useSanityData(cmsProduct);
 
   return (
-    <SanityData initial={cmsProduct}>
-      {(data) => (
-        <div className="container">
-          <h1>{product.title}</h1>
-          <h2>Data from Sanity: {data?.title}</h2>
-        </div>
-      )}
-    </SanityData>
+    <div className="container">
+      <h1>{product.title}</h1>
+      <h2>Data from Sanity: {data?.title}</h2>
+    </div>
   );
 }
 
