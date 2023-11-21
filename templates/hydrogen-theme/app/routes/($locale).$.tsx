@@ -1,12 +1,12 @@
 import type { LoaderFunctionArgs } from "@shopify/remix-oxygen";
-import { useLoaderData } from "@remix-run/react";
 import { defer } from "@shopify/remix-oxygen";
-import { Suspense } from "react";
 
 import type { I18nLocale } from "~/lib/type";
 import { CmsSection } from "~/components/CmsSection";
 import { PAGE_QUERY } from "~/qroq/queries";
-import { useSanityQuery } from "~/hooks/useSanityQuery";
+import { useLoaderData } from "@remix-run/react";
+import { useSanityData } from "~/components/sanity/SanityData";
+import { sanityPreviewPayload } from "~/lib/sanity/sanity.payload.server";
 
 export async function loader({ context, params, request }: LoaderFunctionArgs) {
   const { sanity, locale } = context;
@@ -19,12 +19,12 @@ export async function loader({ context, params, request }: LoaderFunctionArgs) {
     language,
   };
 
-  const cmsPage = await sanity.query({
+  const page = await sanity.query({
     groqdQuery: PAGE_QUERY,
     params: queryParams,
   });
 
-  if (!cmsPage.data) {
+  if (!page.data) {
     throw new Response(null, {
       status: 404,
       statusText: "Not Found",
@@ -32,33 +32,24 @@ export async function loader({ context, params, request }: LoaderFunctionArgs) {
   }
 
   return defer({
-    cms: {
-      initial: cmsPage,
-      params: queryParams,
+    page,
+    ...sanityPreviewPayload({
       query: PAGE_QUERY.query,
-    },
+      params: queryParams,
+      context,
+    }),
   });
 }
 
 export default function PageRoute() {
-  const { cms } = useLoaderData<typeof loader>();
-  const { data, loading } = useSanityQuery(cms);
+  const { page } = useLoaderData<typeof loader>();
+  const { data } = useSanityData(page);
 
-  // `data` should contain the initial data from the loader
-  // `loading` will only be true when Visual Editing is enabled
-  if (loading && !data) {
-    return <div>Sanity Visual Editing is loading...</div>;
-  }
-
-  return (
-    <Suspense>
-      {data?.sections && data?.sections?.length > 0
-        ? data.sections.map((section) => (
-            <CmsSection key={section._key} data={section} />
-          ))
-        : null}
-    </Suspense>
-  );
+  return data?.sections && data.sections.length > 0
+    ? data.sections.map((section) => (
+        <CmsSection data={section} key={section._key} />
+      ))
+    : null;
 }
 
 function getPageHandle(args: {

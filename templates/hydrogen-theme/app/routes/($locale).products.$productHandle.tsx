@@ -12,7 +12,8 @@ import {
   VARIANTS_QUERY,
 } from "~/graphql/queries";
 import { PRODUCT_QUERY as CMS_PRODUCT_QUERY } from "~/qroq/queries";
-import { useSanityQuery } from "~/hooks/useSanityQuery";
+import { SanityData } from "~/components/sanity/SanityData";
+import { sanityPreviewPayload } from "~/lib/sanity/sanity.payload.server";
 
 export async function loader({ context, params, request }: LoaderFunctionArgs) {
   const { productHandle } = params;
@@ -76,12 +77,13 @@ export async function loader({ context, params, request }: LoaderFunctionArgs) {
   return defer({
     variants,
     product,
-    cms: {
-      initial: cmsProduct,
-      params: queryParams,
-      query: CMS_PRODUCT_QUERY.query,
-    },
+    cmsProduct,
     recommended,
+    ...sanityPreviewPayload({
+      query: CMS_PRODUCT_QUERY.query,
+      params: queryParams,
+      context,
+    }),
   });
 }
 
@@ -105,20 +107,17 @@ function redirectToFirstVariant({
 }
 
 export default function Product() {
-  const { product, cms } = useLoaderData<typeof loader>();
-  const { data, loading } = useSanityQuery(cms);
-
-  // `data` should contain the initial data from the loader
-  // `loading` will only be true when Visual Editing is enabled
-  if (loading && !data) {
-    return <div>Sanity Visual Editing is loading...</div>;
-  }
+  const { product, cmsProduct } = useLoaderData<typeof loader>();
 
   return (
-    <div className="container">
-      <h1>{product.title}</h1>
-      <h2>Data from Sanity: {data?.title}</h2>
-    </div>
+    <SanityData initial={cmsProduct}>
+      {(data) => (
+        <div className="container">
+          <h1>{product.title}</h1>
+          <h2>Data from Sanity: {data?.title}</h2>
+        </div>
+      )}
+    </SanityData>
   );
 }
 

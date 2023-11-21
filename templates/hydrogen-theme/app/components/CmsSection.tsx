@@ -1,6 +1,6 @@
 import type { CSSProperties } from "react";
 import type { InferType } from "groqd";
-import { useMemo } from "react";
+import { Suspense, useMemo } from "react";
 import { cx } from "class-variance-authority";
 
 import type { DEFAULT_COLOR_SCHEME_QUERY } from "~/qroq/queries";
@@ -23,9 +23,11 @@ export function CmsSection(props: { data: NonNullable<CmsSectionsProps>[0] }) {
   const Section = useMemo(() => sections[type], [type]);
 
   return Section ? (
-    <SectionWrapper data={data}>
-      <Section data={data} />
-    </SectionWrapper>
+    <Suspense>
+      <SectionWrapper data={data}>
+        <Section data={data} />
+      </SectionWrapper>
+    </Suspense>
   ) : isDev ? (
     <Fallback type={type} />
   ) : null;
