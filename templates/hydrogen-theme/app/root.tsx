@@ -126,9 +126,10 @@ export async function loader({ context }: LoaderFunctionArgs) {
 
 export default function App() {
   const nonce = useNonce();
+  const locale = useLocale();
 
   return (
-    <html lang="en">
+    <html lang={locale?.language}>
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width,initial-scale=1" />
@@ -167,18 +168,18 @@ export function ErrorBoundary() {
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width,initial-scale=1" />
-        <title>{title}</title>
         <Meta />
+        <Fonts />
         <Links />
       </head>
-      <body>
-        <main>
+      <body className="flex min-h-screen flex-col [&_main]:flex-1">
+        <Layout>
           <section>
             <div className="container">
               <h1>{title}</h1>
             </div>
           </section>
-        </main>
+        </Layout>
         <ScrollRestoration nonce={nonce} />
         <Scripts nonce={nonce} />
         <LiveReload nonce={nonce} />

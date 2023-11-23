@@ -13,11 +13,17 @@ import {
 */
 export const PAGE_QUERY = q("*")
   .filter(
-    ` _type == "page" &&
-      language in [$language, null] &&
-      slug.current == $handle ||
-      _type == "home" &&
-      language in [$language, null]
+    ` (
+        _type == "page" &&
+        language in [$language, null] &&
+        ($handle != "home" && slug.current == $handle)
+      ) ||
+      (
+        _type == "home" &&
+        language in [$language, null] &&
+        $handle == "home" &&
+        !defined(slug.current)
+      )
     `
   )
   .grab({
