@@ -10,7 +10,7 @@ import type {
 import { CacheShort, createWithCache } from "@shopify/hydrogen";
 
 import { getSanityClient } from "./client";
-import { queryStore } from "./sanity.loader";
+import { loadQuery, queryStore } from "./sanity.loader";
 
 type CreateSanityClientOptions = {
   cache: Cache;
@@ -74,7 +74,6 @@ export function createSanityClient(options: CreateSanityClientOptions) {
       cache: strategy = CacheShort(),
       queryOptions,
     }) {
-      const { loadQuery } = queryStore;
       const { query } = groqdQuery as GroqdQuery;
       const queryHash = await hashQuery(query, params);
       const withCache = createWithCache({

@@ -23,7 +23,7 @@
   },
   "pnpm": {
     "patchedDependencies": {
-      "@sanity/react-loader@1.0.2": "patches/@sanity__react-loader@1.0.2.patch"
+      "@sanity/react-loader@1.1.0": "patches/@sanity__react-loader@1.1.0.patch"
     }
   }
 }
