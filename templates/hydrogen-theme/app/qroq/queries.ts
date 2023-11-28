@@ -3,7 +3,9 @@ import { q } from "groqd";
 import {
   COLOR_SCHEME_FRAGMENT,
   FONT_CATEGORY_FRAGMENT,
+  MENU_FRAGMENT,
   SECTIONS_FRAGMENT,
+  SETTINGS_FRAGMENT,
 } from "./fragments";
 
 /*
@@ -72,9 +74,34 @@ export const DEFAULT_COLOR_SCHEME_QUERY = q("*")
   .order("_createdAt asc")
   .slice(0);
 
+export const SETTINGS_QUERY = q("*")
+  .filter("_type == 'settings'")
+  .grab(SETTINGS_FRAGMENT)
+  .slice(0)
+  .nullable();
+
+export const HEADER_QUERY = q("*")
+  .filter("_type == 'header'")
+  .grab({
+    desktopLogoWidth: q.number().nullable(),
+    paddingTop: q.number().nullable(),
+    paddingBottom: q.number().nullable(),
+    menu: MENU_FRAGMENT,
+  })
+  .slice(0)
+  .nullable();
+
+export const FOOTER_QUERY = q("*")
+  .filter("_type == 'footer'")
+  .slice(0)
+  .nullable();
+
 export const CMS_SETTINGS_QUERY = q("")
   .grab({
     defaultColorScheme: DEFAULT_COLOR_SCHEME_QUERY,
     fonts: FONTS_QUERY,
+    settings: SETTINGS_QUERY,
+    header: HEADER_QUERY,
+    footer: FOOTER_QUERY,
   })
   .nullable();
