@@ -14,6 +14,7 @@ import {defaultDocumentNode, structure} from './desk'
 import {projectDetails} from './project.details'
 import {getAllLanguages} from '../countries'
 import {customDocumentActions} from './plugins/customDocumentActions'
+import {SINGLETONS, singletonActions, singletonsTypes} from './desk/singletons'
 
 const {projectId, dataset, apiVersion} = projectDetails
 const localePreviewUrl = 'http://localhost:3000'
@@ -59,5 +60,15 @@ export default defineConfig({
   ],
   schema: {
     types: schemaTypes,
+    // Filter out singleton types from the global “New document” menu options
+    templates: (templates) => templates.filter(({schemaType}) => !singletonsTypes.has(schemaType)),
+  },
+  document: {
+    // For singleton types, filter out actions that are not explicitly included
+    // in the `singletonActions` list defined above
+    actions: (input, context) =>
+      singletonsTypes.has(context.schemaType)
+        ? input.filter(({action}) => action && singletonActions.has(action))
+        : input,
   },
 })
