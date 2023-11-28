@@ -1,7 +1,8 @@
-import type { SectionFragment } from "~/lib/type";
+import type { TypeFromSelection } from "groqd";
+
 import type { CTA_SECTION_FRAGMENT } from "~/qroq/sections";
 
-type CtaSectionProps = SectionFragment<typeof CTA_SECTION_FRAGMENT>;
+type CtaSectionProps = TypeFromSelection<typeof CTA_SECTION_FRAGMENT>;
 
 export function CtaSection(props: { data: CtaSectionProps }) {
   const { data } = props;

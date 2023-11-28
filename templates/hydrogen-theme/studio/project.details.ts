@@ -5,4 +5,5 @@ export const projectDetails = {
   apiVersion: process.env.SANITY_STUDIO_API_VERSION || '2023-10-01',
   previewUrl: process.env.SANITY_STUDIO_PREVIEW_URL,
   previewSecret: process.env.SANITY_STUDIO_PREVIEW_SECRET,
+  shopifyShopHandle: process.env.SANITY_STUDIO_SHOPIFY_SHOP_HANDLE,
 }

@@ -66,4 +66,7 @@ export default defineType({
       },
     }),
   ],
+  preview: {
+    prepare: () => ({title: 'Settings'}),
+  },
 })

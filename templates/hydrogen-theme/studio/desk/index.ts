@@ -1,41 +1,24 @@
 import {DefaultDocumentNodeResolver, StructureResolver} from 'sanity/desk'
-import {ComposeIcon} from '@sanity/icons'
 
 import {SINGLETONS, singleton} from './singletons'
-import {intDocumentList} from './intDocumentList'
-import {IconPage} from '../icons/Page'
-import {IconTag} from '../icons/Tag'
-import {IconCollectionTag} from '../icons/CollectionTag'
+import {IconPage} from '../components/icons/Page'
+import {IconBlog} from '../components/icons/Blog'
+import {products} from './productStructure'
+import {collections} from './collectionStructure'
 
 export const defaultDocumentNode: DefaultDocumentNodeResolver = (S) => {
   return S.document().views([S.view.form()])
 }
 
-export const structure: StructureResolver = (S) => {
+export const structure: StructureResolver = (S, context) => {
   return S.list()
     .title('Content')
     .items([
       singleton(S, SINGLETONS.home),
-      intDocumentList(S, {
-        title: 'Pages',
-        _type: 'page',
-        icon: IconPage,
-      }),
-      intDocumentList(S, {
-        title: 'Products',
-        _type: 'product',
-        icon: IconTag,
-      }),
-      intDocumentList(S, {
-        title: 'Collections',
-        _type: 'collection',
-        icon: IconCollectionTag,
-      }),
-      intDocumentList(S, {
-        title: 'Blog posts',
-        _type: 'blogPost',
-        icon: ComposeIcon,
-      }),
+      S.documentTypeListItem('page').icon(IconPage),
+      products(S, context),
+      collections(S, context),
+      S.documentTypeListItem('blogPost').icon(IconBlog),
       S.divider(),
       singleton(S, SINGLETONS.header),
       singleton(S, SINGLETONS.footer),

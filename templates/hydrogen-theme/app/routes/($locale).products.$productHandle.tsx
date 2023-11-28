@@ -14,6 +14,7 @@ import {
 import { PRODUCT_QUERY as CMS_PRODUCT_QUERY } from "~/qroq/queries";
 import { sanityPreviewPayload } from "~/lib/sanity/sanity.payload.server";
 import { useSanityData } from "~/hooks/useSanityData";
+import { DEFAULT_LOCALE } from "countries";
 
 export async function loader({ context, params, request }: LoaderFunctionArgs) {
   const { productHandle } = params;
@@ -27,6 +28,7 @@ export async function loader({ context, params, request }: LoaderFunctionArgs) {
   const queryParams = {
     productHandle,
     language,
+    defaultLanguage: DEFAULT_LOCALE.language.toLowerCase(),
   };
 
   const productData = Promise.all([
@@ -113,7 +115,6 @@ export default function Product() {
   return (
     <div className="container">
       <h1>{product.title}</h1>
-      <h2>Data from Sanity: {data?.title}</h2>
     </div>
   );
 }

@@ -1,7 +1,8 @@
-import type { SectionFragment } from "~/lib/type";
+import type { TypeFromSelection } from "groqd";
+
 import type { HERO_SECTION_FRAGMENT } from "~/qroq/sections";
 
-type HeroSectionProps = SectionFragment<typeof HERO_SECTION_FRAGMENT>;
+type HeroSectionProps = TypeFromSelection<typeof HERO_SECTION_FRAGMENT>;
 
 export function HeroSection(props: { data: HeroSectionProps }) {
   const { data } = props;

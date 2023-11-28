@@ -1,3 +1,4 @@
+import type { Selection } from "groqd";
 import { q } from "groqd";
 
 /*
@@ -6,8 +7,14 @@ import { q } from "groqd";
 |--------------------------------------------------------------------------
 */
 export const HERO_SECTION_FRAGMENT = {
-  title: q.string(),
-};
+  title: [
+    `coalesce(
+      title[_key == $language][0].value,
+      title[_key == $defaultLanguage][0].value,
+    )`,
+    q.string(),
+  ],
+} satisfies Selection;
 
 /*
 |--------------------------------------------------------------------------
@@ -15,8 +22,14 @@ export const HERO_SECTION_FRAGMENT = {
 |--------------------------------------------------------------------------
 */
 export const CTA_SECTION_FRAGMENT = {
-  title: q.string(),
-};
+  title: [
+    `coalesce(
+      title[_key == $language][0].value,
+      title[_key == $defaultLanguage][0].value,
+    )`,
+    q.string(),
+  ],
+} satisfies Selection;
 
 /*
 |--------------------------------------------------------------------------

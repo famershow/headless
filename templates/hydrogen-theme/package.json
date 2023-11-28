@@ -19,7 +19,7 @@
     "@remix-run/react": "2.3.1",
     "@sanity/client": "^6.8.6",
     "@sanity/image-url": "^1.0.2",
-    "@sanity/overlays": "^2.0.2",
+    "@sanity/overlays": "^2.0.3",
     "@sanity/react-loader": "^1.1.0",
     "@shopify/cli": "3.51.0",
     "@shopify/cli-hydrogen": "^6.0.2",
@@ -52,7 +52,7 @@
     "postcss": "^8.4.31",
     "postcss-import": "^15.1.0",
     "postcss-preset-env": "^9.3.0",
-    "prettier": "2.8.8",
+    "prettier": "^2.8.8",
     "prettier-plugin-tailwindcss": "0.4.1",
     "tailwindcss": "^3.3.5",
     "typescript": "^5.3.2"

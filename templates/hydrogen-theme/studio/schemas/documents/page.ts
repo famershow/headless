@@ -1,6 +1,6 @@
 import {defineField, defineType} from 'sanity'
 
-import {slugOptions} from '../../utils/slugInternationalization'
+import {SlugInt, validateIntSlug} from '../../utils/slug'
 
 export default defineType({
   name: 'page',
@@ -9,7 +9,7 @@ export default defineType({
   fields: [
     defineField({
       name: 'title',
-      type: 'string',
+      type: 'internationalizedArrayString',
       title: 'Title',
     }),
     defineField({
@@ -22,16 +22,22 @@ export default defineType({
     }),
     defineField({
       name: 'slug',
-      type: 'slug',
+      type: 'internationalizedArraySlug',
       title: 'Slug',
-      validation: (Rule) => Rule.required(),
-      options: slugOptions,
-    }),
-    defineField({
-      name: 'language',
-      type: 'string',
-      readOnly: true,
-      hidden: true,
+      validation: (Rule) =>
+        Rule.required().custom((slugArray: SlugInt[], context) =>
+          validateIntSlug({slugArray, context})
+        ),
     }),
   ],
+  preview: {
+    select: {
+      title: 'title',
+    },
+    prepare({title}) {
+      return {
+        title: title?.[0]?.value || 'No title',
+      }
+    },
+  },
 })

@@ -7,6 +7,7 @@ import { CmsSection } from "~/components/CmsSection";
 import { PAGE_QUERY } from "~/qroq/queries";
 import { sanityPreviewPayload } from "~/lib/sanity/sanity.payload.server";
 import { useSanityData } from "~/hooks/useSanityData";
+import { DEFAULT_LOCALE } from "countries";
 
 export async function loader({ context, params, request }: LoaderFunctionArgs) {
   const { sanity, locale } = context;
@@ -17,6 +18,7 @@ export async function loader({ context, params, request }: LoaderFunctionArgs) {
   const queryParams = {
     handle,
     language,
+    defaultLanguage: DEFAULT_LOCALE.language.toLowerCase(),
   };
 
   const page = await sanity.query({

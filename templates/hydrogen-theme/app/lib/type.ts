@@ -19,7 +19,3 @@ export type Locale = {
 };
 
 export type Localizations = Record<string, Locale>;
-
-export type SectionFragment<T> = {
-  [K in keyof T]: InferType<T[K]>;
-};

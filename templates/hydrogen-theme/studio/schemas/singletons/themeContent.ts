@@ -17,7 +17,7 @@ export default defineType({
         defineField({
           title: 'View',
           name: 'view',
-          type: 'string',
+          type: 'internationalizedArrayString',
         }),
       ],
       initialValue: {
@@ -33,18 +33,15 @@ export default defineType({
         defineField({
           title: 'Add to cart',
           name: 'addToCart',
-          type: 'string',
+          type: 'internationalizedArrayString',
         }),
       ],
       initialValue: {
         addToCart: 'Add to cart',
       },
     }),
-    defineField({
-      name: 'language',
-      type: 'string',
-      readOnly: true,
-      hidden: true,
-    }),
   ],
+  preview: {
+    prepare: () => ({title: 'Theme Content'}),
+  },
 })

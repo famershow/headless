@@ -13,10 +13,35 @@ import blogPost from './documents/blogPost'
 import sectionsList from './objects/global/sectionsList'
 import seo from './objects/global/seo'
 import sectionSettings from './objects/global/sectionSettings'
+import headerNavigation from './objects/global/headerNavigation'
+import inventory from './objects/shopify/inventory'
+import options from './objects/shopify/options'
+import placeholderString from './objects/shopify/placeholderString'
+import priceRange from './objects/shopify/priceRange'
+import proxyString from './objects/shopify/proxyString'
+import shopifyProduct from './objects/shopify/shopifyProduct'
+import shopifyProductVariant from './objects/shopify/shopifyProductVariant'
+import productVariant from './documents/productVariant'
+import shopifyCollection from './objects/shopify/shopifyCollection'
+import shopifyCollectionRule from './objects/shopify/shopifyCollectionRule'
 
 const singletons = [home, header, footer, settings, themeContent]
-const documents = [page, color, collection, product, blogPost]
+const documents = [page, color, collection, product, blogPost, productVariant]
 const sections = [heroSection, ctaSection]
-const objects = [sectionsList, seo, sectionSettings]
+const objects = [
+  sectionsList,
+  seo,
+  sectionSettings,
+  headerNavigation,
+  inventory,
+  options,
+  placeholderString,
+  priceRange,
+  proxyString,
+  shopifyProduct,
+  shopifyProductVariant,
+  shopifyCollection,
+  shopifyCollectionRule,
+]
 
-export const schemaTypes = [...singletons, ...documents, ...sections, ...objects]
+export const schemaTypes = [...objects, ...sections, ...singletons, ...documents]
