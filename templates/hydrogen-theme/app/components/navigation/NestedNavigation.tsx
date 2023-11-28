@@ -31,7 +31,7 @@ export function NestedNavigation(props: {
       </NavigationTrigger>
       <NavigationMenu.Content className="absolute left-0 top-[var(--nav-height)] w-full">
         {/* Todo: use background from scheme */}
-        <ul className="flex w-auto min-w-[10rem] flex-col gap-3 rounded bg-white p-2 shadow">
+        <ul className="relative z-10 flex w-auto min-w-[10rem] flex-col gap-3 rounded bg-white p-2 shadow">
           {childLinks.map((child) =>
             child._type === "internalLink" ? (
               <SanityInternalLink key={child._key} data={child} />
