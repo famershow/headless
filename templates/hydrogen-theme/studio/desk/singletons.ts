@@ -48,6 +48,12 @@ export const SINGLETONS: {
   },
 }
 
+export const singletonsTypes = new Set(
+  Object.values(SINGLETONS).map((singleton) => singleton._type)
+)
+// Define the actions that should be available for singleton documents
+export const singletonActions = new Set(['publish', 'discardChanges', 'restore'])
+
 export const singleton = (S: StructureBuilder, singleton: Singleton) =>
   S.documentTypeListItem(singleton._type)
     .icon(singleton.icon)
@@ -56,5 +62,5 @@ export const singleton = (S: StructureBuilder, singleton: Singleton) =>
         .title(singleton.title)
         .schemaType(singleton._type)
         .documentId(singleton._type)
-        .views([S.view.form()]),
+        .views([S.view.form()])
     )
