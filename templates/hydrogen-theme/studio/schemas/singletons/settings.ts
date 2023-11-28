@@ -8,30 +8,18 @@ export default defineType({
     defineField({
       title: 'Logo',
       name: 'logo',
-      type: 'object',
-      fields: [
-        defineField({
-          title: 'Logo',
-          name: 'logo',
-          type: 'image',
-        }),
-        defineField({
-          title: 'Desktop logo width',
-          name: 'desktopWidth',
-          type: 'number',
-        }),
-        defineField({
-          title: 'Favicon',
-          description: 'Will be scaled down to 32 x 32px',
-          name: 'favicon',
-          type: 'image',
-        }),
-      ],
+      type: 'image',
       options: {
-        collapsible: true,
+        hotspot: true,
       },
-      initialValue: {
-        desktopWidth: 100,
+    }),
+    defineField({
+      title: 'Favicon',
+      description: 'Will be scaled down to 32 x 32px',
+      name: 'favicon',
+      type: 'image',
+      options: {
+        hotspot: true,
       },
     }),
     defineField({

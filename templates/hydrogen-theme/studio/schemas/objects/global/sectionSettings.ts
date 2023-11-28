@@ -1,4 +1,5 @@
 import {defineField} from 'sanity'
+import {paddingBottom, paddingTop} from './paddingOptions'
 
 export default defineField({
   type: 'object',
@@ -13,26 +14,12 @@ export default defineField({
     defineField({
       name: 'paddingTop',
       title: 'Top padding',
-      type: 'rangeSlider',
-      options: {
-        min: 0,
-        max: 200,
-        suffix: 'px',
-      },
-      initialValue: 80,
-      validation: (Rule: any) => Rule.min(0).max(200),
+      type: 'paddingTop',
     }),
     defineField({
       name: 'paddingBottom',
       title: 'Bottom padding',
-      type: 'rangeSlider',
-      options: {
-        min: 0,
-        max: 200,
-        suffix: 'px',
-      },
-      initialValue: 80,
-      validation: (Rule: any) => Rule.min(0).max(200),
+      type: 'paddingBottom',
     }),
     defineField({
       type: 'code',

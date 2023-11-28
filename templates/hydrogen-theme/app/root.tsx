@@ -18,11 +18,12 @@ import type { HydrogenSession } from "./lib/hydrogen.session.server";
 import favicon from "../public/favicon.svg";
 import appStyles from "./styles/app.css";
 import tailwindCss from "./styles/tailwind.css";
-import { Layout } from "~/components/Layout";
+import { Layout } from "~/components/layout/Layout";
 import { Fonts } from "./components/Fonts";
 import { CMS_SETTINGS_QUERY } from "./qroq/queries";
 import { generateFontsPreloadLinks } from "./lib/fonts";
 import { useLocale } from "./hooks/useLocale";
+import { DEFAULT_LOCALE } from "countries";
 
 // This is important to avoid re-fetching root queries on sub-navigations
 export const shouldRevalidate: ShouldRevalidateFunction = ({
@@ -79,10 +80,15 @@ export const meta: MetaFunction<typeof loader> = (loaderData) => {
 
 export async function loader({ context }: LoaderFunctionArgs) {
   const { session, cart, env, sanity, locale, sanityPreviewMode } = context;
+  const language = locale?.language.toLowerCase();
   const customerAccessToken = await session.get("customerAccessToken");
 
   const cmsSettings = await sanity.query({
     groqdQuery: CMS_SETTINGS_QUERY,
+    params: {
+      language,
+      defaultLanguage: DEFAULT_LOCALE.language.toLowerCase(),
+    },
   });
 
   // validate the customer access token is valid
