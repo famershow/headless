@@ -1,5 +1,5 @@
 import {ObjectRule, StringRule, defineField, defineType} from 'sanity'
-import {IconPalette} from '../../icons/Palette'
+import {IconPalette} from '../../components/icons/Palette'
 import {ColorSchemeMedia} from '../../components/ColorScheme'
 
 export default defineType({

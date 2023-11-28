@@ -12,11 +12,8 @@ export default defineType({
       name: 'seo',
       type: 'seo',
     }),
-    defineField({
-      name: 'language',
-      type: 'string',
-      readOnly: true,
-      hidden: true,
-    }),
   ],
+  preview: {
+    prepare: () => ({title: 'Home'}),
+  },
 })

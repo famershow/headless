@@ -73,18 +73,6 @@ export const PRODUCT_VARIANT_FRAGMENT = `#graphql
   }
 `;
 
-export const PRODUCT_METAFIELDS_FRAGMENT = `#graphql
-  fragment ProductMetafields on Product {
-    metafields(identifiers: [
-      {namespace: "sanity", key: "availability"},
-    ]) {
-      namespace
-      value
-      key
-    }
-  }
-`;
-
 export const PRODUCT_CARD_FRAGMENT = `#graphql
   fragment ProductCard on Product {
     id
@@ -92,7 +80,6 @@ export const PRODUCT_CARD_FRAGMENT = `#graphql
     publishedAt
     handle
     vendor
-    ...ProductMetafields
     variants(first: 1) {
       nodes {
         id
@@ -122,7 +109,6 @@ export const PRODUCT_CARD_FRAGMENT = `#graphql
       }
     }
   }
-  ${PRODUCT_METAFIELDS_FRAGMENT}
 `;
 
 export const CART_QUERY_FRAGMENT = `#graphql
@@ -237,18 +223,6 @@ export const FEATURED_COLLECTION_FRAGMENT = `#graphql
       width
       height
       url
-    }
-  }
-`;
-
-export const COLLECTION_METAFIELDS_FRAGMENT = `#graphql
-  fragment CollectionMetafields on Collection {
-    metafields(identifiers: [
-      {namespace: "sanity", key: "availability"},
-    ]) {
-      namespace
-      value
-      key
     }
   }
 `;

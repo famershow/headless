@@ -4,6 +4,7 @@ import { defer } from "@shopify/remix-oxygen";
 import PageRoute from "./($locale).$";
 import { PAGE_QUERY } from "~/qroq/queries";
 import { sanityPreviewPayload } from "~/lib/sanity/sanity.payload.server";
+import { DEFAULT_LOCALE } from "countries";
 
 export async function loader({ context }: LoaderFunctionArgs) {
   const { locale, sanity } = context;
@@ -11,6 +12,7 @@ export async function loader({ context }: LoaderFunctionArgs) {
   const queryParams = {
     handle: "home",
     language,
+    defaultLanguage: DEFAULT_LOCALE.language.toLowerCase(),
   };
 
   const page = await sanity.query({

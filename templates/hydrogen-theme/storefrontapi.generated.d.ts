@@ -58,14 +58,6 @@ export type ProductVariantFragmentFragment = Pick<
   product: Pick<StorefrontAPI.Product, 'title' | 'handle'>;
 };
 
-export type ProductMetafieldsFragment = {
-  metafields: Array<
-    StorefrontAPI.Maybe<
-      Pick<StorefrontAPI.Metafield, 'namespace' | 'value' | 'key'>
-    >
-  >;
-};
-
 export type ProductCardFragment = Pick<
   StorefrontAPI.Product,
   'id' | 'title' | 'publishedAt' | 'handle' | 'vendor'
@@ -87,11 +79,6 @@ export type ProductCardFragment = Pick<
       }
     >;
   };
-  metafields: Array<
-    StorefrontAPI.Maybe<
-      Pick<StorefrontAPI.Metafield, 'namespace' | 'value' | 'key'>
-    >
-  >;
 };
 
 export type MoneyFragment = Pick<
@@ -202,14 +189,6 @@ export type FeaturedCollectionDetailsFragment = Pick<
 > & {
   image?: StorefrontAPI.Maybe<
     Pick<StorefrontAPI.Image, 'altText' | 'width' | 'height' | 'url'>
-  >;
-};
-
-export type CollectionMetafieldsFragment = {
-  metafields: Array<
-    StorefrontAPI.Maybe<
-      Pick<StorefrontAPI.Metafield, 'namespace' | 'value' | 'key'>
-    >
   >;
 };
 
@@ -324,11 +303,6 @@ export type ProductQuery = {
           }
         >;
       };
-      metafields: Array<
-        StorefrontAPI.Maybe<
-          Pick<StorefrontAPI.Metafield, 'namespace' | 'value' | 'key'>
-        >
-      >;
     }
   >;
 };
@@ -367,11 +341,6 @@ export type ProductRecommendationsQuery = {
             }
           >;
         };
-        metafields: Array<
-          StorefrontAPI.Maybe<
-            Pick<StorefrontAPI.Metafield, 'namespace' | 'value' | 'key'>
-          >
-        >;
       }
     >
   >;
@@ -401,11 +370,6 @@ export type ProductRecommendationsQuery = {
             }
           >;
         };
-        metafields: Array<
-          StorefrontAPI.Maybe<
-            Pick<StorefrontAPI.Metafield, 'namespace' | 'value' | 'key'>
-          >
-        >;
       }
     >;
   };
@@ -451,11 +415,6 @@ export type AllProductsQuery = {
             }
           >;
         };
-        metafields: Array<
-          StorefrontAPI.Maybe<
-            Pick<StorefrontAPI.Metafield, 'namespace' | 'value' | 'key'>
-          >
-        >;
       }
     >;
     pageInfo: Pick<
@@ -527,11 +486,6 @@ export type CollectionsQuery = {
           Pick<
             StorefrontAPI.Image,
             'id' | 'url' | 'width' | 'height' | 'altText'
-          >
-        >;
-        metafields: Array<
-          StorefrontAPI.Maybe<
-            Pick<StorefrontAPI.Metafield, 'namespace' | 'value' | 'key'>
           >
         >;
       }
@@ -610,11 +564,6 @@ export type CollectionDetailsQuery = {
                 }
               >;
             };
-            metafields: Array<
-              StorefrontAPI.Maybe<
-                Pick<StorefrontAPI.Metafield, 'namespace' | 'value' | 'key'>
-              >
-            >;
           }
         >;
         pageInfo: Pick<
@@ -630,15 +579,15 @@ export type CollectionDetailsQuery = {
 };
 
 interface GeneratedQueryTypes {
-  '#graphql\nquery Product(\n  $country: CountryCode\n  $language: LanguageCode\n  $handle: String!\n  $selectedOptions: [SelectedOptionInput!]!\n) @inContext(country: $country, language: $language) {\n  product(handle: $handle) {\n    id\n    title\n    vendor\n    handle\n    descriptionHtml\n    description\n    ...ProductMetafields\n    options {\n      name\n      values\n    }\n    selectedVariant: variantBySelectedOptions(selectedOptions: $selectedOptions) {\n      ...ProductVariantFragment\n    }\n    media(first: 7) {\n      nodes {\n        ...Media\n      }\n    }\n    variants(first: 1) {\n      nodes {\n        ...ProductVariantFragment\n      }\n    }\n  }\n}\n#graphql\n  fragment Media on Media {\n    __typename\n    mediaContentType\n    alt\n    previewImage {\n      url\n    }\n    ... on MediaImage {\n      id\n      image {\n        id\n        url\n        width\n        height\n      }\n    }\n    ... on Video {\n      id\n      sources {\n        mimeType\n        url\n      }\n    }\n    ... on Model3d {\n      id\n      sources {\n        mimeType\n        url\n      }\n    }\n    ... on ExternalVideo {\n      id\n      embedUrl\n      host\n    }\n  }\n\n#graphql\n  fragment ProductVariantFragment on ProductVariant {\n    id\n    availableForSale\n    selectedOptions {\n      name\n      value\n    }\n    image {\n      id\n      url\n      altText\n      width\n      height\n    }\n    price {\n      amount\n      currencyCode\n    }\n    compareAtPrice {\n      amount\n      currencyCode\n    }\n    sku\n    title\n    unitPrice {\n      amount\n      currencyCode\n    }\n    product {\n      title\n      handle\n    }\n  }\n\n#graphql\n  fragment ProductMetafields on Product {\n    metafields(identifiers: [\n      {namespace: "sanity", key: "availability"},\n    ]) {\n      namespace\n      value\n      key\n    }\n  }\n\n': {
+  '#graphql\nquery Product(\n  $country: CountryCode\n  $language: LanguageCode\n  $handle: String!\n  $selectedOptions: [SelectedOptionInput!]!\n) @inContext(country: $country, language: $language) {\n  product(handle: $handle) {\n    id\n    title\n    vendor\n    handle\n    descriptionHtml\n    description\n    options {\n      name\n      values\n    }\n    selectedVariant: variantBySelectedOptions(selectedOptions: $selectedOptions) {\n      ...ProductVariantFragment\n    }\n    media(first: 7) {\n      nodes {\n        ...Media\n      }\n    }\n    variants(first: 1) {\n      nodes {\n        ...ProductVariantFragment\n      }\n    }\n  }\n}\n#graphql\n  fragment Media on Media {\n    __typename\n    mediaContentType\n    alt\n    previewImage {\n      url\n    }\n    ... on MediaImage {\n      id\n      image {\n        id\n        url\n        width\n        height\n      }\n    }\n    ... on Video {\n      id\n      sources {\n        mimeType\n        url\n      }\n    }\n    ... on Model3d {\n      id\n      sources {\n        mimeType\n        url\n      }\n    }\n    ... on ExternalVideo {\n      id\n      embedUrl\n      host\n    }\n  }\n\n#graphql\n  fragment ProductVariantFragment on ProductVariant {\n    id\n    availableForSale\n    selectedOptions {\n      name\n      value\n    }\n    image {\n      id\n      url\n      altText\n      width\n      height\n    }\n    price {\n      amount\n      currencyCode\n    }\n    compareAtPrice {\n      amount\n      currencyCode\n    }\n    sku\n    title\n    unitPrice {\n      amount\n      currencyCode\n    }\n    product {\n      title\n      handle\n    }\n  }\n\n': {
     return: ProductQuery;
     variables: ProductQueryVariables;
   };
-  '#graphql\n  query productRecommendations(\n    $productId: ID!\n    $count: Int\n    $country: CountryCode\n    $language: LanguageCode\n  ) @inContext(country: $country, language: $language) {\n    recommended: productRecommendations(productId: $productId) {\n      ...ProductCard\n    }\n    additional: products(first: $count, sortKey: BEST_SELLING) {\n      nodes {\n        ...ProductCard\n      }\n    }\n  }\n  #graphql\n  fragment ProductCard on Product {\n    id\n    title\n    publishedAt\n    handle\n    vendor\n    ...ProductMetafields\n    variants(first: 1) {\n      nodes {\n        id\n        availableForSale\n        image {\n          url\n          altText\n          width\n          height\n        }\n        price {\n          amount\n          currencyCode\n        }\n        compareAtPrice {\n          amount\n          currencyCode\n        }\n        selectedOptions {\n          name\n          value\n        }\n        product {\n          handle\n          title\n        }\n      }\n    }\n  }\n  #graphql\n  fragment ProductMetafields on Product {\n    metafields(identifiers: [\n      {namespace: "sanity", key: "availability"},\n    ]) {\n      namespace\n      value\n      key\n    }\n  }\n\n\n': {
+  '#graphql\n  query productRecommendations(\n    $productId: ID!\n    $count: Int\n    $country: CountryCode\n    $language: LanguageCode\n  ) @inContext(country: $country, language: $language) {\n    recommended: productRecommendations(productId: $productId) {\n      ...ProductCard\n    }\n    additional: products(first: $count, sortKey: BEST_SELLING) {\n      nodes {\n        ...ProductCard\n      }\n    }\n  }\n  #graphql\n  fragment ProductCard on Product {\n    id\n    title\n    publishedAt\n    handle\n    vendor\n    variants(first: 1) {\n      nodes {\n        id\n        availableForSale\n        image {\n          url\n          altText\n          width\n          height\n        }\n        price {\n          amount\n          currencyCode\n        }\n        compareAtPrice {\n          amount\n          currencyCode\n        }\n        selectedOptions {\n          name\n          value\n        }\n        product {\n          handle\n          title\n        }\n      }\n    }\n  }\n\n': {
     return: ProductRecommendationsQuery;
     variables: ProductRecommendationsQueryVariables;
   };
-  '#graphql\n  query AllProducts(\n    $country: CountryCode\n    $language: LanguageCode\n    $first: Int\n    $last: Int\n    $startCursor: String\n    $endCursor: String\n  ) @inContext(country: $country, language: $language) {\n    products(first: $first, last: $last, before: $startCursor, after: $endCursor) {\n      nodes {\n        ...ProductCard\n      }\n      pageInfo {\n        hasPreviousPage\n        hasNextPage\n        startCursor\n        endCursor\n      }\n    }\n  }\n  #graphql\n  fragment ProductCard on Product {\n    id\n    title\n    publishedAt\n    handle\n    vendor\n    ...ProductMetafields\n    variants(first: 1) {\n      nodes {\n        id\n        availableForSale\n        image {\n          url\n          altText\n          width\n          height\n        }\n        price {\n          amount\n          currencyCode\n        }\n        compareAtPrice {\n          amount\n          currencyCode\n        }\n        selectedOptions {\n          name\n          value\n        }\n        product {\n          handle\n          title\n        }\n      }\n    }\n  }\n  #graphql\n  fragment ProductMetafields on Product {\n    metafields(identifiers: [\n      {namespace: "sanity", key: "availability"},\n    ]) {\n      namespace\n      value\n      key\n    }\n  }\n\n\n': {
+  '#graphql\n  query AllProducts(\n    $country: CountryCode\n    $language: LanguageCode\n    $first: Int\n    $last: Int\n    $startCursor: String\n    $endCursor: String\n  ) @inContext(country: $country, language: $language) {\n    products(first: $first, last: $last, before: $startCursor, after: $endCursor) {\n      nodes {\n        ...ProductCard\n      }\n      pageInfo {\n        hasPreviousPage\n        hasNextPage\n        startCursor\n        endCursor\n      }\n    }\n  }\n  #graphql\n  fragment ProductCard on Product {\n    id\n    title\n    publishedAt\n    handle\n    vendor\n    variants(first: 1) {\n      nodes {\n        id\n        availableForSale\n        image {\n          url\n          altText\n          width\n          height\n        }\n        price {\n          amount\n          currencyCode\n        }\n        compareAtPrice {\n          amount\n          currencyCode\n        }\n        selectedOptions {\n          name\n          value\n        }\n        product {\n          handle\n          title\n        }\n      }\n    }\n  }\n\n': {
     return: AllProductsQuery;
     variables: AllProductsQueryVariables;
   };
@@ -646,11 +595,11 @@ interface GeneratedQueryTypes {
     return: VariantsQuery;
     variables: VariantsQueryVariables;
   };
-  '#graphql\n  query Collections(\n    $country: CountryCode\n    $language: LanguageCode\n    $first: Int\n    $last: Int\n    $startCursor: String\n    $endCursor: String\n  ) @inContext(country: $country, language: $language) {\n    collections(first: $first, last: $last, before: $startCursor, after: $endCursor) {\n      nodes {\n        id\n        title\n        description\n        handle\n        ...CollectionMetafields\n        seo {\n          description\n          title\n        }\n        image {\n          id\n          url\n          width\n          height\n          altText\n        }\n      }\n      pageInfo {\n        hasPreviousPage\n        hasNextPage\n        startCursor\n        endCursor\n      }\n    }\n  }\n  #graphql\n  fragment CollectionMetafields on Collection {\n    metafields(identifiers: [\n      {namespace: "sanity", key: "availability"},\n    ]) {\n      namespace\n      value\n      key\n    }\n  }\n\n': {
+  '#graphql\n  query Collections(\n    $country: CountryCode\n    $language: LanguageCode\n    $first: Int\n    $last: Int\n    $startCursor: String\n    $endCursor: String\n  ) @inContext(country: $country, language: $language) {\n    collections(first: $first, last: $last, before: $startCursor, after: $endCursor) {\n      nodes {\n        id\n        title\n        description\n        handle\n        seo {\n          description\n          title\n        }\n        image {\n          id\n          url\n          width\n          height\n          altText\n        }\n      }\n      pageInfo {\n        hasPreviousPage\n        hasNextPage\n        startCursor\n        endCursor\n      }\n    }\n  }\n': {
     return: CollectionsQuery;
     variables: CollectionsQueryVariables;
   };
-  '#graphql\n  query CollectionDetails(\n    $handle: String!\n    $country: CountryCode\n    $language: LanguageCode\n    $filters: [ProductFilter!]\n    $sortKey: ProductCollectionSortKeys!\n    $reverse: Boolean\n    $first: Int\n    $last: Int\n    $startCursor: String\n    $endCursor: String\n  ) @inContext(country: $country, language: $language) {\n    collection(handle: $handle) {\n      id\n      handle\n      title\n      description\n      image {\n        id\n        url\n        width\n        height\n        altText\n      }\n      products(\n        first: $first,\n        last: $last,\n        before: $startCursor,\n        after: $endCursor,\n        filters: $filters,\n        sortKey: $sortKey,\n        reverse: $reverse\n      ) {\n        filters {\n          id\n          label\n          type\n          values {\n            id\n            label\n            count\n            input\n          }\n        }\n        nodes {\n          ...ProductCard\n        }\n        pageInfo {\n          hasPreviousPage\n          hasNextPage\n          endCursor\n          startCursor\n        }\n      }\n    }\n    collections(first: 100) {\n      edges {\n        node {\n          title\n          handle\n        }\n      }\n    }\n  }\n  #graphql\n  fragment ProductCard on Product {\n    id\n    title\n    publishedAt\n    handle\n    vendor\n    ...ProductMetafields\n    variants(first: 1) {\n      nodes {\n        id\n        availableForSale\n        image {\n          url\n          altText\n          width\n          height\n        }\n        price {\n          amount\n          currencyCode\n        }\n        compareAtPrice {\n          amount\n          currencyCode\n        }\n        selectedOptions {\n          name\n          value\n        }\n        product {\n          handle\n          title\n        }\n      }\n    }\n  }\n  #graphql\n  fragment ProductMetafields on Product {\n    metafields(identifiers: [\n      {namespace: "sanity", key: "availability"},\n    ]) {\n      namespace\n      value\n      key\n    }\n  }\n\n\n': {
+  '#graphql\n  query CollectionDetails(\n    $handle: String!\n    $country: CountryCode\n    $language: LanguageCode\n    $filters: [ProductFilter!]\n    $sortKey: ProductCollectionSortKeys!\n    $reverse: Boolean\n    $first: Int\n    $last: Int\n    $startCursor: String\n    $endCursor: String\n  ) @inContext(country: $country, language: $language) {\n    collection(handle: $handle) {\n      id\n      handle\n      title\n      description\n      image {\n        id\n        url\n        width\n        height\n        altText\n      }\n      products(\n        first: $first,\n        last: $last,\n        before: $startCursor,\n        after: $endCursor,\n        filters: $filters,\n        sortKey: $sortKey,\n        reverse: $reverse\n      ) {\n        filters {\n          id\n          label\n          type\n          values {\n            id\n            label\n            count\n            input\n          }\n        }\n        nodes {\n          ...ProductCard\n        }\n        pageInfo {\n          hasPreviousPage\n          hasNextPage\n          endCursor\n          startCursor\n        }\n      }\n    }\n    collections(first: 100) {\n      edges {\n        node {\n          title\n          handle\n        }\n      }\n    }\n  }\n  #graphql\n  fragment ProductCard on Product {\n    id\n    title\n    publishedAt\n    handle\n    vendor\n    variants(first: 1) {\n      nodes {\n        id\n        availableForSale\n        image {\n          url\n          altText\n          width\n          height\n        }\n        price {\n          amount\n          currencyCode\n        }\n        compareAtPrice {\n          amount\n          currencyCode\n        }\n        selectedOptions {\n          name\n          value\n        }\n        product {\n          handle\n          title\n        }\n      }\n    }\n  }\n\n': {
     return: CollectionDetailsQuery;
     variables: CollectionDetailsQueryVariables;
   };

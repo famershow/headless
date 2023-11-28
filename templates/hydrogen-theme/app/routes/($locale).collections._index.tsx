@@ -52,13 +52,11 @@ function CollectionCardGrid(props: {
 
   return collections.length > 0 ? (
     <ul className="grid grid-cols-3 gap-10">
-      {collections.map((collection) =>
-        checkSanityAvailability(collection) ? (
-          <li key={collection.id}>
-            <CollectionCard collection={collection} />
-          </li>
-        ) : null
-      )}
+      {collections.map((collection) => (
+        <li key={collection.id}>
+          <CollectionCard collection={collection} />
+        </li>
+      ))}
     </ul>
   ) : null;
 }
@@ -76,28 +74,4 @@ function CollectionCard(props: { collection: Collection; className?: string }) {
       </Link>
     </div>
   );
-}
-
-/*
-|--------------------------------------------------------------------------
-| Check Sanity availability
-|--------------------------------------------------------------------------
-|
-| To avoid synchronization issues between Sanity & Shopify, a metafield
-| is required to be set to true in order for the collection to be available
-| in the storefront. A collection needs to exists in Sanity and Shopify.
-| The metafield should have a namespace of "sanity" and a key of "availability"
-| and a value of type boolean (sanity.availability).
-|
-*/
-export function checkSanityAvailability(collection: Collection) {
-  const metafields = collection.metafields;
-  const isAvailable = metafields.find(
-    (metafield) =>
-      metafield?.namespace === "sanity" &&
-      metafield?.key === "availability" &&
-      metafield.value === "true"
-  );
-
-  return isAvailable;
 }

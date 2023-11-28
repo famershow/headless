@@ -1,18 +1,23 @@
-import type { QueryParams } from "@sanity/client";
+import type {
+  ClientPerspective,
+  ContentSourceMap,
+  QueryParams,
+} from "@sanity/client";
 import { useLoaderData } from "@remix-run/react";
 
-import type { loadQuery } from "~/lib/sanity/sanity.loader";
 import { useQuery } from "~/lib/sanity/sanity.loader";
 
-type UnwrapPromise<T> = T extends Promise<infer U> ? U : never;
+type Initial = {
+  data: unknown;
+  sourceMap?: ContentSourceMap;
+  perspective?: ClientPerspective;
+};
 type InitialData<U> = U extends { data: infer V } ? V : never;
 /**
  * The `useSanityData` hook is needed to preview live data from Sanity Studio.
  * It must be used within a route that has a loader that returns a `sanityPreviewPayload` object.
  */
-export function useSanityData<T>(
-  initial: T extends UnwrapPromise<ReturnType<typeof loadQuery>> ? T : never
-) {
+export function useSanityData<T extends Initial>(initial: T) {
   const loaderData = useLoaderData<{
     sanity?: {
       query?: string;
@@ -32,11 +37,11 @@ export function useSanityData<T>(
   const query = sanity?.query || "";
 
   const { data, loading } = useQuery(query || "", params, {
-    initial,
+    initial: initial as any,
   });
 
   return { data, loading } as {
-    data: InitialData<typeof initial>;
+    data: InitialData<T>;
     loading: boolean;
   };
 }

@@ -15,23 +15,16 @@ export const PAGE_QUERY = q("*")
   .filter(
     ` (
         _type == "page" &&
-        language in [$language, null] &&
-        ($handle != "home" && slug.current == $handle)
+        ($handle != "home" && slug[_key == $language][0].value.current == $handle) ||
+        ($handle != "home" && slug[_key == $defaultLanguage][0].value.current == $handle)
       ) ||
       (
         _type == "home" &&
-        language in [$language, null] &&
-        $handle == "home" &&
-        !defined(slug.current)
+        $handle == "home"
       )
     `
   )
   .grab({
-    slug: q
-      .object({
-        current: q.string(),
-      })
-      .nullable(),
     sections: SECTIONS_FRAGMENT,
   })
   .slice(0)
@@ -42,19 +35,10 @@ export const PAGE_QUERY = q("*")
 | Product Query
 |--------------------------------------------------------------------------
 */
-
 export const PRODUCT_QUERY = q("*")
-  .filter(
-    ` _type == "product" &&
-      language in [$language, null] &&
-      slug.current == $productHandle
-    `
-  )
+  .filter(`_type == "product" && slug.current == $productHandle`)
   .grab({
-    slug: q.object({
-      current: q.string(),
-    }),
-    title: q.string(),
+    slug: q.string(),
     sections: SECTIONS_FRAGMENT,
   })
   .slice(0)

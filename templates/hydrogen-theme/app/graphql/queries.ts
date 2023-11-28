@@ -1,8 +1,6 @@
 import {
-  COLLECTION_METAFIELDS_FRAGMENT,
   MEDIA_FRAGMENT,
   PRODUCT_CARD_FRAGMENT,
-  PRODUCT_METAFIELDS_FRAGMENT,
   PRODUCT_VARIANT_FRAGMENT,
 } from "./fragments";
 
@@ -25,7 +23,6 @@ query Product(
     handle
     descriptionHtml
     description
-    ...ProductMetafields
     options {
       name
       values
@@ -47,7 +44,6 @@ query Product(
 }
 ${MEDIA_FRAGMENT}
 ${PRODUCT_VARIANT_FRAGMENT}
-${PRODUCT_METAFIELDS_FRAGMENT}
 ` as const;
 
 export const RECOMMENDED_PRODUCTS_QUERY = `#graphql
@@ -135,7 +131,6 @@ export const COLLECTIONS_QUERY = `#graphql
         title
         description
         handle
-        ...CollectionMetafields
         seo {
           description
           title
@@ -156,7 +151,6 @@ export const COLLECTIONS_QUERY = `#graphql
       }
     }
   }
-  ${COLLECTION_METAFIELDS_FRAGMENT}
 `;
 
 export const COLLECTION_QUERY = `#graphql

@@ -14,11 +14,8 @@ export default defineType({
         },
       ],
     }),
-    defineField({
-      name: 'language',
-      type: 'string',
-      readOnly: true,
-      hidden: true,
-    }),
   ],
+  preview: {
+    prepare: () => ({title: 'Footer'}),
+  },
 })

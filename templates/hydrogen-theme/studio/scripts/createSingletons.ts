@@ -1,8 +1,7 @@
 import {getCliClient} from 'sanity/cli'
-import {getAllLanguages} from '../../countries'
 import {SINGLETONS} from '../desk/singletons'
+import fs from 'fs'
 
-const LANGUAGES = getAllLanguages()
 /**
  * This script will create one or many "singleton" documents for each language
  * It works by appending the language ID to the document ID
@@ -21,6 +20,17 @@ const LANGUAGES = getAllLanguages()
  * 5. Update your desk structure to use the new documents
  */
 
+const FLAG_FILE_PATH = './scripts/flag.txt'
+
+// Check if the flag file exists
+if (fs.existsSync(FLAG_FILE_PATH)) {
+  console.log('✔ Singletons already created. Exiting...')
+  process.exit(0)
+}
+
+// Create the flag file to indicate that the script has run
+fs.writeFileSync(FLAG_FILE_PATH, 'Singletons created: true')
+
 // This will use the client configured in ./sanity.cli.ts
 const client = getCliClient()
 
@@ -29,30 +39,12 @@ async function createSingletons() {
 
   const documents = singletonsArray
     .map((singleton) => {
-      if (singleton.needsTranslations) {
-        const translations = LANGUAGES.map((language) => ({
-          _id: `${singleton.id}-${language.id}`,
+      return [
+        {
+          _id: `${singleton.id}`,
           _type: singleton._type,
-          language: language.id,
-        }))
-
-        const metadata = {
-          _id: `${singleton.id}-translation-metadata`,
-          _type: `translation.metadata`,
-          translations: translations.map((translation) => ({
-            _key: translation.language,
-            value: {
-              _type: 'reference',
-              _ref: translation._id,
-            },
-          })),
-          schemaTypes: Array.from(new Set(translations.map((translation) => translation._type))),
-        }
-
-        return [metadata, ...translations]
-      }
-
-      return []
+        },
+      ]
     })
     .flat()
 
@@ -66,7 +58,7 @@ async function createSingletons() {
     .commit()
     .then((res) => {
       // eslint-disable-next-line no-console
-      console.log('Singletons created or updated successfully!')
+      console.log('✔ Singletons created or updated successfully!')
     })
     .catch((err) => {
       console.error(err)
