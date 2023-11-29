@@ -4,9 +4,9 @@ import {
   COLOR_SCHEME_FRAGMENT,
   FONT_CATEGORY_FRAGMENT,
   MENU_FRAGMENT,
-  SECTIONS_FRAGMENT,
   SETTINGS_FRAGMENT,
 } from "./fragments";
+import { SECTIONS_FRAGMENT } from "./sections";
 
 /*
 |--------------------------------------------------------------------------

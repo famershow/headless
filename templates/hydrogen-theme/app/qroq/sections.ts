@@ -1,5 +1,23 @@
 import type { Selection } from "groqd";
-import { q } from "groqd";
+import { q, z } from "groqd";
+
+import { COLOR_SCHEME_FRAGMENT } from "./fragments";
+
+/*
+|--------------------------------------------------------------------------
+| Section Settings
+|--------------------------------------------------------------------------
+*/
+export const SECTION_SETTINGS_FRAGMENT = q("settings").grab({
+  colorScheme: q("colorScheme").deref().grab(COLOR_SCHEME_FRAGMENT),
+  paddingTop: q.number(),
+  paddingBottom: q.number(),
+  customCss: q
+    .object({
+      code: q.string().optional(),
+    })
+    .nullable(),
+});
 
 /*
 |--------------------------------------------------------------------------
@@ -7,6 +25,9 @@ import { q } from "groqd";
 |--------------------------------------------------------------------------
 */
 export const HERO_SECTION_FRAGMENT = {
+  _type: z.enum(["heroSection"]),
+  _key: q.string().nullable(),
+  settings: SECTION_SETTINGS_FRAGMENT,
   title: [
     `coalesce(
       title[_key == $language][0].value,
@@ -22,11 +43,14 @@ export const HERO_SECTION_FRAGMENT = {
 |--------------------------------------------------------------------------
 */
 export const CTA_SECTION_FRAGMENT = {
+  _type: z.enum(["ctaSection"]),
+  _key: q.string().nullable(),
+  settings: SECTION_SETTINGS_FRAGMENT,
   title: [
     `coalesce(
-      title[_key == $language][0].value,
-      title[_key == $defaultLanguage][0].value,
-    )`,
+    title[_key == $language][0].value,
+    title[_key == $defaultLanguage][0].value,
+  )`,
     q.string(),
   ],
 } satisfies Selection;
@@ -36,7 +60,16 @@ export const CTA_SECTION_FRAGMENT = {
 | List of sections
 |--------------------------------------------------------------------------
 */
-export const SECTIONS_LIST_FRAGMENT = {
-  '_type == "heroSection"': HERO_SECTION_FRAGMENT,
-  '_type == "ctaSection"': CTA_SECTION_FRAGMENT,
+export const SECTIONS_LIST_SELECTION = {
+  "_type == 'heroSection'": HERO_SECTION_FRAGMENT,
+  "_type == 'ctaSection'": CTA_SECTION_FRAGMENT,
 };
+
+/*
+|--------------------------------------------------------------------------
+| Sections Fragment
+|--------------------------------------------------------------------------
+*/
+export const SECTIONS_FRAGMENT = q("sections[]", { isArray: true })
+  .select(SECTIONS_LIST_SELECTION)
+  .nullable();

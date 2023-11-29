@@ -1,5 +1,6 @@
+import type { Selection } from "groqd";
 import { q } from "groqd";
-import { SECTIONS_LIST_FRAGMENT } from "./sections";
+
 import { LINKS_LIST_SELECTION } from "./links";
 
 /*
@@ -65,12 +66,12 @@ export const COLOR_FRAGMENT = {
   }),
   hex: q.string(),
   alpha: q.number(),
-};
+} satisfies Selection;
 
 export const COLOR_SCHEME_FRAGMENT = {
   background: q("background").grab(COLOR_FRAGMENT).nullable(),
   text: q("text").grab(COLOR_FRAGMENT).nullable(),
-};
+} satisfies Selection;
 
 /*
 |--------------------------------------------------------------------------
@@ -86,7 +87,7 @@ export const SETTINGS_FRAGMENT = {
     twitter: q.string().nullable(),
     youtube: q.string().nullable(),
   }),
-};
+} satisfies Selection;
 
 /*
 |--------------------------------------------------------------------------
@@ -97,7 +98,7 @@ const FONT_ASSET_FRAGMENT = {
   url: q("asset").deref().grabOne("url", q.string()),
   extension: q("asset").deref().grabOne("extension", q.string()),
   mimeType: q("asset").deref().grabOne("mimeType", q.string()),
-};
+} satisfies Selection;
 
 export const FONT_CATEGORY_FRAGMENT = {
   fontName: q.string(),
@@ -111,32 +112,4 @@ export const FONT_CATEGORY_FRAGMENT = {
     woff: q("woff").grab(FONT_ASSET_FRAGMENT).nullable(),
     ttf: q("ttf").grab(FONT_ASSET_FRAGMENT).nullable(),
   }),
-};
-
-/*
-|--------------------------------------------------------------------------
-| Sections Fragments
-|--------------------------------------------------------------------------
-*/
-export const SECTION_SETTINGS_FRAGMENT = q("settings").grab({
-  paddingTop: q.number(),
-  paddingBottom: q.number(),
-  colorScheme: q("colorScheme").deref().grab(COLOR_SCHEME_FRAGMENT).nullable(),
-  customCss: q
-    .object({
-      code: q.string().optional(),
-    })
-    .nullable(),
-});
-
-export const SECTIONS_FRAGMENT = q("sections[]", { isArray: true })
-  // Todo: Use selection instead of grab
-  .grab(
-    {
-      _type: q.string(),
-      _key: q.string(),
-      settings: SECTION_SETTINGS_FRAGMENT,
-    },
-    SECTIONS_LIST_FRAGMENT
-  )
-  .nullable();
+} satisfies Selection;

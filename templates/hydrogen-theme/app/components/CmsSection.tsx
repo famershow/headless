@@ -7,7 +7,7 @@ import type { DEFAULT_COLOR_SCHEME_QUERY } from "~/qroq/queries";
 import type {
   SECTIONS_FRAGMENT,
   SECTION_SETTINGS_FRAGMENT,
-} from "~/qroq/fragments";
+} from "~/qroq/sections";
 import { useIsDev } from "~/hooks/useIsDev";
 import { useDefaultColorScheme } from "~/hooks/useDefaultColorScheme";
 import { sections } from "~/lib/sectionRelsolver";
