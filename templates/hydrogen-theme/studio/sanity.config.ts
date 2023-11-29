@@ -2,6 +2,7 @@ import {defineConfig, isDev} from 'sanity'
 import {deskTool} from 'sanity/desk'
 import {visionTool} from '@sanity/vision'
 import {internationalizedArray} from 'sanity-plugin-internationalized-array'
+import {media, mediaAssetSource} from 'sanity-plugin-media'
 import {fontPicker} from '@headless.build/sanity-font-picker'
 import {colorPicker} from '@headless.build/sanity-color-picker'
 import {rangeSlider} from '@headless.build/sanity-plugin-range-slider'
@@ -41,6 +42,7 @@ export default defineConfig({
     codeInput(),
     deskTool({structure, defaultDocumentNode}),
     customDocumentActions(),
+    media(),
     presentationTool({
       // Required: set the base URL to the preview location in the front end
       previewUrl: `${SANITY_STUDIO_PREVIEW_URL}/sanity/preview`,
@@ -70,5 +72,17 @@ export default defineConfig({
       singletonsTypes.has(context.schemaType)
         ? input.filter(({action}) => action && singletonActions.has(action))
         : input,
+  },
+  form: {
+    file: {
+      assetSources: (previousAssetSources) => {
+        return previousAssetSources.filter((assetSource) => assetSource !== mediaAssetSource)
+      },
+    },
+    image: {
+      assetSources: (previousAssetSources) => {
+        return previousAssetSources.filter((assetSource) => assetSource === mediaAssetSource)
+      },
+    },
   },
 })
