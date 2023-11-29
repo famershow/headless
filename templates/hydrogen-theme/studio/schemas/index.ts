@@ -25,11 +25,15 @@ import productVariant from './documents/productVariant'
 import shopifyCollection from './objects/shopify/shopifyCollection'
 import shopifyCollectionRule from './objects/shopify/shopifyCollectionRule'
 import paddingObject from './objects/global/padding'
+import footersList from './objects/global/footersList'
+import socialLinksOnly from './objects/footers/socialLinksOnly'
 
 const singletons = [home, header, footer, settings, themeContent]
 const documents = [page, color, collection, product, blogPost, productVariant]
 const sections = [heroSection, ctaSection]
+const footers = [socialLinksOnly]
 const objects = [
+  footersList,
   sectionsList,
   seo,
   sectionSettings,
@@ -46,4 +50,4 @@ const objects = [
   paddingObject,
 ]
 
-export const schemaTypes = [...objects, ...sections, ...singletons, ...documents]
+export const schemaTypes = [...objects, ...sections, ...footers, ...singletons, ...documents]

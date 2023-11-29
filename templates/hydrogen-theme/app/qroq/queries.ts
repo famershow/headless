@@ -7,6 +7,7 @@ import {
   SETTINGS_FRAGMENT,
 } from "./fragments";
 import { SECTIONS_FRAGMENT } from "./sections";
+import { FOOTERS_FRAGMENT } from "./footers";
 
 /*
 |--------------------------------------------------------------------------
@@ -98,6 +99,10 @@ export const HEADER_QUERY = q("*")
 
 export const FOOTER_QUERY = q("*")
   .filter("_type == 'footer'")
+  .grab({
+    sections: SECTIONS_FRAGMENT,
+    footer: FOOTERS_FRAGMENT,
+  })
   .slice(0)
   .nullable();
 

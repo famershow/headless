@@ -1,12 +1,13 @@
 import type {MouseEventHandler} from 'react'
-import type {
-  ArrayOfObjectsInputProps,
-  BooleanSchemaType,
-  FileSchemaType,
-  NumberSchemaType,
-  ObjectSchemaType,
-  ReferenceSchemaType,
-  StringSchemaType,
+import {
+  ArrayOfPrimitivesFunctions,
+  type ArrayOfObjectsInputProps,
+  type BooleanSchemaType,
+  type FileSchemaType,
+  type NumberSchemaType,
+  type ObjectSchemaType,
+  type ReferenceSchemaType,
+  type StringSchemaType,
 } from 'sanity'
 
 import {useCallback, useState} from 'react'
@@ -22,11 +23,16 @@ type Schema =
   | StringSchemaType
   | ReferenceSchemaType
 
-const SectionsListInput = (props: ArrayOfObjectsInputProps) => {
+const SectionsListInput = (
+  props: ArrayOfObjectsInputProps & {
+    type?: 'section' | 'footer'
+  }
+) => {
   const {onInsert} = props
   const [open, setOpen] = useState(false)
   const onClose = useCallback(() => setOpen(false), [])
   const onOpen = useCallback(() => setOpen(true), [])
+  const type = props.type || 'section'
 
   const onSelectItem = useCallback((schema: Schema) => {
     const key = randomKey(12)
@@ -49,15 +55,15 @@ const SectionsListInput = (props: ArrayOfObjectsInputProps) => {
       <Stack space={3}>
         {props.renderDefault({
           ...props,
-          arrayFunctions: () => {
-            return <Button onClick={onOpen} icon={AddIcon} mode="ghost" text="Add section" />
+          arrayFunctions: (props: any) => {
+            return <ArrayFunctions type={type} onOpen={onOpen} {...props} />
           },
         })}
       </Stack>
 
       {open && (
         <Dialog
-          header="Select a section"
+          header={`Select a ${type}`}
           id="dialog-sections"
           width={4}
           onClose={onClose}
@@ -82,6 +88,18 @@ const SectionsListInput = (props: ArrayOfObjectsInputProps) => {
       )}
     </>
   )
+}
+
+function ArrayFunctions(props: any) {
+  const valRules = props?.schemaType?.validation?.[0]?._rules || []
+  const max = valRules.find((r: any) => r.flag === 'max')?.constraint
+  const total = props?.value?.length || 0
+
+  if (!isNaN(max) && total >= max) {
+    return null
+  }
+
+  return <Button onClick={props.onOpen} icon={AddIcon} mode="ghost" text={`Add ${props.type}`} />
 }
 
 type PreviewProps = {

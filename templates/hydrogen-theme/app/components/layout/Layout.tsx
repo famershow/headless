@@ -5,6 +5,7 @@ import { useSanityPreviewMode } from "~/hooks/useSanityPreviewMode";
 import { Link } from "@remix-run/react";
 import { TailwindIndicator } from "../TailwindIndicator";
 import { Header } from "./Header";
+import { Footer } from "./Footer";
 
 const VisualEditing = lazy(() =>
   import("~/components/sanity/VisualEditing").then((mod) => ({
@@ -23,6 +24,7 @@ export function Layout({ children = null }: LayoutProps) {
     <>
       <Header />
       <main>{children}</main>
+      <Footer />
       <TailwindIndicator />
       {previewMode ? (
         <Suspense>

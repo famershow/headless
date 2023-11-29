@@ -14,6 +14,10 @@ export default defineField({
       name: 'padding',
       title: 'Padding',
       type: 'padding',
+      initialValue: {
+        top: 80,
+        bottom: 80,
+      },
     }),
     defineField({
       type: 'code',

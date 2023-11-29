@@ -6,10 +6,18 @@ import type { SECTIONS_FRAGMENT } from "~/qroq/sections";
 import { useIsDev } from "~/hooks/useIsDev";
 import { sections } from "~/lib/sectionRelsolver";
 import { useSettingsCssVars } from "~/hooks/useSettingsCssVars";
+import type { FOOTERS_FRAGMENT } from "~/qroq/footers";
 
-type CmsSectionsProps = InferType<typeof SECTIONS_FRAGMENT>;
+type CmsSectionsProps =
+  | NonNullable<InferType<typeof SECTIONS_FRAGMENT>>[0]
+  | NonNullable<InferType<typeof FOOTERS_FRAGMENT>>;
 
-export function CmsSection(props: { data: NonNullable<CmsSectionsProps>[0] }) {
+type CmsSectionType = "footer" | "section";
+
+export function CmsSection(props: {
+  data: CmsSectionsProps;
+  type?: CmsSectionType;
+}) {
   const { data } = props;
   const isDev = useIsDev();
   const type = data._type;
@@ -17,7 +25,7 @@ export function CmsSection(props: { data: NonNullable<CmsSectionsProps>[0] }) {
 
   return Section ? (
     <Suspense>
-      <SectionWrapper data={data}>
+      <SectionWrapper type={props.type} data={data}>
         <Section data={data} />
       </SectionWrapper>
     </Suspense>
@@ -28,7 +36,8 @@ export function CmsSection(props: { data: NonNullable<CmsSectionsProps>[0] }) {
 
 function SectionWrapper(props: {
   children: React.ReactNode;
-  data: NonNullable<CmsSectionsProps>[0];
+  data: CmsSectionsProps;
+  type?: CmsSectionType;
 }) {
   const { data, children } = props;
   const isDev = useIsDev();
@@ -41,18 +50,31 @@ function SectionWrapper(props: {
     : "";
   const sectionType = data._type;
 
-  return (
+  const classNames = [
+    // Background and text color
+    "bg-[var(--backgroundColor)] text-[var(--textColor)]",
+    // Padding top and bottom, 25% smaller on mobile
+    "pb-[calc(var(--paddingBottom)*.75)] pt-[calc(var(--paddingTop)*.75)]",
+    "sm:pb-[var(--paddingBottom)] sm:pt-[var(--paddingTop)]",
+  ];
+
+  return props.type === "footer" ? (
+    <footer
+      data-footer-type={isDev ? sectionType : null}
+      style={cssVars}
+      className={cx(classNames)}
+    >
+      {children}
+      {data.settings?.customCss && (
+        <style dangerouslySetInnerHTML={{ __html: customCss }} />
+      )}
+    </footer>
+  ) : (
     <section
       data-section-type={isDev ? sectionType : null}
       id={`section-${data._key}`}
       style={cssVars}
-      className={cx([
-        // Background and text color
-        "bg-[var(--backgroundColor)] text-[var(--textColor)]",
-        // Padding top and bottom, 25% smaller on mobile
-        "pb-[calc(var(--paddingBottom)*.75)] pt-[calc(var(--paddingTop)*.75)]",
-        "sm:pb-[var(--paddingBottom)] sm:pt-[var(--paddingTop)]",
-      ])}
+      className={cx(classNames)}
     >
       {children}
       {data.settings?.customCss && (

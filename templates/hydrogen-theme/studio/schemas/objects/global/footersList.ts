@@ -3,19 +3,17 @@ import {ArrayOfObjectsInputProps, defineField} from 'sanity'
 import SectionsListInput from '../../../components/SectionsListInput'
 
 export default defineField({
-  title: 'Sections',
-  name: 'sections',
+  title: 'Footers',
+  name: 'footers',
   type: 'array',
   group: 'pagebuilder',
   of: [
     {
-      type: 'heroSection',
-    },
-    {
-      type: 'ctaSection',
+      type: 'socialLinksOnly',
     },
   ],
   components: {
-    input: (props: ArrayOfObjectsInputProps) => SectionsListInput({type: 'section', ...props}),
+    input: (props: ArrayOfObjectsInputProps) => SectionsListInput({type: 'footer', ...props}),
   },
+  validation: (Rule: any) => Rule.max(1),
 })

@@ -13,4 +13,9 @@ export const sections: {
       default: module.CtaSection,
     }))
   ),
+  socialLinksOnly: lazy(() =>
+    import("../components/footers/SocialLinksOnly").then((module) => ({
+      default: module.SocialLinksOnly,
+    }))
+  ),
 };
