@@ -6,6 +6,7 @@ import type { NESTED_NAVIGATION_FRAGMENT } from "~/qroq/links";
 import { NavigationTrigger } from "./NestedNavigationTrigger";
 import { SanityInternalLink } from "../sanity/link/SanityInternalLink";
 import { SanityExternalLink } from "../sanity/link/SanityExternalLink";
+import { NestedNavigationContent } from "./NestedNavigationContent";
 
 type SanityNestedNavigationProps = TypeFromSelection<
   typeof NESTED_NAVIGATION_FRAGMENT
@@ -29,9 +30,8 @@ export function NestedNavigation(props: {
           aria-hidden
         />
       </NavigationTrigger>
-      <NavigationMenu.Content className="absolute left-0 top-[var(--nav-height)] w-full">
-        {/* Todo: use background from scheme */}
-        <ul className="relative z-10 flex w-auto min-w-[10rem] flex-col gap-3 rounded bg-white p-2 shadow">
+      <NestedNavigationContent>
+        <ul className="relative z-10 flex w-auto min-w-[10rem] flex-col gap-3 rounded bg-[var(--backgroundColor)] p-2 text-[var(--textColor)] shadow">
           {childLinks.map((child) =>
             child._type === "internalLink" ? (
               <SanityInternalLink key={child._key} data={child} />
@@ -40,7 +40,7 @@ export function NestedNavigation(props: {
             ) : null
           )}
         </ul>
-      </NavigationMenu.Content>
+      </NestedNavigationContent>
     </>
   ) : data.link && data.name && (!childLinks || childLinks.length === 0) ? (
     // Render internal link if no child links

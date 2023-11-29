@@ -10,8 +10,8 @@ export default defineField({
   },
   fields: [
     defineField({
-      name: 'bottom',
-      title: 'Bottom padding',
+      name: 'top',
+      title: 'Top padding',
       type: 'rangeSlider',
       options: {
         min: 0,
@@ -21,8 +21,8 @@ export default defineField({
       validation: (Rule: any) => Rule.min(0).max(200),
     }),
     defineField({
-      name: 'top',
-      title: 'Top padding',
+      name: 'bottom',
+      title: 'Bottom padding',
       type: 'rangeSlider',
       options: {
         min: 0,

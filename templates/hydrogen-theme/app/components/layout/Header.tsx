@@ -1,53 +1,44 @@
 import type { CSSProperties } from "react";
-import { useEffect, useRef, useState } from "react";
 import { Link } from "@remix-run/react";
 
 import { Logo } from "./Logo";
 import { Navigation } from "../navigation/Navigation";
 import { useSanityRoot } from "~/hooks/useSanityRoot";
+import { useSettingsCssVars } from "~/hooks/useSettingsCssVars";
+import { cx } from "class-variance-authority";
 
 export function Header() {
   const { data } = useSanityRoot();
   const header = data?.header;
-  const paddingTop = header?.padding?.top || 0;
-  const paddingBottom = header?.padding?.bottom || 0;
-  const headerPadding = {
-    top: `${paddingTop}px`,
-    bottom: `${paddingBottom}px`,
-  };
   const logoWidth = header?.desktopLogoWidth
     ? `${header?.desktopLogoWidth}px`
     : null;
-  const [headerHeight, setHeaderHeight] = useState(0);
-  const headerRef = useRef<HTMLHeadingElement>(null);
-
-  useEffect(() => {
-    // Todo: Set header height without JS
-    const headerHeight = headerRef.current && headerRef.current.offsetHeight;
-
-    setHeaderHeight(headerHeight ? headerHeight - paddingTop : 0);
-  }, [paddingTop]);
+  const cssVars = useSettingsCssVars({
+    settings: header,
+  });
 
   return (
     <header
-      ref={headerRef}
-      style={
-        {
-          paddingTop: headerPadding.top,
-          paddingBottom: headerPadding.bottom,
-          "--nav-height": `${headerHeight}px`,
-        } as CSSProperties
-      }
+      style={cssVars}
+      className={cx([
+        // Background and text color
+        "bg-[var(--backgroundColor)] text-[var(--textColor)]",
+        // Padding top and bottom, 25% smaller on mobile
+        "pb-[calc(var(--paddingBottom)*.75)] pt-[calc(var(--paddingTop)*.75)]",
+        "sm:pb-[var(--paddingBottom)] sm:pt-[var(--paddingTop)]",
+      ])}
     >
       <div className="container">
         <div className="flex items-center justify-between">
           <Link to="/">
             <Logo
-              style={{
-                width: logoWidth || undefined,
-                height: "auto",
-              }}
+              className="h-auto w-[var(--logoWidth)]"
               sizes={logoWidth}
+              style={
+                {
+                  "--logoWidth": logoWidth || "auto",
+                } as CSSProperties
+              }
             />
           </Link>
           <Navigation data={header?.menu} />

@@ -90,6 +90,7 @@ export const HEADER_QUERY = q("*")
         bottom: q.number().nullable(),
       })
       .nullable(),
+    colorScheme: q("colorScheme").deref().grab(COLOR_SCHEME_FRAGMENT),
     menu: MENU_FRAGMENT,
   })
   .slice(0)
