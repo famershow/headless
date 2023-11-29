@@ -110,8 +110,8 @@ function getSectionCssVars({
   };
 
   // Padding
-  const paddingTop = `${settings?.paddingTop}px` || 0;
-  const paddingBottom = `${settings?.paddingBottom}px` || 0;
+  const paddingTop = `${settings?.padding?.top}px` || 0;
+  const paddingBottom = `${settings?.padding?.bottom}px` || 0;
 
   return {
     "--backgroundColor": scheme.background,

@@ -84,8 +84,12 @@ export const HEADER_QUERY = q("*")
   .filter("_type == 'header'")
   .grab({
     desktopLogoWidth: q.number().nullable(),
-    paddingTop: q.number().nullable(),
-    paddingBottom: q.number().nullable(),
+    padding: q
+      .object({
+        top: q.number().nullable(),
+        bottom: q.number().nullable(),
+      })
+      .nullable(),
     menu: MENU_FRAGMENT,
   })
   .slice(0)

@@ -10,8 +10,12 @@ import { COLOR_SCHEME_FRAGMENT } from "./fragments";
 */
 export const SECTION_SETTINGS_FRAGMENT = q("settings").grab({
   colorScheme: q("colorScheme").deref().grab(COLOR_SCHEME_FRAGMENT),
-  paddingTop: q.number(),
-  paddingBottom: q.number(),
+  padding: q
+    .object({
+      top: q.number().nullable(),
+      bottom: q.number().nullable(),
+    })
+    .nullable(),
   customCss: q
     .object({
       code: q.string().optional(),

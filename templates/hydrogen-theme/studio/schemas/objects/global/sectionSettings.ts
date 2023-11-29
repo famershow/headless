@@ -1,5 +1,4 @@
 import {defineField} from 'sanity'
-import {paddingBottom, paddingTop} from './paddingOptions'
 
 export default defineField({
   type: 'object',
@@ -12,14 +11,9 @@ export default defineField({
       to: [{type: 'colorScheme'}],
     }),
     defineField({
-      name: 'paddingTop',
-      title: 'Top padding',
-      type: 'paddingTop',
-    }),
-    defineField({
-      name: 'paddingBottom',
-      title: 'Bottom padding',
-      type: 'paddingBottom',
+      name: 'padding',
+      title: 'Padding',
+      type: 'padding',
     }),
     defineField({
       type: 'code',

@@ -1,19 +1,13 @@
 import {defineField, defineType} from 'sanity'
-import {paddingBottom, paddingTop} from '../objects/global/paddingOptions'
 
 export default defineType({
   name: 'header',
   type: 'document',
   fields: [
     defineField({
-      name: 'paddingTop',
-      title: 'Top padding',
-      type: 'paddingTop',
-    }),
-    defineField({
-      name: 'paddingBottom',
-      title: 'Bottom padding',
-      type: 'paddingBottom',
+      name: 'padding',
+      title: 'Padding',
+      type: 'padding',
     }),
     defineField({
       name: 'desktopLogoWidth',
