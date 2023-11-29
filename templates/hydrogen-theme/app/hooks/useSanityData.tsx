@@ -1,3 +1,4 @@
+import type { EncodeDataAttributeCallback } from "@sanity/react-loader";
 import type {
   ClientPerspective,
   ContentSourceMap,
@@ -6,6 +7,8 @@ import type {
 import { useLoaderData } from "@remix-run/react";
 
 import { useQuery } from "~/lib/sanity/sanity.loader";
+import { useEncodeDataAttribute } from "@sanity/react-loader";
+import { useEnvironmentVariables } from "./useEnvironmentVariables";
 
 type Initial = {
   data: unknown;
@@ -25,6 +28,8 @@ export function useSanityData<T extends Initial>(initial: T) {
     };
   }>();
   const sanity = loaderData?.sanity;
+  const env = useEnvironmentVariables();
+  const studioUrl = env?.SANITY_STUDIO_URL!;
 
   if (sanity === undefined) {
     // eslint-disable-next-line no-console
@@ -36,12 +41,21 @@ export function useSanityData<T extends Initial>(initial: T) {
   const params = sanity?.params;
   const query = sanity?.query || "";
 
-  const { data, loading } = useQuery(query || "", params, {
+  const { data, loading, sourceMap } = useQuery(query || "", params, {
     initial: initial as any,
   });
 
-  return { data, loading } as {
+  // `encodeDataAttribute` is a helpful utility for adding custom `data-sanity` attributes.
+  const encodeDataAttribute = useEncodeDataAttribute(
+    data,
+    sourceMap,
+    studioUrl
+  );
+
+  return { data, loading, sourceMap, encodeDataAttribute } as {
     data: InitialData<T>;
     loading: boolean;
+    sourceMap?: ContentSourceMap;
+    encodeDataAttribute: EncodeDataAttributeCallback;
   };
 }

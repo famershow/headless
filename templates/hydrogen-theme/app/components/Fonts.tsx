@@ -2,20 +2,21 @@ import type { InferType } from "groqd";
 
 import type { FONTS_QUERY } from "~/qroq/queries";
 import type { FONT_CATEGORY_FRAGMENT } from "~/qroq/fragments";
-import { useFonts } from "~/hooks/useFonts";
+import { useSanityRoot } from "~/hooks/useSanityRoot";
 
 type FontsQuery = InferType<typeof FONTS_QUERY>;
 type FontAssetsFragment = InferType<typeof FONT_CATEGORY_FRAGMENT.fontAssets>;
 
 export function Fonts() {
-  const fontData = useFonts();
+  const { data } = useSanityRoot();
+  const fontsData = data?.fonts;
 
-  if (!fontData) {
+  if (!fontsData) {
     return null;
   }
 
-  const fontFaces = generateFontFaces({ fontsData: fontData });
-  const cssFontVariables = generateCssFontVariables({ fontsData: fontData });
+  const fontFaces = generateFontFaces({ fontsData });
+  const cssFontVariables = generateCssFontVariables({ fontsData });
 
   return (
     <style

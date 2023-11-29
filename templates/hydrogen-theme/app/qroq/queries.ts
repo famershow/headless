@@ -96,7 +96,7 @@ export const FOOTER_QUERY = q("*")
   .slice(0)
   .nullable();
 
-export const CMS_SETTINGS_QUERY = q("")
+export const ROOT_QUERY = q("")
   .grab({
     defaultColorScheme: DEFAULT_COLOR_SCHEME_QUERY,
     fonts: FONTS_QUERY,

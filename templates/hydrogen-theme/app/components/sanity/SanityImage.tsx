@@ -3,19 +3,15 @@ import imageUrlBuilder from "@sanity/image-url";
 import type { SanityImageFragment } from "~/lib/type";
 import { useEnvironmentVariables } from "~/hooks/useEnvironmentVariables";
 
-export function SanityImage({
-  data,
-  className,
-  style,
-  sizes,
-  loading,
-}: {
+export function SanityImage(props: {
   data?: SanityImageFragment | null;
   className?: string;
   style?: React.CSSProperties;
   sizes?: string | null;
   loading?: "lazy" | "eager";
+  sanityEncodeData?: string;
 }) {
+  const { data, className, style, sizes, loading, sanityEncodeData } = props;
   const env = useEnvironmentVariables();
 
   if (!data) {
@@ -70,6 +66,8 @@ export function SanityImage({
       height={data.height}
       loading={loading}
       alt={data.altText || ""}
+      // Adding this attribute makes sure the image is always clickable in the Presentation tool
+      data-sanity={sanityEncodeData}
     />
   );
 }

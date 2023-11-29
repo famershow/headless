@@ -4,6 +4,7 @@
     "build": {},
     "dev": { "cache": false, "persistent": true },
     "release": {},
-    "deploy": {}
+    "deploy": {},
+    "typecheck": {}
   }
 }
