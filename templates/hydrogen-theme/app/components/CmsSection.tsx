@@ -1,20 +1,13 @@
-import type { CSSProperties } from "react";
 import type { InferType } from "groqd";
 import { Suspense, useMemo } from "react";
 import { cx } from "class-variance-authority";
 
-import type { DEFAULT_COLOR_SCHEME_QUERY } from "~/qroq/queries";
-import type {
-  SECTIONS_FRAGMENT,
-  SECTION_SETTINGS_FRAGMENT,
-} from "~/qroq/sections";
+import type { SECTIONS_FRAGMENT } from "~/qroq/sections";
 import { useIsDev } from "~/hooks/useIsDev";
-import { useSanityRoot } from "~/hooks/useSanityRoot";
 import { sections } from "~/lib/sectionRelsolver";
+import { useSettingsCssVars } from "~/hooks/useSettingsCssVars";
 
 type CmsSectionsProps = InferType<typeof SECTIONS_FRAGMENT>;
-type CmsSectionSettings = InferType<typeof SECTION_SETTINGS_FRAGMENT>;
-type DefaultColorScheme = InferType<typeof DEFAULT_COLOR_SCHEME_QUERY>;
 
 export function CmsSection(props: { data: NonNullable<CmsSectionsProps>[0] }) {
   const { data } = props;
@@ -39,11 +32,8 @@ function SectionWrapper(props: {
 }) {
   const { data, children } = props;
   const isDev = useIsDev();
-  const sanityRoot = useSanityRoot();
-  const defaultColorScheme = sanityRoot?.data?.defaultColorScheme;
-  const cssVars = getSectionCssVars({
+  const cssVars = useSettingsCssVars({
     settings: data?.settings,
-    defaultColorScheme,
   });
   const sectionSelector = `#section-${data._key}`;
   const customCss = data.settings?.customCss?.code
@@ -88,35 +78,4 @@ function Fallback({ type }: { type?: string }) {
       </div>
     </section>
   );
-}
-
-function getSectionCssVars({
-  settings,
-  defaultColorScheme,
-}: {
-  settings: CmsSectionSettings;
-  defaultColorScheme?: DefaultColorScheme;
-}) {
-  // Color scheme
-  const fallbackScheme = {
-    background: { hex: "#ffffff" },
-    text: { hex: "#000000" },
-  };
-  const colorScheme =
-    settings.colorScheme || defaultColorScheme || fallbackScheme;
-  const scheme = {
-    background: colorScheme?.background?.hex,
-    text: colorScheme?.text?.hex,
-  };
-
-  // Padding
-  const paddingTop = `${settings?.padding?.top}px` || 0;
-  const paddingBottom = `${settings?.padding?.bottom}px` || 0;
-
-  return {
-    "--backgroundColor": scheme.background,
-    "--textColor": scheme.text,
-    "--paddingTop": paddingTop,
-    "--paddingBottom": paddingBottom,
-  } as CSSProperties;
 }
