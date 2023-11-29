@@ -20,10 +20,11 @@ import appStyles from "./styles/app.css";
 import tailwindCss from "./styles/tailwind.css";
 import { Layout } from "~/components/layout/Layout";
 import { Fonts } from "./components/Fonts";
-import { CMS_SETTINGS_QUERY } from "./qroq/queries";
 import { generateFontsPreloadLinks } from "./lib/fonts";
+import { sanityPreviewPayload } from "./lib/sanity/sanity.payload.server";
 import { useLocale } from "./hooks/useLocale";
 import { DEFAULT_LOCALE } from "countries";
+import { ROOT_QUERY } from "./qroq/queries";
 
 // This is important to avoid re-fetching root queries on sub-navigations
 export const shouldRevalidate: ShouldRevalidateFunction = ({
@@ -64,7 +65,7 @@ export const meta: MetaFunction<typeof loader> = (loaderData) => {
   const { data } = loaderData;
   // Preload fonts files to avoid FOUT (flash of unstyled text)
   const fontsPreloadLinks = generateFontsPreloadLinks({
-    fontsData: data?.cms.initial.data?.fonts,
+    fontsData: data?.sanityRoot.data?.fonts,
   });
 
   return [
@@ -83,12 +84,14 @@ export async function loader({ context }: LoaderFunctionArgs) {
   const language = locale?.language.toLowerCase();
   const customerAccessToken = await session.get("customerAccessToken");
 
-  const cmsSettings = await sanity.query({
-    groqdQuery: CMS_SETTINGS_QUERY,
-    params: {
-      language,
-      defaultLanguage: DEFAULT_LOCALE.language.toLowerCase(),
-    },
+  const queryParams = {
+    language,
+    defaultLanguage: DEFAULT_LOCALE.language.toLowerCase(),
+  };
+
+  const sanityRoot = await sanity.query({
+    groqdQuery: ROOT_QUERY,
+    params: queryParams,
   });
 
   // validate the customer access token is valid
@@ -104,14 +107,7 @@ export async function loader({ context }: LoaderFunctionArgs) {
     {
       locale,
       sanityPreviewMode,
-      cms: {
-        initial: cmsSettings,
-        query: CMS_SETTINGS_QUERY.query,
-        params: {},
-      },
-      query: CMS_SETTINGS_QUERY.query,
-      params: {},
-      // preview,
+      sanityRoot,
       cart: cartPromise,
       isLoggedIn,
       env: {
@@ -125,6 +121,11 @@ export async function loader({ context }: LoaderFunctionArgs) {
         SANITY_STUDIO_DATASET: env.SANITY_STUDIO_DATASET,
         SANITY_STUDIO_API_VERSION: env.SANITY_STUDIO_API_VERSION,
       },
+      ...sanityPreviewPayload({
+        query: ROOT_QUERY.query,
+        params: queryParams,
+        context,
+      }),
     },
     { headers }
   );

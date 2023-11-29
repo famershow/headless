@@ -3,11 +3,12 @@ import { useEffect, useRef, useState } from "react";
 import { Link } from "@remix-run/react";
 
 import { Logo } from "./Logo";
-import { useHeader } from "~/hooks/useHeader";
 import { Navigation } from "../navigation/Navigation";
+import { useSanityRoot } from "~/hooks/useSanityRoot";
 
 export function Header() {
-  const header = useHeader();
+  const { data } = useSanityRoot();
+  const header = data?.header;
   const headerPadding = {
     top: `${header?.paddingTop || 0}px`,
     bottom: `${header?.paddingBottom || 0}px`,
@@ -21,9 +22,9 @@ export function Header() {
   useEffect(() => {
     // Todo: Set header height without JS
     const headerHeight = headerRef.current && headerRef.current.offsetHeight;
-    const padding = (header?.paddingTop || 0) + (header?.paddingBottom || 0);
+    const paddingTop = header?.paddingTop || 0;
 
-    setHeaderHeight(headerHeight ? headerHeight - padding : 0);
+    setHeaderHeight(headerHeight ? headerHeight - paddingTop : 0);
   }, [header?.paddingBottom, header?.paddingTop]);
 
   return (

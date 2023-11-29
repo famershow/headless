@@ -9,7 +9,7 @@ import type {
   SECTION_SETTINGS_FRAGMENT,
 } from "~/qroq/sections";
 import { useIsDev } from "~/hooks/useIsDev";
-import { useDefaultColorScheme } from "~/hooks/useDefaultColorScheme";
+import { useSanityRoot } from "~/hooks/useSanityRoot";
 import { sections } from "~/lib/sectionRelsolver";
 
 type CmsSectionsProps = InferType<typeof SECTIONS_FRAGMENT>;
@@ -39,7 +39,8 @@ function SectionWrapper(props: {
 }) {
   const { data, children } = props;
   const isDev = useIsDev();
-  const defaultColorScheme = useDefaultColorScheme();
+  const sanityRoot = useSanityRoot();
+  const defaultColorScheme = sanityRoot?.data?.defaultColorScheme;
   const cssVars = getSectionCssVars({
     settings: data?.settings,
     defaultColorScheme,
