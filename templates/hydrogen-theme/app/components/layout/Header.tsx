@@ -9,9 +9,11 @@ import { useSanityRoot } from "~/hooks/useSanityRoot";
 export function Header() {
   const { data } = useSanityRoot();
   const header = data?.header;
+  const paddingTop = header?.padding?.top || 0;
+  const paddingBottom = header?.padding?.bottom || 0;
   const headerPadding = {
-    top: `${header?.paddingTop || 0}px`,
-    bottom: `${header?.paddingBottom || 0}px`,
+    top: `${paddingTop}px`,
+    bottom: `${paddingBottom}px`,
   };
   const logoWidth = header?.desktopLogoWidth
     ? `${header?.desktopLogoWidth}px`
@@ -22,10 +24,9 @@ export function Header() {
   useEffect(() => {
     // Todo: Set header height without JS
     const headerHeight = headerRef.current && headerRef.current.offsetHeight;
-    const paddingTop = header?.paddingTop || 0;
 
     setHeaderHeight(headerHeight ? headerHeight - paddingTop : 0);
-  }, [header?.paddingBottom, header?.paddingTop]);
+  }, [paddingTop]);
 
   return (
     <header

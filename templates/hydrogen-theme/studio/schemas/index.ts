@@ -24,7 +24,7 @@ import shopifyProductVariant from './objects/shopify/shopifyProductVariant'
 import productVariant from './documents/productVariant'
 import shopifyCollection from './objects/shopify/shopifyCollection'
 import shopifyCollectionRule from './objects/shopify/shopifyCollectionRule'
-import {paddingBottom, paddingTop} from './objects/global/paddingOptions'
+import paddingObject from './objects/global/padding'
 
 const singletons = [home, header, footer, settings, themeContent]
 const documents = [page, color, collection, product, blogPost, productVariant]
@@ -43,8 +43,7 @@ const objects = [
   shopifyProductVariant,
   shopifyCollection,
   shopifyCollectionRule,
-  paddingTop,
-  paddingBottom,
+  paddingObject,
 ]
 
 export const schemaTypes = [...objects, ...sections, ...singletons, ...documents]
