@@ -30,7 +30,7 @@ export function Header() {
     >
       <div className="container">
         <div className="flex items-center justify-between">
-          <Link to="/">
+          <Link prefetch="intent" to="/">
             <Logo
               className="h-auto w-[var(--logoWidth)]"
               sizes={logoWidth}
