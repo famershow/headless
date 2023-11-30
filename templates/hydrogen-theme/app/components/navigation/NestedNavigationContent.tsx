@@ -1,8 +1,8 @@
-import * as NavigationMenu from "@radix-ui/react-navigation-menu";
-import { useEffect, type CSSProperties, useMemo } from "react";
-import { useSanityRoot } from "~/hooks/useSanityRoot";
+import * as NavigationMenu from '@radix-ui/react-navigation-menu';
+import {useEffect, type CSSProperties, useMemo} from 'react';
+import {useSanityRoot} from '~/hooks/useSanityRoot';
 
-export function NestedNavigationContent(props: { children: React.ReactNode }) {
+export function NestedNavigationContent(props: {children: React.ReactNode}) {
   const sanityRoot = useSanityRoot();
   const headerLogoWidth = sanityRoot.data?.header?.desktopLogoWidth || 0;
   const headerPaddingTop = sanityRoot.data?.header?.padding?.top || 0;
@@ -12,14 +12,14 @@ export function NestedNavigationContent(props: { children: React.ReactNode }) {
   const logoHeight = headerLogoWidth / logoAspectRatio;
   const topDistance = useMemo(
     () => headerPaddingTop + logoHeight,
-    [headerPaddingTop, logoHeight]
+    [headerPaddingTop, logoHeight],
   );
 
   return (
     <NavigationMenu.Content
       style={
         {
-          "--topDistance": `${topDistance}px`,
+          '--topDistance': `${topDistance}px`,
         } as CSSProperties
       }
       className="absolute left-0 top-[var(--topDistance)] w-full"

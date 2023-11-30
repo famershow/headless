@@ -1,13 +1,13 @@
-import { Link } from "@remix-run/react";
-import { flattenConnection, Image, Money } from "@shopify/hydrogen";
+import {Link} from '@remix-run/react';
+import {flattenConnection, Image, Money} from '@shopify/hydrogen';
 
-import type { ProductCardFragment } from "storefrontapi.generated";
+import type {ProductCardFragment} from 'storefrontapi.generated';
 
 export function ProductCard(props: {
   product: ProductCardFragment;
   className?: string;
 }) {
-  const { product } = props;
+  const {product} = props;
   const firstVariant = flattenConnection(product.variants)[0];
 
   return (

@@ -1,10 +1,10 @@
-import type { TypeFromSelection } from "groqd";
+import type {TypeFromSelection} from 'groqd';
 import type {
   CountryCode,
   CurrencyCode,
   LanguageCode,
-} from "@shopify/hydrogen/storefront-api-types";
-import type { IMAGE_FRAGMENT } from "~/qroq/fragments";
+} from '@shopify/hydrogen/storefront-api-types';
+import type {IMAGE_FRAGMENT} from '~/qroq/fragments';
 
 export type I18nLocale = Locale & {
   pathPrefix: string;

@@ -1,23 +1,23 @@
-import type { LoaderFunctionArgs } from "@shopify/remix-oxygen";
-import type { ProductCollectionSortKeys } from "@shopify/hydrogen/storefront-api-types";
-import { useLoaderData } from "@remix-run/react";
+import type {LoaderFunctionArgs} from '@shopify/remix-oxygen';
+import type {ProductCollectionSortKeys} from '@shopify/hydrogen/storefront-api-types';
+import {useLoaderData} from '@remix-run/react';
 import {
   flattenConnection,
   getPaginationVariables,
   Image,
-} from "@shopify/hydrogen";
-import { json } from "@shopify/remix-oxygen";
-import invariant from "tiny-invariant";
+} from '@shopify/hydrogen';
+import {json} from '@shopify/remix-oxygen';
+import invariant from 'tiny-invariant';
 
-import { ProductCardGrid } from "~/components/ProductCardGrid";
-import { COLLECTION_QUERY } from "~/graphql/queries";
+import {ProductCardGrid} from '~/components/ProductCardGrid';
+import {COLLECTION_QUERY} from '~/graphql/queries';
 
 export type SortParam =
-  | "price-low-high"
-  | "price-high-low"
-  | "best-selling"
-  | "newest"
-  | "featured";
+  | 'price-low-high'
+  | 'price-high-low'
+  | 'best-selling'
+  | 'newest'
+  | 'featured';
 
 export type AppliedFilter = {
   label: string;
@@ -28,70 +28,70 @@ export type AppliedFilter = {
 };
 
 type VariantFilterParam = Record<string, string | boolean>;
-type PriceFiltersQueryParam = Record<"price", { max?: number; min?: number }>;
+type PriceFiltersQueryParam = Record<'price', {max?: number; min?: number}>;
 type VariantOptionFiltersQueryParam = Record<
-  "variantOption",
-  { name: string; value: string }
+  'variantOption',
+  {name: string; value: string}
 >;
 type FiltersQueryParams = Array<
   VariantFilterParam | PriceFiltersQueryParam | VariantOptionFiltersQueryParam
 >;
 
-export async function loader({ params, request, context }: LoaderFunctionArgs) {
+export async function loader({params, request, context}: LoaderFunctionArgs) {
   const paginationVariables = getPaginationVariables(request, {
     pageBy: 8,
   });
-  const { collectionHandle } = params;
+  const {collectionHandle} = params;
 
-  invariant(collectionHandle, "Missing collectionHandle param");
+  invariant(collectionHandle, 'Missing collectionHandle param');
 
   const searchParams = new URL(request.url).searchParams;
-  const knownFilters = ["productVendor", "productType"];
-  const available = "available";
-  const variantOption = "variantOption";
-  const { sortKey, reverse } = getSortValuesFromParam(
-    searchParams.get("sort") as SortParam
+  const knownFilters = ['productVendor', 'productType'];
+  const available = 'available';
+  const variantOption = 'variantOption';
+  const {sortKey, reverse} = getSortValuesFromParam(
+    searchParams.get('sort') as SortParam,
   );
   const filters: FiltersQueryParams = [];
   const appliedFilters: AppliedFilter[] = [];
 
   for (const [key, value] of searchParams.entries()) {
     if (available === key) {
-      filters.push({ available: value === "true" });
+      filters.push({available: value === 'true'});
       appliedFilters.push({
-        label: value === "true" ? "In stock" : "Out of stock",
+        label: value === 'true' ? 'In stock' : 'Out of stock',
         urlParam: {
           key: available,
           value,
         },
       });
     } else if (knownFilters.includes(key)) {
-      filters.push({ [key]: value });
-      appliedFilters.push({ label: value, urlParam: { key, value } });
+      filters.push({[key]: value});
+      appliedFilters.push({label: value, urlParam: {key, value}});
     } else if (key.includes(variantOption)) {
-      const [name, val] = value.split(":");
-      filters.push({ variantOption: { name, value: val } });
-      appliedFilters.push({ label: val, urlParam: { key, value } });
+      const [name, val] = value.split(':');
+      filters.push({variantOption: {name, value: val}});
+      appliedFilters.push({label: val, urlParam: {key, value}});
     }
   }
 
   // Builds min and max price filter since we can't stack them separately into
   // the filters array. See price filters limitations:
   // https://shopify.dev/custom-storefronts/products-collections/filter-products#limitations
-  if (searchParams.has("minPrice") || searchParams.has("maxPrice")) {
-    const price: { min?: number; max?: number } = {};
-    if (searchParams.has("minPrice")) {
-      price.min = Number(searchParams.get("minPrice")) || 0;
+  if (searchParams.has('minPrice') || searchParams.has('maxPrice')) {
+    const price: {min?: number; max?: number} = {};
+    if (searchParams.has('minPrice')) {
+      price.min = Number(searchParams.get('minPrice')) || 0;
       appliedFilters.push({
         label: `Min: $${price.min}`,
-        urlParam: { key: "minPrice", value: searchParams.get("minPrice")! },
+        urlParam: {key: 'minPrice', value: searchParams.get('minPrice')!},
       });
     }
-    if (searchParams.has("maxPrice")) {
-      price.max = Number(searchParams.get("maxPrice")) || 0;
+    if (searchParams.has('maxPrice')) {
+      price.max = Number(searchParams.get('maxPrice')) || 0;
       appliedFilters.push({
         label: `Max: $${price.max}`,
-        urlParam: { key: "maxPrice", value: searchParams.get("maxPrice")! },
+        urlParam: {key: 'maxPrice', value: searchParams.get('maxPrice')!},
       });
     }
     filters.push({
@@ -99,7 +99,7 @@ export async function loader({ params, request, context }: LoaderFunctionArgs) {
     });
   }
 
-  const { collection, collections } = await context.storefront.query(
+  const {collection, collections} = await context.storefront.query(
     COLLECTION_QUERY,
     {
       variables: {
@@ -111,11 +111,11 @@ export async function loader({ params, request, context }: LoaderFunctionArgs) {
         country: context.storefront.i18n.country,
         language: context.storefront.i18n.language,
       },
-    }
+    },
   );
 
   if (!collection) {
-    throw new Response("collection", { status: 404 });
+    throw new Response('collection', {status: 404});
   }
 
   return json({
@@ -126,7 +126,7 @@ export async function loader({ params, request, context }: LoaderFunctionArgs) {
 }
 
 export default function Collection() {
-  const { collection } = useLoaderData<typeof loader>();
+  const {collection} = useLoaderData<typeof loader>();
   const products =
     collection.products.nodes.length > 1
       ? flattenConnection(collection.products)
@@ -160,34 +160,34 @@ function getSortValuesFromParam(sortParam: SortParam | null): {
   reverse: boolean;
 } {
   switch (sortParam) {
-    case "price-high-low":
+    case 'price-high-low':
       return {
-        sortKey: "PRICE",
+        sortKey: 'PRICE',
         reverse: true,
       };
-    case "price-low-high":
+    case 'price-low-high':
       return {
-        sortKey: "PRICE",
+        sortKey: 'PRICE',
         reverse: false,
       };
-    case "best-selling":
+    case 'best-selling':
       return {
-        sortKey: "BEST_SELLING",
+        sortKey: 'BEST_SELLING',
         reverse: false,
       };
-    case "newest":
+    case 'newest':
       return {
-        sortKey: "CREATED",
+        sortKey: 'CREATED',
         reverse: true,
       };
-    case "featured":
+    case 'featured':
       return {
-        sortKey: "MANUAL",
+        sortKey: 'MANUAL',
         reverse: false,
       };
     default:
       return {
-        sortKey: "RELEVANCE",
+        sortKey: 'RELEVANCE',
         reverse: false,
       };
   }

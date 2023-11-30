@@ -1,21 +1,21 @@
-import { lazy } from "react";
+import {lazy} from 'react';
 
 export const sections: {
   [key: string]: React.FC<any>;
 } = {
   heroSection: lazy(() =>
-    import("../components/sections/HeroSection").then((module) => ({
+    import('../components/sections/HeroSection').then((module) => ({
       default: module.HeroSection,
-    }))
+    })),
   ),
   ctaSection: lazy(() =>
-    import("../components/sections/CtaSection").then((module) => ({
+    import('../components/sections/CtaSection').then((module) => ({
       default: module.CtaSection,
-    }))
+    })),
   ),
   socialLinksOnly: lazy(() =>
-    import("../components/footers/SocialLinksOnly").then((module) => ({
+    import('../components/footers/SocialLinksOnly').then((module) => ({
       default: module.SocialLinksOnly,
-    }))
+    })),
   ),
 };

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import {useEffect, useState} from 'react';
 
 export function useIsInIframe() {
   const [isInIframe, setIsInIframe] = useState(false);

@@ -4,21 +4,21 @@
 
 // Enhance TypeScript's built-in typings.
 
-import type { Storefront, HydrogenCart } from "@shopify/hydrogen";
-import type { CustomerAccessToken } from "@shopify/hydrogen/storefront-api-types";
-import type { Sanity } from "./app/lib/sanity/sanity.server";
+import type {Storefront, HydrogenCart} from '@shopify/hydrogen';
+import type {CustomerAccessToken} from '@shopify/hydrogen/storefront-api-types';
+import type {Sanity} from './app/lib/sanity/sanity.server';
 
-import type { HydrogenSession } from "~/lib/hydrogen.session.server";
-import type { SanitySession } from "~/lib/sanity/sanity.session.server";
-import type { I18nLocale } from "~/lib/type";
+import type {HydrogenSession} from '~/lib/hydrogen.session.server';
+import type {SanitySession} from '~/lib/sanity/sanity.session.server';
+import type {I18nLocale} from '~/lib/type';
 
-import "@total-typescript/ts-reset";
+import '@total-typescript/ts-reset';
 
 declare global {
   /**
    * A global `process` object is only available during build to access NODE_ENV.
    */
-  const process: { env: { NODE_ENV: "production" | "development" } };
+  const process: {env: {NODE_ENV: 'production' | 'development'}};
 
   /**
    * Declare expected Env parameter in fetch handler.
@@ -35,11 +35,11 @@ declare global {
     SANITY_STUDIO_API_VERSION: string;
     SANITY_STUDIO_URL: string;
     SANITY_STUDIO_USE_STEGA: string;
-    NODE_ENV: "production" | "development";
+    NODE_ENV: 'production' | 'development';
   }
 }
 
-declare module "@shopify/remix-oxygen" {
+declare module '@shopify/remix-oxygen' {
   /**
    * Declare local additions to the Remix loader context.
    */
@@ -50,7 +50,7 @@ declare module "@shopify/remix-oxygen" {
     session: HydrogenSession;
     sanitySession: SanitySession;
     sanityPreviewMode: boolean;
-    waitUntil: ExecutionContext["waitUntil"];
+    waitUntil: ExecutionContext['waitUntil'];
     sanity: Sanity;
     locale: I18nLocale;
     isDev: boolean;

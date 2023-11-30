@@ -1,4 +1,4 @@
-import type { BaseQuery, InferType, z } from "groqd";
+import type {BaseQuery, InferType, z} from 'groqd';
 import type {
   ClientPerspective,
   ContentSourceMap,
@@ -6,15 +6,15 @@ import type {
   QueryParams,
   SanityStegaClient,
   UnfilteredResponseQueryOptions,
-} from "@sanity/client/stega";
-import { CacheShort, createWithCache } from "@shopify/hydrogen";
+} from '@sanity/client/stega';
+import {CacheShort, createWithCache} from '@shopify/hydrogen';
 
-import { getSanityClient } from "./client";
-import { loadQuery, queryStore } from "./sanity.loader";
+import {getSanityClient} from './client';
+import {loadQuery, queryStore} from './sanity.loader';
 
 type CreateSanityClientOptions = {
   cache: Cache;
-  waitUntil: ExecutionContext["waitUntil"];
+  waitUntil: ExecutionContext['waitUntil'];
   config: {
     projectId: string;
     dataset: string;
@@ -48,11 +48,10 @@ export type Sanity = {
 let sanityServerClientHasBeenInitialized = false;
 
 export function createSanityClient(options: CreateSanityClientOptions) {
-  const { cache, waitUntil, config } = options;
-  const { projectId, dataset, useStega, useCdn, studioUrl, apiVersion } =
-    config;
+  const {cache, waitUntil, config} = options;
+  const {projectId, dataset, useStega, useCdn, studioUrl, apiVersion} = config;
 
-  const { client } = getSanityClient({
+  const {client} = getSanityClient({
     projectId,
     dataset,
     useCdn,
@@ -74,7 +73,7 @@ export function createSanityClient(options: CreateSanityClientOptions) {
       cache: strategy = CacheShort(),
       queryOptions,
     }) {
-      const { query } = groqdQuery as GroqdQuery;
+      const {query} = groqdQuery as GroqdQuery;
       const queryHash = await hashQuery(query, params);
       const withCache = createWithCache({
         cache,
@@ -107,18 +106,18 @@ export async function sha256(message: string): Promise<string> {
   // encode as UTF-8
   const messageBuffer = new TextEncoder().encode(message);
   // hash the message
-  const hashBuffer = await crypto.subtle.digest("SHA-256", messageBuffer);
+  const hashBuffer = await crypto.subtle.digest('SHA-256', messageBuffer);
   // convert bytes to hex string
   return Array.from(new Uint8Array(hashBuffer))
-    .map((b) => b.toString(16).padStart(2, "0"))
-    .join("");
+    .map((b) => b.toString(16).padStart(2, '0'))
+    .join('');
 }
 
 /**
  * Hash query and its parameters for use as cache key
  * NOTE: Oxygen deployment will break if the cache key is long or contains `\n`
  */
-function hashQuery(query: GroqdQuery["query"], params?: QueryParams) {
+function hashQuery(query: GroqdQuery['query'], params?: QueryParams) {
   let hash = query;
 
   if (params !== null) {

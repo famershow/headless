@@ -12,6 +12,7 @@
     "version": "changeset version",
     "postinstall": "manypkg check",
     "fix": "manypkg fix",
+    "format": "turbo format",
     "typecheck": "turbo typecheck"
   },
   "dependencies": {

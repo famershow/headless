@@ -1,5 +1,5 @@
-import type { QueryParams } from "@sanity/client/stega";
-import type { AppLoadContext } from "@shopify/remix-oxygen";
+import type {QueryParams} from '@sanity/client/stega';
+import type {AppLoadContext} from '@shopify/remix-oxygen';
 
 type SanityPayload = {
   query: string;
@@ -11,12 +11,8 @@ type SanityPayload = {
  * It is used to pass the query and params to the Sanity client and fetch live data from Sanity Studio.
  * The payload will be returned as `null` if the `sanityPreviewMode` is false.
  **/
-export function sanityPreviewPayload({
-  query,
-  params,
-  context,
-}: SanityPayload) {
-  const { sanityPreviewMode } = context;
+export function sanityPreviewPayload({query, params, context}: SanityPayload) {
+  const {sanityPreviewMode} = context;
 
   if (sanityPreviewMode) {
     return {

@@ -1,23 +1,23 @@
 // Virtual entry point for the app
-import * as remixBuild from "@remix-run/dev/server-build";
+import * as remixBuild from '@remix-run/dev/server-build';
 import {
   cartGetIdDefault,
   cartSetIdDefault,
   createCartHandler,
   createStorefrontClient,
   storefrontRedirect,
-} from "@shopify/hydrogen";
+} from '@shopify/hydrogen';
 import {
   createRequestHandler,
   getStorefrontHeaders,
-} from "@shopify/remix-oxygen";
+} from '@shopify/remix-oxygen';
 
-import { getLocaleFromRequest } from "countries";
-import { createSanityClient } from "./app/lib/sanity/sanity.server";
-import { CART_QUERY_FRAGMENT } from "~/graphql/fragments";
-import { envVariables } from "~/lib/env.server";
-import { HydrogenSession } from "~/lib/hydrogen.session.server";
-import { SanitySession } from "~/lib/sanity/sanity.session.server";
+import {getLocaleFromRequest} from 'countries';
+import {createSanityClient} from './app/lib/sanity/sanity.server';
+import {CART_QUERY_FRAGMENT} from '~/graphql/fragments';
+import {envVariables} from '~/lib/env.server';
+import {HydrogenSession} from '~/lib/hydrogen.session.server';
+import {SanitySession} from '~/lib/sanity/sanity.session.server';
 
 /*
  * Export a fetch handler in module format.
@@ -26,38 +26,38 @@ export default {
   async fetch(
     request: Request,
     env: Env,
-    executionContext: ExecutionContext
+    executionContext: ExecutionContext,
   ): Promise<Response> {
     try {
       /*
        * Open a cache instance in the worker and a custom session instance.
        */
       if (!env?.SESSION_SECRET) {
-        throw new Error("SESSION_SECRET environment variable is not set");
+        throw new Error('SESSION_SECRET environment variable is not set');
       }
 
       const envVars = envVariables(env);
-      const isDev = envVars.NODE_ENV === "development";
+      const isDev = envVars.NODE_ENV === 'development';
       const origin = new URL(request.url).origin;
       const locale = getLocaleFromRequest(request);
       const waitUntil = executionContext.waitUntil.bind(executionContext);
       const [cache, session, sanitySession] = await Promise.all([
-        caches.open("hydrogen"),
+        caches.open('hydrogen'),
         HydrogenSession.init(request, [env.SESSION_SECRET]),
         SanitySession.init(request, [env.SESSION_SECRET]),
       ]);
-      const sanityPreviewMode = await sanitySession.has("previewMode");
+      const sanityPreviewMode = await sanitySession.has('previewMode');
 
       /*
        * Create Hydrogen's Storefront client.
        */
-      const { storefront } = createStorefrontClient({
+      const {storefront} = createStorefrontClient({
         cache,
         waitUntil,
-        i18n: { language: locale.language, country: locale.country },
+        i18n: {language: locale.language, country: locale.country},
         publicStorefrontToken: env.PUBLIC_STOREFRONT_API_TOKEN,
         privateStorefrontToken: env.PRIVATE_STOREFRONT_API_TOKEN,
-        storefrontApiVersion: env.PUBLIC_STOREFRONT_API_VERSION || "2023-10",
+        storefrontApiVersion: env.PUBLIC_STOREFRONT_API_VERSION || '2023-10',
         storeDomain: env.PUBLIC_STORE_DOMAIN,
         storefrontId: env.PUBLIC_STOREFRONT_ID,
         storefrontHeaders: getStorefrontHeaders(request),
@@ -84,7 +84,7 @@ export default {
           projectId: envVars.SANITY_STUDIO_PROJECT_ID,
           dataset: envVars.SANITY_STUDIO_DATASET,
           apiVersion: envVars.SANITY_STUDIO_API_VERSION,
-          useCdn: envVars.NODE_ENV === "production",
+          useCdn: envVars.NODE_ENV === 'production',
           useStega: envVars.SANITY_STUDIO_USE_STEGA,
           studioUrl: envVars.SANITY_STUDIO_URL,
         },
@@ -119,14 +119,14 @@ export default {
          * If the redirect doesn't exist, then `storefrontRedirect`
          * will pass through the 404 response.
          */
-        return storefrontRedirect({ request, response, storefront });
+        return storefrontRedirect({request, response, storefront});
       }
 
       return response;
     } catch (error) {
       // eslint-disable-next-line no-console
       console.error(error);
-      return new Response("An unexpected error occurred", { status: 500 });
+      return new Response('An unexpected error occurred', {status: 500});
     }
   },
 };

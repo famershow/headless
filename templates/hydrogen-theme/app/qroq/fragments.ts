@@ -1,7 +1,7 @@
-import type { Selection } from "groqd";
-import { q } from "groqd";
+import type {Selection} from 'groqd';
+import {q} from 'groqd';
 
-import { LINKS_LIST_SELECTION } from "./links";
+import {LINKS_LIST_SELECTION} from './links';
 
 /*
 |--------------------------------------------------------------------------
@@ -9,8 +9,8 @@ import { LINKS_LIST_SELECTION } from "./links";
 |--------------------------------------------------------------------------
 */
 export const IMAGE_FRAGMENT = {
-  _ref: q("asset").grabOne("_ref", q.string()),
-  hotspot: q("hotspot")
+  _ref: q('asset').grabOne('_ref', q.string()),
+  hotspot: q('hotspot')
     .grab({
       x: q.number(),
       y: q.number(),
@@ -18,7 +18,7 @@ export const IMAGE_FRAGMENT = {
       width: q.number(),
     })
     .nullable(),
-  crop: q("crop")
+  crop: q('crop')
     .grab({
       top: q.number(),
       bottom: q.number(),
@@ -26,11 +26,11 @@ export const IMAGE_FRAGMENT = {
       right: q.number(),
     })
     .nullable(),
-  altText: q("asset").deref().grabOne("altText", q.string()).nullable(),
-  url: q("asset").deref().grabOne("url", q.string()),
-  width: q("asset").deref().grabOne("metadata.dimensions.width", q.number()),
-  height: q("asset").deref().grabOne("metadata.dimensions.height", q.number()),
-  blurDataURL: q("asset").deref().grabOne("metadata.lqip", q.string()),
+  altText: q('asset').deref().grabOne('altText', q.string()).nullable(),
+  url: q('asset').deref().grabOne('url', q.string()),
+  width: q('asset').deref().grabOne('metadata.dimensions.width', q.number()),
+  height: q('asset').deref().grabOne('metadata.dimensions.height', q.number()),
+  blurDataURL: q('asset').deref().grabOne('metadata.lqip', q.string()),
 };
 
 /*
@@ -43,7 +43,7 @@ export const MENU_FRAGMENT = q(
     menu[_key == $language][0].value[],
     menu[_key == $defaultLanguage][0].value[],
   )[]`,
-  { isArray: true }
+  {isArray: true},
 )
   .select(LINKS_LIST_SELECTION)
   .nullable();
@@ -54,12 +54,12 @@ export const MENU_FRAGMENT = q(
 |--------------------------------------------------------------------------
 */
 export const COLOR_FRAGMENT = {
-  hsl: q("hsl").grab({
+  hsl: q('hsl').grab({
     h: q.number(),
     s: q.number(),
     l: q.number(),
   }),
-  rgb: q("rgb").grab({
+  rgb: q('rgb').grab({
     r: q.number(),
     g: q.number(),
     b: q.number(),
@@ -69,8 +69,8 @@ export const COLOR_FRAGMENT = {
 } satisfies Selection;
 
 export const COLOR_SCHEME_FRAGMENT = {
-  background: q("background").grab(COLOR_FRAGMENT).nullable(),
-  text: q("text").grab(COLOR_FRAGMENT).nullable(),
+  background: q('background').grab(COLOR_FRAGMENT).nullable(),
+  text: q('text').grab(COLOR_FRAGMENT).nullable(),
 } satisfies Selection;
 
 /*
@@ -79,9 +79,9 @@ export const COLOR_SCHEME_FRAGMENT = {
 |--------------------------------------------------------------------------
 */
 export const SETTINGS_FRAGMENT = {
-  logo: q("logo").grab(IMAGE_FRAGMENT).nullable(),
-  favicon: q("favicon").grab(IMAGE_FRAGMENT).nullable(),
-  socialMedia: q("socialMedia").grab({
+  logo: q('logo').grab(IMAGE_FRAGMENT).nullable(),
+  favicon: q('favicon').grab(IMAGE_FRAGMENT).nullable(),
+  socialMedia: q('socialMedia').grab({
     facebook: q.string().nullable(),
     instagram: q.string().nullable(),
     twitter: q.string().nullable(),
@@ -95,21 +95,21 @@ export const SETTINGS_FRAGMENT = {
 |--------------------------------------------------------------------------
 */
 const FONT_ASSET_FRAGMENT = {
-  url: q("asset").deref().grabOne("url", q.string()),
-  extension: q("asset").deref().grabOne("extension", q.string()),
-  mimeType: q("asset").deref().grabOne("mimeType", q.string()),
+  url: q('asset').deref().grabOne('url', q.string()),
+  extension: q('asset').deref().grabOne('extension', q.string()),
+  mimeType: q('asset').deref().grabOne('mimeType', q.string()),
 } satisfies Selection;
 
 export const FONT_CATEGORY_FRAGMENT = {
   fontName: q.string(),
   fontType: q.string(),
   antialiased: q.boolean().nullable(),
-  fontAssets: q("fontAssets[]", { isArray: true }).grab({
+  fontAssets: q('fontAssets[]', {isArray: true}).grab({
     fontWeight: q.number(),
     fontStyle: q.string(),
-    fontName: ["^.fontName", q.string()],
-    woff2: q("woff2").grab(FONT_ASSET_FRAGMENT).nullable(),
-    woff: q("woff").grab(FONT_ASSET_FRAGMENT).nullable(),
-    ttf: q("ttf").grab(FONT_ASSET_FRAGMENT).nullable(),
+    fontName: ['^.fontName', q.string()],
+    woff2: q('woff2').grab(FONT_ASSET_FRAGMENT).nullable(),
+    woff: q('woff').grab(FONT_ASSET_FRAGMENT).nullable(),
+    ttf: q('ttf').grab(FONT_ASSET_FRAGMENT).nullable(),
   }),
 } satisfies Selection;

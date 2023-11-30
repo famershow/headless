@@ -1,5 +1,5 @@
-import type { Session, SessionStorage } from "@shopify/remix-oxygen";
-import { createCookieSessionStorage } from "@shopify/remix-oxygen";
+import type {Session, SessionStorage} from '@shopify/remix-oxygen';
+import {createCookieSessionStorage} from '@shopify/remix-oxygen';
 
 /**
  * This is a custom session implementation for your Hydrogen shop.
@@ -18,15 +18,15 @@ export class HydrogenSession {
   static async init(request: Request, secrets: string[]) {
     const storage = createCookieSessionStorage({
       cookie: {
-        name: "session",
+        name: 'session',
         httpOnly: true,
-        path: "/",
-        sameSite: "lax",
+        path: '/',
+        sameSite: 'lax',
         secrets,
       },
     });
 
-    const session = await storage.getSession(request.headers.get("Cookie"));
+    const session = await storage.getSession(request.headers.get('Cookie'));
 
     return new this(storage, session);
   }
