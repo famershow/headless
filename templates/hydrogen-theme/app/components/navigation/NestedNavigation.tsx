@@ -7,6 +7,7 @@ import {NavigationTrigger} from './NestedNavigationTrigger';
 import {SanityInternalLink} from '../sanity/link/SanityInternalLink';
 import {SanityExternalLink} from '../sanity/link/SanityExternalLink';
 import {NestedNavigationContent} from './NestedNavigationContent';
+import {cx} from 'class-variance-authority';
 
 type SanityNestedNavigationProps = TypeFromSelection<
   typeof NESTED_NAVIGATION_FRAGMENT
@@ -29,14 +30,29 @@ export function NestedNavigation(props: {data?: SanityNestedNavigationProps}) {
         />
       </NavigationTrigger>
       <NestedNavigationContent>
-        <ul className="relative z-10 flex w-auto min-w-[10rem] flex-col gap-3 rounded bg-[var(--backgroundColor)] p-2 text-[var(--textColor)] shadow">
-          {childLinks.map((child) =>
-            child._type === 'internalLink' ? (
-              <SanityInternalLink key={child._key} data={child} />
-            ) : child._type === 'externalLink' ? (
-              <SanityExternalLink key={child._key} data={child} />
-            ) : null,
-          )}
+        <ul
+          className={cx([
+            'color-scheme',
+            'relative z-10 flex w-auto min-w-[10rem] flex-col gap-1 rounded p-2 shadow',
+          ])}
+        >
+          {childLinks.map((child) => (
+            <NavigationMenu.Link key={child._key} asChild>
+              <li
+                className={cx([
+                  'rounded px-2 py-1 transition-colors duration-100',
+                  'hover:inverted-color-scheme',
+                  '[&>*]:flex',
+                ])}
+              >
+                {child._type === 'internalLink' ? (
+                  <SanityInternalLink data={child} />
+                ) : child._type === 'externalLink' ? (
+                  <SanityExternalLink data={child} />
+                ) : null}
+              </li>
+            </NavigationMenu.Link>
+          ))}
         </ul>
       </NestedNavigationContent>
     </>

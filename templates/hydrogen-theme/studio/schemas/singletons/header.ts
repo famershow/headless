@@ -30,6 +30,13 @@ export default defineType({
       to: [{type: 'colorScheme'}],
     }),
     defineField({
+      name: 'showSeparatorLine',
+      title: 'Show separator line',
+      type: 'boolean',
+      group: 'settings',
+      initialValue: true,
+    }),
+    defineField({
       name: 'padding',
       title: 'Header padding',
       type: 'padding',

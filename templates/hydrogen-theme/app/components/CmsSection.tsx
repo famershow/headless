@@ -1,12 +1,12 @@
 import type {InferType} from 'groqd';
 import {Suspense, useMemo} from 'react';
-import {cx} from 'class-variance-authority';
 
 import type {SECTIONS_FRAGMENT} from '~/qroq/sections';
+import type {FOOTERS_FRAGMENT} from '~/qroq/footers';
 import {useIsDev} from '~/hooks/useIsDev';
 import {sections} from '~/lib/sectionRelsolver';
 import {useSettingsCssVars} from '~/hooks/useSettingsCssVars';
-import type {FOOTERS_FRAGMENT} from '~/qroq/footers';
+import {section} from './cva/section';
 
 type CmsSectionsProps =
   | NonNullable<InferType<typeof SECTIONS_FRAGMENT>>[0]
@@ -50,19 +50,11 @@ function SectionWrapper(props: {
     : '';
   const sectionType = data._type;
 
-  const classNames = [
-    // Background and text color
-    'bg-[var(--backgroundColor)] text-[var(--textColor)]',
-    // Padding top and bottom, 25% smaller on mobile
-    'pb-[calc(var(--paddingBottom)*.75)] pt-[calc(var(--paddingTop)*.75)]',
-    'sm:pb-[var(--paddingBottom)] sm:pt-[var(--paddingTop)]',
-  ];
-
   return props.type === 'footer' ? (
     <footer
       data-footer-type={isDev ? sectionType : null}
       style={cssVars}
-      className={cx(classNames)}
+      className={section({})}
     >
       {children}
       {data.settings?.customCss && (
@@ -74,7 +66,7 @@ function SectionWrapper(props: {
       data-section-type={isDev ? sectionType : null}
       id={`section-${data._key}`}
       style={cssVars}
-      className={cx(classNames)}
+      className={section({})}
     >
       {children}
       {data.settings?.customCss && (
@@ -87,13 +79,11 @@ function SectionWrapper(props: {
 function Fallback({type}: {type?: string}) {
   return (
     <section className="w-full bg-slate-800 text-white">
-      <div className="text-text1 container py-10 text-center">
+      <div className="container py-10 text-center">
         <div className="rounded-md border-2 border-dashed border-gray-400 px-5 py-10">
           <div>
             The section component
-            {type && (
-              <strong className="text-accent1 px-2 text-xl">{type}</strong>
-            )}
+            {type && <strong className="px-2 text-xl">{type}</strong>}
             does not exist yet.
           </div>
         </div>

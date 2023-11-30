@@ -83,6 +83,7 @@ export const HEADER_QUERY = q('*')
   .filter("_type == 'header'")
   .grab({
     desktopLogoWidth: q.number().nullable(),
+    showSeparatorLine: q.boolean().nullable(),
     padding: q
       .object({
         top: q.number().nullable(),
