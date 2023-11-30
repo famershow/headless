@@ -5,7 +5,7 @@ import {Logo} from './Logo';
 import {Navigation} from '../navigation/Navigation';
 import {useSanityRoot} from '~/hooks/useSanityRoot';
 import {useSettingsCssVars} from '~/hooks/useSettingsCssVars';
-import {cx} from 'class-variance-authority';
+import {section} from '../cva/section';
 
 export function Header() {
   const {data} = useSanityRoot();
@@ -13,6 +13,7 @@ export function Header() {
   const logoWidth = header?.desktopLogoWidth
     ? `${header?.desktopLogoWidth}px`
     : null;
+  const showSeparatorLine = header?.showSeparatorLine;
   const cssVars = useSettingsCssVars({
     settings: header,
   });
@@ -20,13 +21,7 @@ export function Header() {
   return (
     <header
       style={cssVars}
-      className={cx([
-        // Background and text color
-        'bg-[var(--backgroundColor)] text-[var(--textColor)]',
-        // Padding top and bottom, 25% smaller on mobile
-        'pb-[calc(var(--paddingBottom)*.75)] pt-[calc(var(--paddingTop)*.75)]',
-        'sm:pb-[var(--paddingBottom)] sm:pt-[var(--paddingTop)]',
-      ])}
+      className={section({optional: showSeparatorLine ? 'header' : null})}
     >
       <div className="container">
         <div className="flex items-center justify-between">
