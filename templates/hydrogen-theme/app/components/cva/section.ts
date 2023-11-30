@@ -5,6 +5,7 @@ export type SectionVariantProps = VariantProps<typeof sectionVariants>;
 
 export const sectionVariants = cva(
   [
+    'relative',
     // Background and text color from color scheme
     'color-scheme',
     // Padding top and bottom, 25% smaller on mobile

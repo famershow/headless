@@ -7,6 +7,7 @@ import {useIsDev} from '~/hooks/useIsDev';
 import {sections} from '~/lib/sectionRelsolver';
 import {useSettingsCssVars} from '~/hooks/useSettingsCssVars';
 import {section} from './cva/section';
+import {EncodeDataAttributeCallback} from '@sanity/react-loader';
 
 type CmsSectionsProps =
   | NonNullable<InferType<typeof SECTIONS_FRAGMENT>>[0]
@@ -17,8 +18,9 @@ type CmsSectionType = 'footer' | 'section';
 export function CmsSection(props: {
   data: CmsSectionsProps;
   type?: CmsSectionType;
+  encodeDataAttribute?: EncodeDataAttributeCallback;
 }) {
-  const {data} = props;
+  const {data, encodeDataAttribute} = props;
   const isDev = useIsDev();
   const type = data._type;
   const Section = useMemo(() => sections[type], [type]);
@@ -26,7 +28,7 @@ export function CmsSection(props: {
   return Section ? (
     <Suspense>
       <SectionWrapper type={props.type} data={data}>
-        <Section data={data} />
+        <Section data={data} encodeDataAttribute={encodeDataAttribute} />
       </SectionWrapper>
     </Suspense>
   ) : isDev ? (

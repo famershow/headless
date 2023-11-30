@@ -11,12 +11,21 @@ export function Footer() {
       {/* Sections */}
       {footerSections && footerSections.length > 0
         ? footerSections.map((section) => (
-            <CmsSection data={section} key={section._key} />
+            <CmsSection
+              data={section}
+              key={section._key}
+              encodeDataAttribute={sanityRoot.encodeDataAttribute}
+            />
           ))
         : null}
       {/* Footer Section */}
       {footer ? (
-        <CmsSection type="footer" data={footer} key={footer._key} />
+        <CmsSection
+          type="footer"
+          data={footer}
+          key={footer._key}
+          encodeDataAttribute={sanityRoot.encodeDataAttribute}
+        />
       ) : null}
     </>
   );

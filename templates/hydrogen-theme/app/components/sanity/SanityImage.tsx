@@ -1,4 +1,5 @@
 import imageUrlBuilder from '@sanity/image-url';
+import {cx} from 'class-variance-authority';
 
 import type {SanityImageFragment} from '~/lib/type';
 import {useEnvironmentVariables} from '~/hooks/useEnvironmentVariables';
@@ -51,7 +52,7 @@ export function SanityImage(props: {
 
   return (
     <img
-      className={className}
+      className={cx([className, 'object-[var(--focalX)_var(--focalY)]'])}
       src={urlDefault}
       srcSet={srcSet}
       style={

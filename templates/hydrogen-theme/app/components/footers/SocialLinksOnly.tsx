@@ -1,4 +1,5 @@
 import type {TypeFromSelection} from 'groqd';
+import {SectionDefaultProps} from '~/lib/type';
 
 import type {FOOTER_SOCIAL_LINKS_ONLY_FRAGMENT} from '~/qroq/footers';
 
@@ -6,7 +7,9 @@ type FooterSocialLinksOnlyProps = TypeFromSelection<
   typeof FOOTER_SOCIAL_LINKS_ONLY_FRAGMENT
 >;
 
-export function SocialLinksOnly(props: {data: FooterSocialLinksOnlyProps}) {
+export function SocialLinksOnly(
+  props: SectionDefaultProps & {data: FooterSocialLinksOnlyProps},
+) {
   const {data} = props;
 
   return (

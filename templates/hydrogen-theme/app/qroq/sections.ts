@@ -1,7 +1,19 @@
 import type {Selection} from 'groqd';
 import {q, z} from 'groqd';
 
-import {COLOR_SCHEME_FRAGMENT} from './fragments';
+import {COLOR_SCHEME_FRAGMENT, IMAGE_FRAGMENT} from './fragments';
+
+export const contentAlignmentValues = [
+  'top_left',
+  'top_center',
+  'top_right',
+  'middle_left',
+  'middle_center',
+  'middle_right',
+  'bottom_left',
+  'bottom_center',
+  'bottom_right',
+] as const;
 
 /*
 |--------------------------------------------------------------------------
@@ -32,6 +44,9 @@ export const HERO_SECTION_FRAGMENT = {
   _type: z.enum(['heroSection']),
   _key: q.string().nullable(),
   settings: SECTION_SETTINGS_FRAGMENT,
+  backgroundImage: q('backgroundImage').grab(IMAGE_FRAGMENT).nullable(),
+  overlayOpacity: q.number().nullable(),
+  contentAlignment: z.enum(contentAlignmentValues).nullable(),
   title: [
     `coalesce(
       title[_key == $language][0].value,
