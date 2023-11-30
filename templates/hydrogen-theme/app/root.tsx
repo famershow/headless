@@ -16,7 +16,6 @@ import {
 
 import type {HydrogenSession} from './lib/hydrogen.session.server';
 import favicon from '../public/favicon.svg';
-import appStyles from './styles/app.css';
 import tailwindCss from './styles/tailwind.css';
 import {Layout} from '~/components/layout/Layout';
 import {Fonts} from './components/Fonts';
@@ -56,7 +55,6 @@ export function links() {
       href: 'https://shop.app',
     },
     {rel: 'stylesheet', href: tailwindCss},
-    {rel: 'stylesheet', href: appStyles},
     {rel: 'icon', type: 'image/svg+xml', href: favicon},
   ];
 }

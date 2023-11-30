@@ -5,6 +5,7 @@ import type {
   LanguageCode,
 } from '@shopify/hydrogen/storefront-api-types';
 import type {IMAGE_FRAGMENT} from '~/qroq/fragments';
+import {EncodeDataAttributeCallback} from '@sanity/react-loader';
 
 export type I18nLocale = Locale & {
   pathPrefix: string;
@@ -22,3 +23,7 @@ export type Locale = {
 export type Localizations = Record<string, Locale>;
 
 export type SanityImageFragment = TypeFromSelection<typeof IMAGE_FRAGMENT>;
+
+export type SectionDefaultProps = {
+  encodeDataAttribute?: EncodeDataAttributeCallback;
+};

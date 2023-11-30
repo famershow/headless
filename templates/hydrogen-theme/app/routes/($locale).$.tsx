@@ -45,11 +45,15 @@ export async function loader({context, params, request}: LoaderFunctionArgs) {
 
 export default function PageRoute() {
   const {page} = useLoaderData<typeof loader>();
-  const {data} = useSanityData(page);
+  const {data, encodeDataAttribute} = useSanityData(page);
 
   return data?.sections && data.sections.length > 0
     ? data.sections.map((section) => (
-        <CmsSection data={section} key={section._key} />
+        <CmsSection
+          data={section}
+          key={section._key}
+          encodeDataAttribute={encodeDataAttribute}
+        />
       ))
     : null;
 }

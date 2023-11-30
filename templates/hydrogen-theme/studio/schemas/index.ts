@@ -27,6 +27,8 @@ import shopifyCollectionRule from './objects/shopify/shopifyCollectionRule'
 import paddingObject from './objects/global/padding'
 import footersList from './objects/global/footersList'
 import socialLinksOnly from './objects/footers/socialLinksOnly'
+import overlayOpacity from './objects/global/overlayOpacity'
+import contentAlignment from './objects/global/contentAlignment'
 
 const singletons = [home, header, footer, settings, themeContent]
 const documents = [page, color, collection, product, blogPost, productVariant]
@@ -48,6 +50,8 @@ const objects = [
   shopifyCollection,
   shopifyCollectionRule,
   paddingObject,
+  overlayOpacity,
+  contentAlignment,
 ]
 
 export const schemaTypes = [...objects, ...sections, ...footers, ...singletons, ...documents]
