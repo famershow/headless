@@ -1,33 +1,33 @@
-import type { InferType } from "groqd";
+import type {InferType} from 'groqd';
 
-import type { FONTS_QUERY } from "~/qroq/queries";
-import type { FONT_CATEGORY_FRAGMENT } from "~/qroq/fragments";
-import { useSanityRoot } from "~/hooks/useSanityRoot";
+import type {FONTS_QUERY} from '~/qroq/queries';
+import type {FONT_CATEGORY_FRAGMENT} from '~/qroq/fragments';
+import {useSanityRoot} from '~/hooks/useSanityRoot';
 
 type FontsQuery = InferType<typeof FONTS_QUERY>;
 type FontAssetsFragment = InferType<typeof FONT_CATEGORY_FRAGMENT.fontAssets>;
 
 export function Fonts() {
-  const { data } = useSanityRoot();
+  const {data} = useSanityRoot();
   const fontsData = data?.fonts;
 
   if (!fontsData) {
     return null;
   }
 
-  const fontFaces = generateFontFaces({ fontsData });
-  const cssFontVariables = generateCssFontVariables({ fontsData });
+  const fontFaces = generateFontFaces({fontsData});
+  const cssFontVariables = generateCssFontVariables({fontsData});
 
   return (
     <style
       dangerouslySetInnerHTML={{
-        __html: fontFaces + "\n" + cssFontVariables,
+        __html: fontFaces + '\n' + cssFontVariables,
       }}
     ></style>
   );
 }
 
-export function getFonts({ fontsData }: { fontsData: FontsQuery }) {
+export function getFonts({fontsData}: {fontsData: FontsQuery}) {
   const headingFonts =
     fontsData?.heading &&
     fontsData.heading.length > 0 &&
@@ -50,8 +50,8 @@ export function getFonts({ fontsData }: { fontsData: FontsQuery }) {
   return [...headingFonts, ...bodyFonts, ...extraFonts];
 }
 
-function generateFontFaces({ fontsData }: { fontsData: FontsQuery }) {
-  const fonts = getFonts({ fontsData });
+function generateFontFaces({fontsData}: {fontsData: FontsQuery}) {
+  const fonts = getFonts({fontsData});
 
   if (fonts?.length > 0) {
     return fonts
@@ -66,10 +66,10 @@ function generateFontFaces({ fontsData }: { fontsData: FontsQuery }) {
           }
         `.trim();
       })
-      .join("\n");
+      .join('\n');
   }
 
-  return "";
+  return '';
 }
 
 function resolveFontAssetUrls(font: FontAssetsFragment[0]) {
@@ -79,10 +79,10 @@ function resolveFontAssetUrls(font: FontAssetsFragment[0]) {
   font.woff && fontAssetUrls.push(`url("${font.woff.url}") format("woff")`);
   font.ttf && fontAssetUrls.push(`url("${font.ttf.url}") format("truetype")`);
 
-  return fontAssetUrls.join(", ");
+  return fontAssetUrls.join(', ');
 }
 
-function generateCssFontVariables({ fontsData }: { fontsData: FontsQuery }) {
+function generateCssFontVariables({fontsData}: {fontsData: FontsQuery}) {
   const fontCategories: Array<{
     categoryName: string;
     fontName: string;
@@ -93,19 +93,19 @@ function generateCssFontVariables({ fontsData }: { fontsData: FontsQuery }) {
   fontsData?.heading &&
     fontsData.heading?.length > 0 &&
     fontCategories.push({
-      categoryName: "heading",
+      categoryName: 'heading',
       ...fontsData.heading[0],
     });
   fontsData?.body &&
     fontsData.body?.length > 0 &&
     fontCategories.push({
-      categoryName: "body",
+      categoryName: 'body',
       ...fontsData.body[0],
     });
   fontsData?.extra &&
     fontsData.extra?.length > 0 &&
     fontCategories.push({
-      categoryName: "extra",
+      categoryName: 'extra',
       ...fontsData.extra[0],
     });
 
@@ -124,15 +124,15 @@ function generateCssFontVariables({ fontsData }: { fontsData: FontsQuery }) {
         --${fontCategory.categoryName}-font-family: "${fontCategory.fontName}";
         --${fontCategory.categoryName}-font-type: ${fontCategory.fontType};
         --${fontCategory.categoryName}-font-webkit-font-smoothing: ${
-          fontCategory.antialiased ? "antialiased" : "unset"
+          fontCategory.antialiased ? 'antialiased' : 'unset'
         };
         --${fontCategory.categoryName}-font-moz-osx-font-smoothing: ${
-          fontCategory.antialiased ? "grayscale" : "unset"
+          fontCategory.antialiased ? 'grayscale' : 'unset'
         };
         `.trim();
       })
-      .join("\n");
+      .join('\n');
   }
 
-  return "";
+  return '';
 }

@@ -1,5 +1,5 @@
-import { useSanityRoot } from "~/hooks/useSanityRoot";
-import { CmsSection } from "../CmsSection";
+import {useSanityRoot} from '~/hooks/useSanityRoot';
+import {CmsSection} from '../CmsSection';
 
 export function Footer() {
   const sanityRoot = useSanityRoot();

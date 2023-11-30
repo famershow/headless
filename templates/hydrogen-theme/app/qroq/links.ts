@@ -1,5 +1,5 @@
-import type { Selection } from "groqd";
-import { q, z } from "groqd";
+import type {Selection} from 'groqd';
+import {q, z} from 'groqd';
 
 /*
 |--------------------------------------------------------------------------
@@ -7,11 +7,11 @@ import { q, z } from "groqd";
 |--------------------------------------------------------------------------
 */
 export const INTERNAL_LINK_FRAGMENT = {
-  _type: z.enum(["internalLink"]),
+  _type: z.enum(['internalLink']),
   _key: q.string().nullable(),
   name: q.string().nullable(),
   anchor: q.string().nullable(),
-  link: q("link")
+  link: q('link')
     .deref()
     .grab({
       slug: [
@@ -25,13 +25,13 @@ export const INTERNAL_LINK_FRAGMENT = {
           _type: q.string(),
         }),
       ],
-      documentType: ["_type", q.string()],
+      documentType: ['_type', q.string()],
     })
     .nullable(),
 } satisfies Selection;
 
 export const EXTERNAL_LINK_FRAGMENT = {
-  _type: z.enum(["externalLink"]),
+  _type: z.enum(['externalLink']),
   _key: q.string().nullable(),
   link: q.string().nullable(),
   openInNewTab: q.boolean().nullable(),
@@ -39,9 +39,9 @@ export const EXTERNAL_LINK_FRAGMENT = {
 } satisfies Selection;
 
 export const NESTED_NAVIGATION_FRAGMENT = {
-  _type: z.enum(["nestedNavigation"]),
+  _type: z.enum(['nestedNavigation']),
   _key: q.string().nullable(),
-  childLinks: q("childLinks[]", { isArray: true }).select({
+  childLinks: q('childLinks[]', {isArray: true}).select({
     '_type == "internalLink"': INTERNAL_LINK_FRAGMENT,
     '_type == "externalLink"': EXTERNAL_LINK_FRAGMENT,
   }),

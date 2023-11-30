@@ -1,20 +1,20 @@
-import { q } from "groqd";
+import {q} from 'groqd';
 
 import {
   COLOR_SCHEME_FRAGMENT,
   FONT_CATEGORY_FRAGMENT,
   MENU_FRAGMENT,
   SETTINGS_FRAGMENT,
-} from "./fragments";
-import { SECTIONS_FRAGMENT } from "./sections";
-import { FOOTERS_FRAGMENT } from "./footers";
+} from './fragments';
+import {SECTIONS_FRAGMENT} from './sections';
+import {FOOTERS_FRAGMENT} from './footers';
 
 /*
 |--------------------------------------------------------------------------
 | Page Query
 |--------------------------------------------------------------------------
 */
-export const PAGE_QUERY = q("*")
+export const PAGE_QUERY = q('*')
   .filter(
     ` (
         _type == "page" &&
@@ -25,7 +25,7 @@ export const PAGE_QUERY = q("*")
         _type == "home" &&
         $handle == "home"
       )
-    `
+    `,
   )
   .grab({
     sections: SECTIONS_FRAGMENT,
@@ -38,7 +38,7 @@ export const PAGE_QUERY = q("*")
 | Product Query
 |--------------------------------------------------------------------------
 */
-export const PRODUCT_QUERY = q("*")
+export const PRODUCT_QUERY = q('*')
   .filter(`_type == "product" && slug.current == $productHandle`)
   .grab({
     slug: q.string(),
@@ -52,36 +52,34 @@ export const PRODUCT_QUERY = q("*")
 | CMS Settings Queries
 |--------------------------------------------------------------------------
 */
-export const FONTS_QUERY = q("*")
+export const FONTS_QUERY = q('*')
   .filter("_type == 'typography'")
   .grab({
-    heading: q("heading[]", { isArray: true })
+    heading: q('heading[]', {isArray: true})
       .grab(FONT_CATEGORY_FRAGMENT)
       .nullable(),
-    body: q("body[]", { isArray: true })
-      .grab(FONT_CATEGORY_FRAGMENT)
-      .nullable(),
-    extra: q("extra[]", { isArray: true })
+    body: q('body[]', {isArray: true}).grab(FONT_CATEGORY_FRAGMENT).nullable(),
+    extra: q('extra[]', {isArray: true})
       .grab(FONT_CATEGORY_FRAGMENT)
       .nullable(),
   })
-  .order("_createdAt asc")
+  .order('_createdAt asc')
   .slice(0)
   .nullable();
 
-export const DEFAULT_COLOR_SCHEME_QUERY = q("*")
+export const DEFAULT_COLOR_SCHEME_QUERY = q('*')
   .filter("_type == 'colorScheme'")
   .grab(COLOR_SCHEME_FRAGMENT)
-  .order("_createdAt asc")
+  .order('_createdAt asc')
   .slice(0);
 
-export const SETTINGS_QUERY = q("*")
+export const SETTINGS_QUERY = q('*')
   .filter("_type == 'settings'")
   .grab(SETTINGS_FRAGMENT)
   .slice(0)
   .nullable();
 
-export const HEADER_QUERY = q("*")
+export const HEADER_QUERY = q('*')
   .filter("_type == 'header'")
   .grab({
     desktopLogoWidth: q.number().nullable(),
@@ -91,13 +89,13 @@ export const HEADER_QUERY = q("*")
         bottom: q.number().nullable(),
       })
       .nullable(),
-    colorScheme: q("colorScheme").deref().grab(COLOR_SCHEME_FRAGMENT),
+    colorScheme: q('colorScheme').deref().grab(COLOR_SCHEME_FRAGMENT),
     menu: MENU_FRAGMENT,
   })
   .slice(0)
   .nullable();
 
-export const FOOTER_QUERY = q("*")
+export const FOOTER_QUERY = q('*')
   .filter("_type == 'footer'")
   .grab({
     sections: SECTIONS_FRAGMENT,
@@ -106,7 +104,7 @@ export const FOOTER_QUERY = q("*")
   .slice(0)
   .nullable();
 
-export const ROOT_QUERY = q("")
+export const ROOT_QUERY = q('')
   .grab({
     defaultColorScheme: DEFAULT_COLOR_SCHEME_QUERY,
     fonts: FONTS_QUERY,

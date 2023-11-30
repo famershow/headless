@@ -1,4 +1,4 @@
 .cache
 dist
 .shopify
-/sanity
+studio/*

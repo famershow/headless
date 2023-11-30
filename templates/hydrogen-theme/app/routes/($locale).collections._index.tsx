@@ -1,27 +1,27 @@
-import type { LoaderFunctionArgs } from "@shopify/remix-oxygen";
-import { json } from "@shopify/remix-oxygen";
-import { Link, useLoaderData } from "@remix-run/react";
+import type {LoaderFunctionArgs} from '@shopify/remix-oxygen';
+import {json} from '@shopify/remix-oxygen';
+import {Link, useLoaderData} from '@remix-run/react';
 import {
   flattenConnection,
   getPaginationVariables,
   Image,
-} from "@shopify/hydrogen";
+} from '@shopify/hydrogen';
 
-import type { CollectionsQuery } from "storefrontapi.generated";
-import { COLLECTIONS_QUERY } from "~/graphql/queries";
+import type {CollectionsQuery} from 'storefrontapi.generated';
+import {COLLECTIONS_QUERY} from '~/graphql/queries';
 
 const PAGINATION_SIZE = 4;
 
-type Collection = CollectionsQuery["collections"]["nodes"][0];
+type Collection = CollectionsQuery['collections']['nodes'][0];
 
 export const loader = async ({
   request,
-  context: { storefront },
+  context: {storefront},
 }: LoaderFunctionArgs) => {
   const variables = getPaginationVariables(request, {
     pageBy: PAGINATION_SIZE,
   });
-  const { collections } = await storefront.query(COLLECTIONS_QUERY, {
+  const {collections} = await storefront.query(COLLECTIONS_QUERY, {
     variables: {
       ...variables,
       country: storefront.i18n.country,
@@ -29,7 +29,7 @@ export const loader = async ({
     },
   });
 
-  return json({ collections });
+  return json({collections});
 };
 
 export default function Collections() {
@@ -43,7 +43,7 @@ export default function Collections() {
 }
 
 function CollectionCardGrid(props: {
-  collections: CollectionsQuery["collections"];
+  collections: CollectionsQuery['collections'];
 }) {
   const collections =
     props.collections.nodes.length > 0
@@ -61,8 +61,8 @@ function CollectionCardGrid(props: {
   ) : null;
 }
 
-function CollectionCard(props: { collection: Collection; className?: string }) {
-  const { collection } = props;
+function CollectionCard(props: {collection: Collection; className?: string}) {
+  const {collection} = props;
 
   return (
     <div className="overflow-hidden rounded-lg border">

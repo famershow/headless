@@ -1,5 +1,5 @@
-import { useFetcher, useLocation } from "@remix-run/react";
-import { useCallback, useEffect } from "react";
+import {useFetcher, useLocation} from '@remix-run/react';
+import {useCallback, useEffect} from 'react';
 
 /*
 |--------------------------------------------------------------------------
@@ -11,8 +11,8 @@ import { useCallback, useEffect } from "react";
 |
 */
 export function TogglePreviewMode() {
-  const fetcher = useFetcher<{ success?: boolean }>();
-  const { pathname } = useLocation();
+  const fetcher = useFetcher<{success?: boolean}>();
+  const {pathname} = useLocation();
 
   const handleShortcut = useCallback(() => {
     fetcher.load(`/sanity/preview?slug=${pathname}`);
@@ -20,17 +20,17 @@ export function TogglePreviewMode() {
 
   const keyDownHandler = useCallback(
     (event: KeyboardEvent) => {
-      if (event.metaKey && event.ctrlKey && event.key === "p") {
+      if (event.metaKey && event.ctrlKey && event.key === 'p') {
         handleShortcut();
       }
     },
-    [handleShortcut]
+    [handleShortcut],
   );
 
   useEffect(() => {
-    document.addEventListener("keydown", keyDownHandler);
+    document.addEventListener('keydown', keyDownHandler);
 
-    return () => document.removeEventListener("keydown", keyDownHandler);
+    return () => document.removeEventListener('keydown', keyDownHandler);
   }, [keyDownHandler]);
 
   return null;

@@ -1,17 +1,17 @@
-import imageUrlBuilder from "@sanity/image-url";
+import imageUrlBuilder from '@sanity/image-url';
 
-import type { SanityImageFragment } from "~/lib/type";
-import { useEnvironmentVariables } from "~/hooks/useEnvironmentVariables";
+import type {SanityImageFragment} from '~/lib/type';
+import {useEnvironmentVariables} from '~/hooks/useEnvironmentVariables';
 
 export function SanityImage(props: {
   data?: SanityImageFragment | null;
   className?: string;
   style?: React.CSSProperties;
   sizes?: string | null;
-  loading?: "lazy" | "eager";
+  loading?: 'lazy' | 'eager';
   sanityEncodeData?: string;
 }) {
-  const { data, className, style, sizes, loading, sanityEncodeData } = props;
+  const {data, className, style, sizes, loading, sanityEncodeData} = props;
   const env = useEnvironmentVariables();
 
   if (!data) {
@@ -44,9 +44,9 @@ export function SanityImage(props: {
       if (data.width >= value) {
         return `${urlBuilder.width(value)} ${value}w`;
       }
-      return "";
+      return '';
     })
-    .join(", ")
+    .join(', ')
     .concat(`, ${urlDefault} ${data.width}w`);
 
   return (
@@ -56,8 +56,8 @@ export function SanityImage(props: {
       srcSet={srcSet}
       style={
         {
-          "--focalX": focalCoords.x + "%",
-          "--focalY": focalCoords.y + "%",
+          '--focalX': focalCoords.x + '%',
+          '--focalY': focalCoords.y + '%',
           ...style,
         } as React.CSSProperties
       }
@@ -65,7 +65,7 @@ export function SanityImage(props: {
       width={data.width}
       height={data.height}
       loading={loading}
-      alt={data.altText || ""}
+      alt={data.altText || ''}
       // Adding this attribute makes sure the image is always clickable in the Presentation tool
       data-sanity={sanityEncodeData}
     />

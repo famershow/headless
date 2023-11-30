@@ -1,5 +1,5 @@
-import type { Session, SessionStorage } from "@shopify/remix-oxygen";
-import { createCookieSessionStorage } from "@shopify/remix-oxygen";
+import type {Session, SessionStorage} from '@shopify/remix-oxygen';
+import {createCookieSessionStorage} from '@shopify/remix-oxygen';
 
 export class SanitySession {
   #sessionStorage;
@@ -13,16 +13,16 @@ export class SanitySession {
   static async init(request: Request, secrets: string[]) {
     const storage = createCookieSessionStorage({
       cookie: {
-        name: "sanityPreview",
+        name: 'sanityPreview',
         httpOnly: true,
         // samesite must be none so Sanity Studio can access the cookie
-        sameSite: "none",
+        sameSite: 'none',
         secure: true,
         secrets,
       },
     });
 
-    const session = await storage.getSession(request.headers.get("Cookie"));
+    const session = await storage.getSession(request.headers.get('Cookie'));
 
     return new this(storage, session);
   }

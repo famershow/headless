@@ -1,15 +1,15 @@
-import type { Selection } from "groqd";
-import { q, z } from "groqd";
+import type {Selection} from 'groqd';
+import {q, z} from 'groqd';
 
-import { COLOR_SCHEME_FRAGMENT } from "./fragments";
+import {COLOR_SCHEME_FRAGMENT} from './fragments';
 
 /*
 |--------------------------------------------------------------------------
 | Section Settings
 |--------------------------------------------------------------------------
 */
-export const SECTION_SETTINGS_FRAGMENT = q("settings").grab({
-  colorScheme: q("colorScheme").deref().grab(COLOR_SCHEME_FRAGMENT),
+export const SECTION_SETTINGS_FRAGMENT = q('settings').grab({
+  colorScheme: q('colorScheme').deref().grab(COLOR_SCHEME_FRAGMENT),
   padding: q
     .object({
       top: q.number().nullable(),
@@ -29,7 +29,7 @@ export const SECTION_SETTINGS_FRAGMENT = q("settings").grab({
 |--------------------------------------------------------------------------
 */
 export const HERO_SECTION_FRAGMENT = {
-  _type: z.enum(["heroSection"]),
+  _type: z.enum(['heroSection']),
   _key: q.string().nullable(),
   settings: SECTION_SETTINGS_FRAGMENT,
   title: [
@@ -47,7 +47,7 @@ export const HERO_SECTION_FRAGMENT = {
 |--------------------------------------------------------------------------
 */
 export const CTA_SECTION_FRAGMENT = {
-  _type: z.enum(["ctaSection"]),
+  _type: z.enum(['ctaSection']),
   _key: q.string().nullable(),
   settings: SECTION_SETTINGS_FRAGMENT,
   title: [
@@ -74,6 +74,6 @@ export const SECTIONS_LIST_SELECTION = {
 | Sections Fragment
 |--------------------------------------------------------------------------
 */
-export const SECTIONS_FRAGMENT = q("sections[]", { isArray: true })
+export const SECTIONS_FRAGMENT = q('sections[]', {isArray: true})
   .select(SECTIONS_LIST_SELECTION)
   .nullable();

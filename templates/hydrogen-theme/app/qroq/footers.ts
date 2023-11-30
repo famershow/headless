@@ -1,15 +1,15 @@
-import type { Selection } from "groqd";
-import { q, z } from "groqd";
+import type {Selection} from 'groqd';
+import {q, z} from 'groqd';
 
-import { COLOR_SCHEME_FRAGMENT } from "./fragments";
+import {COLOR_SCHEME_FRAGMENT} from './fragments';
 
 /*
 |--------------------------------------------------------------------------
 | Footer Settings
 |--------------------------------------------------------------------------
 */
-export const FOOTER_SETTINGS_FRAGMENT = q("settings").grab({
-  colorScheme: q("colorScheme").deref().grab(COLOR_SCHEME_FRAGMENT),
+export const FOOTER_SETTINGS_FRAGMENT = q('settings').grab({
+  colorScheme: q('colorScheme').deref().grab(COLOR_SCHEME_FRAGMENT),
   padding: q
     .object({
       top: q.number().nullable(),
@@ -29,7 +29,7 @@ export const FOOTER_SETTINGS_FRAGMENT = q("settings").grab({
 |--------------------------------------------------------------------------
 */
 export const FOOTER_SOCIAL_LINKS_ONLY_FRAGMENT = {
-  _type: z.enum(["socialLinksOnly"]),
+  _type: z.enum(['socialLinksOnly']),
   _key: q.string().nullable(),
   settings: FOOTER_SETTINGS_FRAGMENT,
   copyright: [
@@ -55,7 +55,7 @@ export const FOOTERS_LIST_SELECTION = {
 | Footers Fragment
 |--------------------------------------------------------------------------
 */
-export const FOOTERS_FRAGMENT = q("footers[]", { isArray: true })
+export const FOOTERS_FRAGMENT = q('footers[]', {isArray: true})
   .select(FOOTERS_LIST_SELECTION)
   .slice(0)
   .nullable();

@@ -1,10 +1,10 @@
-import { getSanityClient } from "~/lib/sanity/client";
-import { useEnvironmentVariables } from "./useEnvironmentVariables";
-import { useMemo } from "react";
+import {getSanityClient} from '~/lib/sanity/client';
+import {useEnvironmentVariables} from './useEnvironmentVariables';
+import {useMemo} from 'react';
 
 export function useSanityClient() {
   const env = useEnvironmentVariables();
-  const { client } = useMemo(
+  const {client} = useMemo(
     () =>
       getSanityClient({
         projectId: env?.SANITY_STUDIO_PROJECT_ID!,
@@ -12,9 +12,9 @@ export function useSanityClient() {
         studioUrl: env?.SANITY_STUDIO_URL!,
         useStega: env?.SANITY_STUDIO_USE_STEGA!,
         apiVersion: env?.SANITY_STUDIO_API_VERSION!,
-        useCdn: env?.NODE_ENV === "production",
+        useCdn: env?.NODE_ENV === 'production',
       }),
-    [env]
+    [env],
   );
 
   return client;

@@ -1,4 +1,4 @@
-import { useRootLoaderData } from "./useRootLoaderData";
+import {useRootLoaderData} from './useRootLoaderData';
 
 export function useEnvironmentVariables() {
   const data = useRootLoaderData();

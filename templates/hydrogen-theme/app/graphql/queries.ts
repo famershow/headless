@@ -2,7 +2,7 @@ import {
   MEDIA_FRAGMENT,
   PRODUCT_CARD_FRAGMENT,
   PRODUCT_VARIANT_FRAGMENT,
-} from "./fragments";
+} from './fragments';
 
 /*
 |--------------------------------------------------------------------------

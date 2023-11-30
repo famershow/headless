@@ -1,4 +1,4 @@
-import { useRootLoaderData } from "./useRootLoaderData";
+import {useRootLoaderData} from './useRootLoaderData';
 
 export function useLocale() {
   const data = useRootLoaderData();

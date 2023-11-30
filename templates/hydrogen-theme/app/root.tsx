@@ -1,8 +1,8 @@
-import type { LoaderFunctionArgs, MetaFunction } from "@shopify/remix-oxygen";
-import type { ShouldRevalidateFunction } from "@remix-run/react";
-import type { CustomerAccessToken } from "@shopify/hydrogen/storefront-api-types";
-import { useNonce } from "@shopify/hydrogen";
-import { defer } from "@shopify/remix-oxygen";
+import type {LoaderFunctionArgs, MetaFunction} from '@shopify/remix-oxygen';
+import type {ShouldRevalidateFunction} from '@remix-run/react';
+import type {CustomerAccessToken} from '@shopify/hydrogen/storefront-api-types';
+import {useNonce} from '@shopify/hydrogen';
+import {defer} from '@shopify/remix-oxygen';
 import {
   Links,
   Meta,
@@ -12,19 +12,19 @@ import {
   useRouteError,
   ScrollRestoration,
   isRouteErrorResponse,
-} from "@remix-run/react";
+} from '@remix-run/react';
 
-import type { HydrogenSession } from "./lib/hydrogen.session.server";
-import favicon from "../public/favicon.svg";
-import appStyles from "./styles/app.css";
-import tailwindCss from "./styles/tailwind.css";
-import { Layout } from "~/components/layout/Layout";
-import { Fonts } from "./components/Fonts";
-import { generateFontsPreloadLinks } from "./lib/fonts";
-import { sanityPreviewPayload } from "./lib/sanity/sanity.payload.server";
-import { useLocale } from "./hooks/useLocale";
-import { DEFAULT_LOCALE } from "countries";
-import { ROOT_QUERY } from "./qroq/queries";
+import type {HydrogenSession} from './lib/hydrogen.session.server';
+import favicon from '../public/favicon.svg';
+import appStyles from './styles/app.css';
+import tailwindCss from './styles/tailwind.css';
+import {Layout} from '~/components/layout/Layout';
+import {Fonts} from './components/Fonts';
+import {generateFontsPreloadLinks} from './lib/fonts';
+import {sanityPreviewPayload} from './lib/sanity/sanity.payload.server';
+import {useLocale} from './hooks/useLocale';
+import {DEFAULT_LOCALE} from 'countries';
+import {ROOT_QUERY} from './qroq/queries';
 
 // This is important to avoid re-fetching root queries on sub-navigations
 export const shouldRevalidate: ShouldRevalidateFunction = ({
@@ -33,7 +33,7 @@ export const shouldRevalidate: ShouldRevalidateFunction = ({
   nextUrl,
 }) => {
   // revalidate when a mutation is performed e.g add to cart, login...
-  if (formMethod && formMethod !== "GET") {
+  if (formMethod && formMethod !== 'GET') {
     return true;
   }
 
@@ -48,21 +48,21 @@ export const shouldRevalidate: ShouldRevalidateFunction = ({
 export function links() {
   return [
     {
-      rel: "preconnect",
-      href: "https://cdn.shopify.com",
+      rel: 'preconnect',
+      href: 'https://cdn.shopify.com',
     },
     {
-      rel: "preconnect",
-      href: "https://shop.app",
+      rel: 'preconnect',
+      href: 'https://shop.app',
     },
-    { rel: "stylesheet", href: tailwindCss },
-    { rel: "stylesheet", href: appStyles },
-    { rel: "icon", type: "image/svg+xml", href: favicon },
+    {rel: 'stylesheet', href: tailwindCss},
+    {rel: 'stylesheet', href: appStyles},
+    {rel: 'icon', type: 'image/svg+xml', href: favicon},
   ];
 }
 
 export const meta: MetaFunction<typeof loader> = (loaderData) => {
-  const { data } = loaderData;
+  const {data} = loaderData;
   // Preload fonts files to avoid FOUT (flash of unstyled text)
   const fontsPreloadLinks = generateFontsPreloadLinks({
     fontsData: data?.sanityRoot.data?.fonts,
@@ -70,19 +70,19 @@ export const meta: MetaFunction<typeof loader> = (loaderData) => {
 
   return [
     {
-      tagName: "link",
-      rel: "preconnect",
+      tagName: 'link',
+      rel: 'preconnect',
       // Preconnect to the Sanity CDN before loading fonts
-      href: "https://cdn.sanity.io",
+      href: 'https://cdn.sanity.io',
     },
     ...fontsPreloadLinks,
   ];
 };
 
-export async function loader({ context }: LoaderFunctionArgs) {
-  const { session, cart, env, sanity, locale, sanityPreviewMode } = context;
+export async function loader({context}: LoaderFunctionArgs) {
+  const {session, cart, env, sanity, locale, sanityPreviewMode} = context;
   const language = locale?.language.toLowerCase();
-  const customerAccessToken = await session.get("customerAccessToken");
+  const customerAccessToken = await session.get('customerAccessToken');
 
   const queryParams = {
     language,
@@ -95,9 +95,9 @@ export async function loader({ context }: LoaderFunctionArgs) {
   });
 
   // validate the customer access token is valid
-  const { isLoggedIn, headers } = await validateCustomerAccessToken(
+  const {isLoggedIn, headers} = await validateCustomerAccessToken(
     session,
-    customerAccessToken
+    customerAccessToken,
   );
 
   // defer the cart query by not awaiting it
@@ -127,7 +127,7 @@ export async function loader({ context }: LoaderFunctionArgs) {
         context,
       }),
     },
-    { headers }
+    {headers},
   );
 }
 
@@ -162,11 +162,11 @@ export function ErrorBoundary() {
   const locale = useLocale();
   const isRouteError = isRouteErrorResponse(routeError);
 
-  let title = "Error";
-  let pageType = "page";
+  let title = 'Error';
+  let pageType = 'page';
 
   if (isRouteError) {
-    title = "Not found";
+    title = 'Not found';
     if (routeError.status === 404) pageType = routeError.data || pageType;
   }
 
@@ -209,12 +209,12 @@ export function ErrorBoundary() {
  */
 async function validateCustomerAccessToken(
   session: HydrogenSession,
-  customerAccessToken?: CustomerAccessToken
+  customerAccessToken?: CustomerAccessToken,
 ) {
   let isLoggedIn = false;
   const headers = new Headers();
   if (!customerAccessToken?.accessToken || !customerAccessToken?.expiresAt) {
-    return { isLoggedIn, headers };
+    return {isLoggedIn, headers};
   }
 
   const expiresAt = new Date(customerAccessToken.expiresAt).getTime();
@@ -222,11 +222,11 @@ async function validateCustomerAccessToken(
   const customerAccessTokenExpired = expiresAt < dateNow;
 
   if (customerAccessTokenExpired) {
-    session.unset("customerAccessToken");
-    headers.append("Set-Cookie", await session.commit());
+    session.unset('customerAccessToken');
+    headers.append('Set-Cookie', await session.commit());
   } else {
     isLoggedIn = true;
   }
 
-  return { isLoggedIn, headers };
+  return {isLoggedIn, headers};
 }

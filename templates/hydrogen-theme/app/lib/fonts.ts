@@ -1,4 +1,4 @@
-import { getFonts } from "~/components/Fonts";
+import {getFonts} from '~/components/Fonts';
 
 type PreloadLink = {
   tagName: string;
@@ -9,21 +9,21 @@ type PreloadLink = {
   crossOrigin: string;
 };
 
-export function generateFontsPreloadLinks({ fontsData }: { fontsData: any }) {
-  const fonts = fontsData ? getFonts({ fontsData }) : [];
+export function generateFontsPreloadLinks({fontsData}: {fontsData: any}) {
+  const fonts = fontsData ? getFonts({fontsData}) : [];
   const preloadLinks: Array<PreloadLink> = [];
-  const fontTypes = ["woff2", "woff", "ttf"];
+  const fontTypes = ['woff2', 'woff', 'ttf'];
 
   fonts.forEach((font: any) => {
     fontTypes.forEach((fontType) => {
       if (font[fontType]) {
         preloadLinks.push({
-          tagName: "link",
-          rel: "preload",
-          as: "font",
+          tagName: 'link',
+          rel: 'preload',
+          as: 'font',
           href: font[fontType].url,
           type: `font/${fontType}`,
-          crossOrigin: "anonymous",
+          crossOrigin: 'anonymous',
         });
       }
     });

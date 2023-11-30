@@ -1,16 +1,16 @@
-import type { LoaderFunctionArgs } from "@shopify/remix-oxygen";
-import { defer } from "@shopify/remix-oxygen";
+import type {LoaderFunctionArgs} from '@shopify/remix-oxygen';
+import {defer} from '@shopify/remix-oxygen';
 
-import PageRoute from "./($locale).$";
-import { PAGE_QUERY } from "~/qroq/queries";
-import { sanityPreviewPayload } from "~/lib/sanity/sanity.payload.server";
-import { DEFAULT_LOCALE } from "countries";
+import PageRoute from './($locale).$';
+import {PAGE_QUERY} from '~/qroq/queries';
+import {sanityPreviewPayload} from '~/lib/sanity/sanity.payload.server';
+import {DEFAULT_LOCALE} from 'countries';
 
-export async function loader({ context }: LoaderFunctionArgs) {
-  const { locale, sanity } = context;
+export async function loader({context}: LoaderFunctionArgs) {
+  const {locale, sanity} = context;
   const language = locale?.language.toLowerCase();
   const queryParams = {
-    handle: "home",
+    handle: 'home',
     language,
     defaultLanguage: DEFAULT_LOCALE.language.toLowerCase(),
   };
@@ -23,7 +23,7 @@ export async function loader({ context }: LoaderFunctionArgs) {
   if (!page.data) {
     throw new Response(null, {
       status: 404,
-      statusText: "Not Found",
+      statusText: 'Not Found',
     });
   }
 

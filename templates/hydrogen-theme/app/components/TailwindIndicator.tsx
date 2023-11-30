@@ -1,5 +1,5 @@
-import { useIsDev } from "~/hooks/useIsDev";
-import { useIsInIframe } from "~/hooks/useIsInIframe";
+import {useIsDev} from '~/hooks/useIsDev';
+import {useIsInIframe} from '~/hooks/useIsInIframe';
 
 // shadcn-ui https://github.com/shadcn-ui/ui/blob/main/apps/www/components/tailwind-indicator.tsx
 export function TailwindIndicator() {

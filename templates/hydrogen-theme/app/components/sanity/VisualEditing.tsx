@@ -1,13 +1,13 @@
-import type { HistoryUpdate } from "@sanity/overlays";
-import { useEffect, useRef } from "react";
-import { useFetcher, useLocation, useNavigate } from "@remix-run/react";
-import { enableOverlays } from "@sanity/overlays";
-import { cx } from "class-variance-authority";
+import type {HistoryUpdate} from '@sanity/overlays';
+import {useEffect, useRef} from 'react';
+import {useFetcher, useLocation, useNavigate} from '@remix-run/react';
+import {enableOverlays} from '@sanity/overlays';
+import {cx} from 'class-variance-authority';
 
-import { useEnvironmentVariables } from "~/hooks/useEnvironmentVariables";
-import { useIsInIframe } from "~/hooks/useIsInIframe";
-import { useSanityClient } from "~/hooks/useSanityClient";
-import { useLiveMode } from "~/lib/sanity/sanity.loader";
+import {useEnvironmentVariables} from '~/hooks/useEnvironmentVariables';
+import {useIsInIframe} from '~/hooks/useIsInIframe';
+import {useSanityClient} from '~/hooks/useSanityClient';
+import {useLiveMode} from '~/lib/sanity/sanity.loader';
 
 export function VisualEditing() {
   const env = useEnvironmentVariables();
@@ -15,7 +15,7 @@ export function VisualEditing() {
   const navigateRemix = useNavigate();
   const location = useLocation();
   const navigateComposerRef = useRef<null | ((update: HistoryUpdate) => void)>(
-    null
+    null,
   );
   const sanityStudioUrl = env?.SANITY_STUDIO_URL!;
   const client = useSanityClient();
@@ -34,9 +34,9 @@ export function VisualEditing() {
           };
         },
         update: (update) => {
-          if (update.type === "push" || update.type === "replace") {
-            navigateRemix(update.url, { replace: update.type === "replace" });
-          } else if (update.type === "pop") {
+          if (update.type === 'push' || update.type === 'replace') {
+            navigateRemix(update.url, {replace: update.type === 'replace'});
+          } else if (update.type === 'pop') {
             navigateRemix(-1);
           }
         },
@@ -48,20 +48,20 @@ export function VisualEditing() {
   useEffect(() => {
     if (navigateComposerRef.current) {
       navigateComposerRef.current({
-        type: "push",
+        type: 'push',
         url: `${location.pathname}${location.search}${location.hash}`,
       });
     }
   }, [location.hash, location.pathname, location.search]);
 
   // Enable live queries from the specified studio origin URL
-  useLiveMode({ allowStudioOrigin: sanityStudioUrl, client });
+  useLiveMode({allowStudioOrigin: sanityStudioUrl, client});
 
   return !isInIframe ? <ExitBanner /> : null;
 }
 
 function ExitBanner() {
-  const fetcher = useFetcher({ key: "exit-sanity-preview" });
+  const fetcher = useFetcher({key: 'exit-sanity-preview'});
   const location = useLocation();
 
   return (
@@ -73,11 +73,11 @@ function ExitBanner() {
             <small>Sanity Preview mode activated</small>
             <button
               type="submit"
-              disabled={fetcher.state === "submitting"}
+              disabled={fetcher.state === 'submitting'}
               className={cx(
-                "flex h-[2.5rem] shrink-0 items-center justify-center rounded-full border border-white p-4 text-sm font-bold duration-200 ease-out",
-                "hover:bg-white hover:text-gray-700",
-                "disabled:bg-opacity-100 disabled:opacity-20"
+                'flex h-[2.5rem] shrink-0 items-center justify-center rounded-full border border-white p-4 text-sm font-bold duration-200 ease-out',
+                'hover:bg-white hover:text-gray-700',
+                'disabled:bg-opacity-100 disabled:opacity-20',
               )}
             >
               Exit Preview Mode

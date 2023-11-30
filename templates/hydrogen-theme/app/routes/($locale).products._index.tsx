@@ -1,18 +1,18 @@
-import type { LoaderFunctionArgs } from "@shopify/remix-oxygen";
-import { useLoaderData } from "@remix-run/react";
-import { flattenConnection, getPaginationVariables } from "@shopify/hydrogen";
-import { json } from "@shopify/remix-oxygen";
+import type {LoaderFunctionArgs} from '@shopify/remix-oxygen';
+import {useLoaderData} from '@remix-run/react';
+import {flattenConnection, getPaginationVariables} from '@shopify/hydrogen';
+import {json} from '@shopify/remix-oxygen';
 
-import { ALL_PRODUCTS_QUERY } from "~/graphql/queries";
-import { ProductCardGrid } from "~/components/ProductCardGrid";
+import {ALL_PRODUCTS_QUERY} from '~/graphql/queries';
+import {ProductCardGrid} from '~/components/ProductCardGrid';
 
 const PAGE_BY = 8;
 
 export async function loader({
   request,
-  context: { storefront },
+  context: {storefront},
 }: LoaderFunctionArgs) {
-  const variables = getPaginationVariables(request, { pageBy: PAGE_BY });
+  const variables = getPaginationVariables(request, {pageBy: PAGE_BY});
 
   const data = await storefront.query(ALL_PRODUCTS_QUERY, {
     variables: {
@@ -22,7 +22,7 @@ export async function loader({
     },
   });
 
-  return json({ products: data.products });
+  return json({products: data.products});
 }
 
 export default function AllProducts() {

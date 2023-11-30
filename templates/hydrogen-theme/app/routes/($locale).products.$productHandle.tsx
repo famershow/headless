@@ -1,27 +1,27 @@
-import type { Storefront } from "@shopify/hydrogen";
-import type { LoaderFunctionArgs } from "@shopify/remix-oxygen";
-import { getSelectedProductOptions } from "@shopify/hydrogen";
-import { defer, redirect } from "@shopify/remix-oxygen";
-import { useLoaderData } from "@remix-run/react";
-import invariant from "tiny-invariant";
+import type {Storefront} from '@shopify/hydrogen';
+import type {LoaderFunctionArgs} from '@shopify/remix-oxygen';
+import {getSelectedProductOptions} from '@shopify/hydrogen';
+import {defer, redirect} from '@shopify/remix-oxygen';
+import {useLoaderData} from '@remix-run/react';
+import invariant from 'tiny-invariant';
 
-import type { ProductQuery } from "storefrontapi.generated";
+import type {ProductQuery} from 'storefrontapi.generated';
 import {
   PRODUCT_QUERY,
   RECOMMENDED_PRODUCTS_QUERY,
   VARIANTS_QUERY,
-} from "~/graphql/queries";
-import { PRODUCT_QUERY as CMS_PRODUCT_QUERY } from "~/qroq/queries";
-import { sanityPreviewPayload } from "~/lib/sanity/sanity.payload.server";
-import { useSanityData } from "~/hooks/useSanityData";
-import { DEFAULT_LOCALE } from "countries";
+} from '~/graphql/queries';
+import {PRODUCT_QUERY as CMS_PRODUCT_QUERY} from '~/qroq/queries';
+import {sanityPreviewPayload} from '~/lib/sanity/sanity.payload.server';
+import {useSanityData} from '~/hooks/useSanityData';
+import {DEFAULT_LOCALE} from 'countries';
 
-export async function loader({ context, params, request }: LoaderFunctionArgs) {
-  const { productHandle } = params;
-  const { storefront, sanity, locale } = context;
+export async function loader({context, params, request}: LoaderFunctionArgs) {
+  const {productHandle} = params;
+  const {storefront, sanity, locale} = context;
   const language = locale?.language.toLowerCase();
 
-  invariant(productHandle, "Missing productHandle param, check route filename");
+  invariant(productHandle, 'Missing productHandle param, check route filename');
 
   const selectedOptions = getSelectedProductOptions(request);
 
@@ -46,14 +46,14 @@ export async function loader({ context, params, request }: LoaderFunctionArgs) {
     }),
   ]);
 
-  const [cmsProduct, { product }] = await productData;
+  const [cmsProduct, {product}] = await productData;
 
   if (!product?.id || !cmsProduct) {
-    throw new Response("product", { status: 404 });
+    throw new Response('product', {status: 404});
   }
 
   if (!product.selectedVariant) {
-    throw redirectToFirstVariant({ product, request });
+    throw redirectToFirstVariant({product, request});
   }
 
   // In order to show which variants are available in the UI, we need to query
@@ -93,7 +93,7 @@ function redirectToFirstVariant({
   product,
   request,
 }: {
-  product: ProductQuery["product"];
+  product: ProductQuery['product'];
   request: Request;
 }) {
   const searchParams = new URLSearchParams(new URL(request.url).search);
@@ -104,13 +104,13 @@ function redirectToFirstVariant({
 
   return redirect(
     `/products/${product!.handle}?${searchParams.toString()}`,
-    302
+    302,
   );
 }
 
 export default function Product() {
-  const { product, cmsProduct } = useLoaderData<typeof loader>();
-  const { data } = useSanityData(cmsProduct);
+  const {product, cmsProduct} = useLoaderData<typeof loader>();
+  const {data} = useSanityData(cmsProduct);
 
   return (
     <div className="container">
@@ -121,26 +121,26 @@ export default function Product() {
 
 async function getRecommendedProducts(
   storefront: Storefront,
-  productId: string
+  productId: string,
 ) {
   const products = await storefront.query(RECOMMENDED_PRODUCTS_QUERY, {
-    variables: { productId, count: 12 },
+    variables: {productId, count: 12},
   });
 
-  invariant(products, "No data returned from Shopify API");
+  invariant(products, 'No data returned from Shopify API');
 
   const mergedProducts = (products.recommended ?? [])
     .concat(products.additional.nodes)
     .filter(
       (value, index, array) =>
-        array.findIndex((value2) => value2.id === value.id) === index
+        array.findIndex((value2) => value2.id === value.id) === index,
     );
 
   const originalProduct = mergedProducts.findIndex(
-    (item) => item.id === productId
+    (item) => item.id === productId,
   );
 
   mergedProducts.splice(originalProduct, 1);
 
-  return { nodes: mergedProducts };
+  return {nodes: mergedProducts};
 }
