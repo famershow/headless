@@ -25,7 +25,7 @@ export function NestedNavigation(props: {data?: SanityNestedNavigationProps}) {
       <NavigationTrigger link={data.link}>
         {data.name}
         <CaretDownIcon
-          className="transition-transform duration-[250] ease-in group-data-[state=open]:-rotate-180"
+          className="transition-transform duration-100 ease-in group-data-[state=open]:-rotate-180"
           aria-hidden
         />
       </NavigationTrigger>

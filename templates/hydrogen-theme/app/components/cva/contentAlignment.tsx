@@ -5,7 +5,7 @@ export type ContentAlignmentVariantProps = VariantProps<
   typeof contentAlignment
 >;
 
-export const contentAlignment = cva('flex', {
+export const contentAlignment = cva('flex h-full', {
   variants: {
     required: {
       top_left: 'items-start justify-start',

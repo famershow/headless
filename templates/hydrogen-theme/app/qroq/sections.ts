@@ -40,11 +40,12 @@ export const SECTION_SETTINGS_FRAGMENT = q('settings').grab({
 | Hero Section
 |--------------------------------------------------------------------------
 */
-export const HERO_SECTION_FRAGMENT = {
-  _type: z.enum(['heroSection']),
+export const IMAGE_BANNER_SECTION_FRAGMENT = {
+  _type: z.enum(['imageBannerSection']),
   _key: q.string().nullable(),
   settings: SECTION_SETTINGS_FRAGMENT,
   backgroundImage: q('backgroundImage').grab(IMAGE_FRAGMENT).nullable(),
+  bannerHeight: q.number().nullable(),
   overlayOpacity: q.number().nullable(),
   contentAlignment: z.enum(contentAlignmentValues).nullable(),
   title: [
@@ -80,7 +81,7 @@ export const CTA_SECTION_FRAGMENT = {
 |--------------------------------------------------------------------------
 */
 export const SECTIONS_LIST_SELECTION = {
-  "_type == 'heroSection'": HERO_SECTION_FRAGMENT,
+  "_type == 'imageBannerSection'": IMAGE_BANNER_SECTION_FRAGMENT,
   "_type == 'ctaSection'": CTA_SECTION_FRAGMENT,
 };
 
