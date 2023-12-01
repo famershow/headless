@@ -1,11 +1,12 @@
 import type {CSSProperties} from 'react';
 import {Link} from '@remix-run/react';
+import {cx} from 'class-variance-authority';
 
 import {Logo} from './Logo';
 import {Navigation} from '../navigation/Navigation';
 import {useSanityRoot} from '~/hooks/useSanityRoot';
 import {useSettingsCssVars} from '~/hooks/useSettingsCssVars';
-import {section} from '../cva/section';
+import {headerVariants} from '../cva/header';
 
 export function Header() {
   const {data} = useSanityRoot();
@@ -21,7 +22,12 @@ export function Header() {
   return (
     <header
       style={cssVars}
-      className={section({optional: showSeparatorLine ? 'header' : null})}
+      className={cx([
+        'color-scheme section-padding relative',
+        headerVariants({
+          optional: showSeparatorLine ? 'separator-line' : null,
+        }),
+      ])}
     >
       <div className="container">
         <div className="flex items-center justify-between">
