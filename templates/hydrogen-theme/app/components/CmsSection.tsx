@@ -6,7 +6,6 @@ import type {FOOTERS_FRAGMENT} from '~/qroq/footers';
 import {useIsDev} from '~/hooks/useIsDev';
 import {sections} from '~/lib/sectionRelsolver';
 import {useSettingsCssVars} from '~/hooks/useSettingsCssVars';
-import {section} from './cva/section';
 import {EncodeDataAttributeCallback} from '@sanity/react-loader';
 
 type CmsSectionsProps =
@@ -56,7 +55,7 @@ function SectionWrapper(props: {
     <footer
       data-footer-type={isDev ? sectionType : null}
       style={cssVars}
-      className={section({})}
+      className="color-scheme section-padding relative"
     >
       {children}
       {data.settings?.customCss && (
@@ -68,7 +67,7 @@ function SectionWrapper(props: {
       data-section-type={isDev ? sectionType : null}
       id={`section-${data._key}`}
       style={cssVars}
-      className={section({})}
+      className="color-scheme section-padding relative"
     >
       {children}
       {data.settings?.customCss && (

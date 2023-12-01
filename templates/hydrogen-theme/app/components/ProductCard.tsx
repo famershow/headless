@@ -13,7 +13,9 @@ export function ProductCard(props: {
   return (
     <div className="overflow-hidden rounded-lg border">
       <Link to={`/products/${product.handle}`}>
-        {firstVariant.image && <Image data={firstVariant.image} />}
+        {firstVariant.image && (
+          <Image aspectRatio="16/9" sizes="33vw" data={firstVariant.image} />
+        )}
         <div className="p-3">
           <div className="text-lg">{product.title}</div>
           <div>
