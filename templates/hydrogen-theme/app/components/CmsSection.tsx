@@ -84,9 +84,9 @@ function Fallback({type}: {type?: string}) {
       <div className="container py-10 text-center">
         <div className="rounded-md border-2 border-dashed border-gray-400 px-5 py-10">
           <div>
-            The section component
-            {type && <strong className="px-2 text-xl">{type}</strong>}
-            does not exist yet.
+            The section component{' '}
+            {type && <strong className="px-2 text-xl">{type}</strong>} does not
+            exist yet.
           </div>
         </div>
       </div>

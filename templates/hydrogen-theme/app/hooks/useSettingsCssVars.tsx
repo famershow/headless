@@ -47,8 +47,10 @@ export function useSettingsCssVars({
   };
 
   // Padding
-  const paddingTop = `${settings?.padding?.top}px` || '0px';
-  const paddingBottom = `${settings?.padding?.bottom}px` || '0px';
+  const paddingTop = settings?.padding ? `${settings.padding.top}px` : '0px';
+  const paddingBottom = settings?.padding
+    ? `${settings.padding.bottom}px`
+    : '0px';
 
   return {
     '--backgroundColor': scheme.background,

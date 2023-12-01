@@ -3,9 +3,9 @@ import {lazy} from 'react';
 export const sections: {
   [key: string]: React.FC<any>;
 } = {
-  heroSection: lazy(() =>
-    import('../components/sections/HeroSection').then((module) => ({
-      default: module.HeroSection,
+  imageBannerSection: lazy(() =>
+    import('../components/sections/ImageBannerSection').then((module) => ({
+      default: module.ImageBannerSection,
     })),
   ),
   ctaSection: lazy(() =>

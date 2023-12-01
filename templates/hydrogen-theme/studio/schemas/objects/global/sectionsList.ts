@@ -9,7 +9,7 @@ export default defineField({
   group: 'pagebuilder',
   of: [
     {
-      type: 'heroSection',
+      type: 'imageBannerSection',
     },
     {
       type: 'ctaSection',

@@ -9,10 +9,10 @@ export function NavigationTrigger(props: {
   link: TypeFromSelection<typeof INTERNAL_LINK_FRAGMENT>['link'];
 }) {
   const {link} = props;
-  const className = 'group flex items-center gap-1';
+  const className = 'flex items-center gap-1';
 
   return (
-    <NavigationMenu.Trigger asChild>
+    <NavigationMenu.Trigger className="group" asChild>
       {link ? (
         <div>
           <SanityInternalLink

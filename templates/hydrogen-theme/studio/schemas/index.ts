@@ -5,7 +5,7 @@ import page from './documents/page'
 import settings from './singletons/settings'
 import themeContent from './singletons/themeContent'
 import ctaSection from './objects/sections/ctaSection'
-import heroSection from './objects/sections/heroSection'
+import imageBannerSection from './objects/sections/imageBannerSection'
 import home from './singletons/home'
 import collection from './documents/collection'
 import product from './documents/product'
@@ -32,7 +32,7 @@ import contentAlignment from './objects/global/contentAlignment'
 
 const singletons = [home, header, footer, settings, themeContent]
 const documents = [page, color, collection, product, blogPost, productVariant]
-const sections = [heroSection, ctaSection]
+const sections = [imageBannerSection, ctaSection]
 const footers = [socialLinksOnly]
 const objects = [
   footersList,
