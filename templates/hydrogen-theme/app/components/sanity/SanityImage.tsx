@@ -22,11 +22,13 @@ export function SanityImage(props: {
   const urlBuilder = imageUrlBuilder({
     projectId: env?.SANITY_STUDIO_PROJECT_ID!,
     dataset: env?.SANITY_STUDIO_DATASET!,
-  }).image({
-    _ref: data._ref,
-    crop: data.crop,
-    hotspot: data.hotspot,
-  });
+  })
+    .image({
+      _ref: data._ref,
+      crop: data.crop,
+      hotspot: data.hotspot,
+    })
+    .auto('format');
 
   const urlDefault = urlBuilder.url();
   // Values used for srcset attribute of image tag (in pixels)
