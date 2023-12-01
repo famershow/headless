@@ -1,5 +1,5 @@
 import type {TypeFromSelection} from 'groqd';
-import {SectionDefaultProps} from '~/lib/type';
+import type {SectionDefaultProps} from '~/lib/type';
 
 import type {FOOTER_SOCIAL_LINKS_ONLY_FRAGMENT} from '~/qroq/footers';
 

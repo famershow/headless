@@ -48,6 +48,7 @@ export const IMAGE_BANNER_SECTION_FRAGMENT = {
   bannerHeight: q.number().nullable(),
   overlayOpacity: q.number().nullable(),
   contentAlignment: z.enum(contentAlignmentValues).nullable(),
+  animateContent: q.boolean().nullable(),
   title: [
     `coalesce(
       title[_key == $language][0].value,

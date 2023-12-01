@@ -1,3 +1,4 @@
+import type {EncodeDataAttributeCallback} from '@sanity/react-loader';
 import type {InferType} from 'groqd';
 import {Suspense, useMemo} from 'react';
 
@@ -6,7 +7,6 @@ import type {FOOTERS_FRAGMENT} from '~/qroq/footers';
 import {useIsDev} from '~/hooks/useIsDev';
 import {sections} from '~/lib/sectionRelsolver';
 import {useSettingsCssVars} from '~/hooks/useSettingsCssVars';
-import {EncodeDataAttributeCallback} from '@sanity/react-loader';
 
 type CmsSectionsProps =
   | NonNullable<InferType<typeof SECTIONS_FRAGMENT>>[0]

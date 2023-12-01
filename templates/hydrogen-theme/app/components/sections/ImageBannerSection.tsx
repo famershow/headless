@@ -1,12 +1,13 @@
+import type {CSSProperties} from 'react';
 import type {TypeFromSelection} from 'groqd';
 import {vercelStegaCleanAll} from '@sanity/client/stega';
 
-import {type IMAGE_BANNER_SECTION_FRAGMENT} from '~/qroq/sections';
-import {SanityImage} from '../sanity/SanityImage';
-import {SectionDefaultProps} from '~/lib/type';
+import type {IMAGE_BANNER_SECTION_FRAGMENT} from '~/qroq/sections';
+import type {SectionDefaultProps} from '~/lib/type';
 import {Overlay} from '../Overlay';
 import {contentAlignmentVariants} from '../cva/contentAlignment';
-import {CSSProperties} from 'react';
+import {SanityImage} from '../sanity/SanityImage';
+import {Animation} from '../Animation';
 
 type HeroSectionProps = TypeFromSelection<typeof IMAGE_BANNER_SECTION_FRAGMENT>;
 
@@ -40,7 +41,18 @@ export function ImageBannerSection(
         </div>
       )}
       <Overlay opacity={overlayOpacity} />
-      <div className="container relative h-full">
+      <Animation
+        className="container relative h-full"
+        enabled={props.data.animateContent}
+        initial={{x: -1000}}
+        animate={{
+          x: 0,
+        }}
+        transition={{
+          duration: 0.5,
+          type: 'spring',
+        }}
+      >
         <div
           className={contentAlignmentVariants({
             required: cleanContentAlignment,
@@ -48,7 +60,7 @@ export function ImageBannerSection(
         >
           <h1>{title}</h1>
         </div>
-      </div>
+      </Animation>
     </div>
   ) : null;
 }
