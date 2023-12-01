@@ -220,3 +220,34 @@ export const COLLECTION_QUERY = `#graphql
   }
   ${PRODUCT_CARD_FRAGMENT}
 ` as const;
+
+export const FEATURED_COLLECTION_QUERY = `#graphql
+  query FeaturedCollection(
+    $handle: String!
+    $country: CountryCode
+    $language: LanguageCode
+    $first: Int
+  ) @inContext(country: $country, language: $language) {
+    collection(handle: $handle) {
+      id
+      handle
+      title
+      description
+      image {
+        id
+        url
+        width
+        height
+        altText
+      }
+      products(
+        first: $first,
+      ) {
+        nodes {
+          ...ProductCard
+        }
+      }
+    }
+  }
+  ${PRODUCT_CARD_FRAGMENT}
+` as const;

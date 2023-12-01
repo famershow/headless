@@ -2,6 +2,7 @@
  * @type {import("@types/eslint").Linter.BaseConfig}
  */
 module.exports = {
+  ignorePatterns: ['studio/*'],
   env: {
     es2021: true,
     node: true,

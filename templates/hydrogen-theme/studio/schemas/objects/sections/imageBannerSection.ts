@@ -1,4 +1,4 @@
-import {defineField} from 'sanity'
+import {defineField} from 'sanity';
 
 export default defineField({
   name: 'imageBannerSection',
@@ -58,8 +58,9 @@ export default defineField({
     prepare({title, media}: any) {
       return {
         title: title?.[0]?.value || 'Missing title',
+        subtitle: 'Image Banner',
         media: media,
-      }
+      };
     },
   },
-})
+});

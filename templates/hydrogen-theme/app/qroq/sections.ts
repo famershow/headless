@@ -37,7 +37,7 @@ export const SECTION_SETTINGS_FRAGMENT = q('settings').grab({
 
 /*
 |--------------------------------------------------------------------------
-| Hero Section
+| Image Banner Section
 |--------------------------------------------------------------------------
 */
 export const IMAGE_BANNER_SECTION_FRAGMENT = {
@@ -56,6 +56,28 @@ export const IMAGE_BANNER_SECTION_FRAGMENT = {
     )`,
     q.string(),
   ],
+} satisfies Selection;
+
+/*
+|--------------------------------------------------------------------------
+| Featured Collection Section
+|--------------------------------------------------------------------------
+*/
+export const FEATURED_COLLECTION_SECTION_FRAGMENT = {
+  _type: z.enum(['featuredCollectionSection']),
+  _key: q.string().nullable(),
+  collection: q('collection')
+    .deref()
+    .grab({
+      store: q('store').grab({
+        slug: q.object({
+          current: q.string(),
+          _type: q.string(),
+        }),
+      }),
+    })
+    .nullable(),
+  settings: SECTION_SETTINGS_FRAGMENT,
 } satisfies Selection;
 
 /*
@@ -83,6 +105,7 @@ export const CTA_SECTION_FRAGMENT = {
 */
 export const SECTIONS_LIST_SELECTION = {
   "_type == 'imageBannerSection'": IMAGE_BANNER_SECTION_FRAGMENT,
+  "_type == 'featuredCollectionSection'": FEATURED_COLLECTION_SECTION_FRAGMENT,
   "_type == 'ctaSection'": CTA_SECTION_FRAGMENT,
 };
 

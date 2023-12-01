@@ -8,9 +8,10 @@ import {PAGE_QUERY} from '~/qroq/queries';
 import {sanityPreviewPayload} from '~/lib/sanity/sanity.payload.server';
 import {useSanityData} from '~/hooks/useSanityData';
 import {DEFAULT_LOCALE} from 'countries';
+import {resolveShopifyPromises} from '~/lib/resolveShopifyPromises';
 
 export async function loader({context, params, request}: LoaderFunctionArgs) {
-  const {sanity, locale} = context;
+  const {sanity, locale, storefront} = context;
   const pathname = new URL(request.url).pathname;
   const handle = getPageHandle({params, locale, pathname});
   const language = locale?.language.toLowerCase();
@@ -26,6 +27,11 @@ export async function loader({context, params, request}: LoaderFunctionArgs) {
     params: queryParams,
   });
 
+  const {featuredCollectionPromise} = resolveShopifyPromises({
+    document: page,
+    storefront,
+  });
+
   if (!page.data) {
     throw new Response(null, {
       status: 404,
@@ -35,6 +41,7 @@ export async function loader({context, params, request}: LoaderFunctionArgs) {
 
   return defer({
     page,
+    featuredCollectionPromise,
     ...sanityPreviewPayload({
       query: PAGE_QUERY.query,
       params: queryParams,
