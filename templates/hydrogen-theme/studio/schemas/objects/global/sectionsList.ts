@@ -1,6 +1,6 @@
-import {ArrayOfObjectsInputProps, defineField} from 'sanity'
+import {ArrayOfObjectsInputProps, defineField} from 'sanity';
 
-import SectionsListInput from '../../../components/SectionsListInput'
+import SectionsListInput from '../../../components/SectionsListInput';
 
 export default defineField({
   title: 'Sections',
@@ -12,10 +12,14 @@ export default defineField({
       type: 'imageBannerSection',
     },
     {
+      type: 'featuredCollectionSection',
+    },
+    {
       type: 'ctaSection',
     },
   ],
   components: {
-    input: (props: ArrayOfObjectsInputProps) => SectionsListInput({type: 'section', ...props}),
+    input: (props: ArrayOfObjectsInputProps) =>
+      SectionsListInput({type: 'section', ...props}),
   },
-})
+});

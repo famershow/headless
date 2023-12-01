@@ -8,6 +8,13 @@ export const sections: {
       default: module.ImageBannerSection,
     })),
   ),
+  featuredCollectionSection: lazy(() =>
+    import('../components/sections/FeaturedCollectionSection').then(
+      (module) => ({
+        default: module.FeaturedCollectionSection,
+      }),
+    ),
+  ),
   ctaSection: lazy(() =>
     import('../components/sections/CtaSection').then((module) => ({
       default: module.CtaSection,

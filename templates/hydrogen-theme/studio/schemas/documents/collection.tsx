@@ -1,12 +1,11 @@
-import React from 'react'
-import {defineField, defineType} from 'sanity'
-import {PackageIcon} from '@sanity/icons'
-import {getExtension} from '@sanity/asset-utils'
-import pluralize from 'pluralize-esm'
+import React from 'react';
+import {defineField, defineType} from 'sanity';
+import {PackageIcon} from '@sanity/icons';
+import pluralize from 'pluralize-esm';
 
-import {ShopifyIcon} from '../../components/icons/ShopifyIcon'
-import {ShopifyDocumentStatus} from '../../components/shopify/ShopifyDocumentStatus'
-import {CollectionHiddenInput} from '../../components/shopify/CollectionHidden'
+import {ShopifyIcon} from '../../components/icons/ShopifyIcon';
+import {ShopifyDocumentStatus} from '../../components/shopify/ShopifyDocumentStatus';
+import {CollectionHiddenInput} from '../../components/shopify/CollectionHidden';
 
 const GROUPS = [
   {
@@ -27,7 +26,7 @@ const GROUPS = [
     name: 'seo',
     title: 'SEO',
   },
-]
+];
 
 export default defineType({
   name: 'collection',
@@ -44,8 +43,8 @@ export default defineType({
         field: CollectionHiddenInput,
       },
       hidden: ({parent}) => {
-        const isDeleted = parent?.store?.isDeleted
-        return !isDeleted
+        const isDeleted = parent?.store?.isDeleted;
+        return !isDeleted;
       },
     }),
     // Title (proxy)
@@ -122,8 +121,8 @@ export default defineType({
       title: 'store.title',
     },
     prepare(selection) {
-      const {imageUrl, isDeleted, rules, title} = selection
-      const ruleCount = rules?.length || 0
+      const {imageUrl, isDeleted, rules, title} = selection;
+      const ruleCount = rules?.length || 0;
 
       return {
         media: (
@@ -134,9 +133,12 @@ export default defineType({
             title={title}
           />
         ),
-        subtitle: ruleCount > 0 ? `Automated (${pluralize('rule', ruleCount, true)})` : 'Manual',
+        subtitle:
+          ruleCount > 0
+            ? `Automated (${pluralize('rule', ruleCount, true)})`
+            : 'Manual',
         title,
-      }
+      };
     },
   },
-})
+});

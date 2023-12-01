@@ -9,10 +9,12 @@ import {contentAlignmentVariants} from '../cva/contentAlignment';
 import {SanityImage} from '../sanity/SanityImage';
 import {Animation} from '../Animation';
 
-type HeroSectionProps = TypeFromSelection<typeof IMAGE_BANNER_SECTION_FRAGMENT>;
+type ImageBannerSectionProps = TypeFromSelection<
+  typeof IMAGE_BANNER_SECTION_FRAGMENT
+>;
 
 export function ImageBannerSection(
-  props: SectionDefaultProps & {data: HeroSectionProps},
+  props: SectionDefaultProps & {data: ImageBannerSectionProps},
 ) {
   const {data} = props;
   const {title, contentAlignment, overlayOpacity} = data;
