@@ -5,7 +5,7 @@ import type {
   LanguageCode,
 } from '@shopify/hydrogen/storefront-api-types';
 import type {IMAGE_FRAGMENT} from '~/qroq/fragments';
-import {EncodeDataAttributeCallback} from '@sanity/react-loader';
+import type {EncodeDataAttributeCallback} from '@sanity/react-loader';
 
 export type I18nLocale = Locale & {
   pathPrefix: string;

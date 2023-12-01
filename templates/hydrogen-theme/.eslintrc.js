@@ -2,9 +2,14 @@
  * @type {import("@types/eslint").Linter.BaseConfig}
  */
 module.exports = {
+  env: {
+    es2021: true,
+    node: true,
+    browser: true,
+  },
   extends: [
     '@remix-run/eslint-config',
-    'plugin:hydrogen/recommended',
+    // 'plugin:hydrogen/recommended', // => has conflicts with prettier v3
     'plugin:hydrogen/typescript',
   ],
   rules: {
