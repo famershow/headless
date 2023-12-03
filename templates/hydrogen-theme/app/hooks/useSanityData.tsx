@@ -41,6 +41,7 @@ export function useSanityData<T extends Initial>(initial: T) {
   const params = sanity?.params;
   const query = sanity?.query || '';
 
+  // Todo: find a way to avoid using useQuery hook in production when STEGA is disabled
   const {data, loading, sourceMap} = useQuery(query || '', params, {
     initial: initial as any,
   });

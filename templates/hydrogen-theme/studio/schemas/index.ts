@@ -30,10 +30,16 @@ import socialLinksOnly from './objects/footers/socialLinksOnly';
 import overlayOpacity from './objects/global/overlayOpacity';
 import contentAlignment from './objects/global/contentAlignment';
 import featuredCollection from './objects/sections/featuredCollection';
+import collectionListSection from './objects/sections/collectionListSection';
 
 const singletons = [home, header, footer, settings, themeContent];
 const documents = [page, color, collection, product, blogPost, productVariant];
-const sections = [imageBannerSection, featuredCollection, ctaSection];
+const sections = [
+  imageBannerSection,
+  featuredCollection,
+  collectionListSection,
+  ctaSection,
+];
 const footers = [socialLinksOnly];
 const objects = [
   footersList,

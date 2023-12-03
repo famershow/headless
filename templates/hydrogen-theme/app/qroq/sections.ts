@@ -70,10 +70,26 @@ export const FEATURED_COLLECTION_SECTION_FRAGMENT = {
     .deref()
     .grab({
       store: q('store').grab({
-        slug: q.object({
-          current: q.string(),
-          _type: q.string(),
-        }),
+        gid: q.string(),
+      }),
+    })
+    .nullable(),
+  settings: SECTION_SETTINGS_FRAGMENT,
+} satisfies Selection;
+
+/*
+|--------------------------------------------------------------------------
+| Collection List Section
+|--------------------------------------------------------------------------
+*/
+export const COLLECTION_LIST_SECTION_FRAGMENT = {
+  _type: z.enum(['collectionListSection']),
+  _key: q.string().nullable(),
+  collections: q('collections[]', {isArray: true})
+    .deref()
+    .grab({
+      store: q('store').grab({
+        gid: q.string(),
       }),
     })
     .nullable(),
@@ -106,6 +122,7 @@ export const CTA_SECTION_FRAGMENT = {
 export const SECTIONS_LIST_SELECTION = {
   "_type == 'imageBannerSection'": IMAGE_BANNER_SECTION_FRAGMENT,
   "_type == 'featuredCollectionSection'": FEATURED_COLLECTION_SECTION_FRAGMENT,
+  "_type == 'collectionListSection'": COLLECTION_LIST_SECTION_FRAGMENT,
   "_type == 'ctaSection'": CTA_SECTION_FRAGMENT,
 };
 

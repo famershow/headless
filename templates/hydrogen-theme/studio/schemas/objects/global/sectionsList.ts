@@ -15,6 +15,9 @@ export default defineField({
       type: 'featuredCollectionSection',
     },
     {
+      type: 'collectionListSection',
+    },
+    {
       type: 'ctaSection',
     },
   ],

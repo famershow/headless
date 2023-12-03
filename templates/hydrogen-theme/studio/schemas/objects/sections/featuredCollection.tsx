@@ -2,7 +2,7 @@ import {defineField} from 'sanity';
 
 export default defineField({
   name: 'featuredCollectionSection',
-  title: 'Featured Collection Section',
+  title: 'Featured Collection',
   type: 'object',
   fields: [
     defineField({
@@ -20,8 +20,6 @@ export default defineField({
       collection: 'collection.store',
     },
     prepare({collection}: any) {
-      console.log('collection', collection);
-
       return {
         title: collection.title,
         subtitle: 'Featured Collection',

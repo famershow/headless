@@ -1,18 +1,12 @@
 import type {LoaderFunctionArgs} from '@shopify/remix-oxygen';
 import {json} from '@shopify/remix-oxygen';
-import {Link, useLoaderData} from '@remix-run/react';
-import {
-  flattenConnection,
-  getPaginationVariables,
-  Image,
-} from '@shopify/hydrogen';
+import {useLoaderData} from '@remix-run/react';
+import {getPaginationVariables} from '@shopify/hydrogen';
 
-import type {CollectionsQuery} from 'storefrontapi.generated';
 import {COLLECTIONS_QUERY} from '~/graphql/queries';
+import {CollectionListGrid} from '~/components/CollectionListGrid';
 
 const PAGINATION_SIZE = 4;
-
-type Collection = CollectionsQuery['collections']['nodes'][0];
 
 export const loader = async ({
   request,
@@ -37,41 +31,7 @@ export default function Collections() {
 
   return (
     <div className="container py-20">
-      <CollectionCardGrid collections={data.collections} />
-    </div>
-  );
-}
-
-function CollectionCardGrid(props: {
-  collections: CollectionsQuery['collections'];
-}) {
-  const collections =
-    props.collections.nodes.length > 0
-      ? flattenConnection(props.collections)
-      : [];
-
-  return collections.length > 0 ? (
-    <ul className="grid grid-cols-3 gap-10">
-      {collections.map((collection) => (
-        <li key={collection.id}>
-          <CollectionCard collection={collection} />
-        </li>
-      ))}
-    </ul>
-  ) : null;
-}
-
-function CollectionCard(props: {collection: Collection; className?: string}) {
-  const {collection} = props;
-
-  return (
-    <div className="overflow-hidden rounded-lg border">
-      <Link to={`/collections/${collection.handle}`}>
-        {collection.image && <Image data={collection.image} />}
-        <div className="p-3">
-          <div className="text-lg">{collection.title}</div>
-        </div>
-      </Link>
+      <CollectionListGrid collections={data.collections} />
     </div>
   );
 }

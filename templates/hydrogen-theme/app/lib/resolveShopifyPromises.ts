@@ -1,9 +1,12 @@
-import type {Storefront} from '@shopify/hydrogen';
+import {parseGid, type Storefront} from '@shopify/hydrogen';
 import type {InferType} from 'groqd';
 
-import type {FeaturedCollectionQuery} from 'storefrontapi.generated';
+import type {
+  CollectionsQuery,
+  FeaturedCollectionQuery,
+} from 'storefrontapi.generated';
 import type {PAGE_QUERY} from '~/qroq/queries';
-import {FEATURED_COLLECTION_QUERY} from '~/graphql/queries';
+import {COLLECTIONS_QUERY, FEATURED_COLLECTION_QUERY} from '~/graphql/queries';
 
 type SanityPageData = InferType<typeof PAGE_QUERY>;
 type PromiseResolverArgs = {
@@ -25,35 +28,78 @@ export function resolveShopifyPromises({
     storefront,
   });
 
-  return {featuredCollectionPromise};
+  const collectionListPromise = resolveCollectionListPromise({
+    document,
+    storefront,
+  });
+
+  return {featuredCollectionPromise, collectionListPromise};
 }
 
 function resolveFeaturedCollectionPromise({
   document,
   storefront,
 }: PromiseResolverArgs) {
-  let featuredCollectionPromise: Promise<FeaturedCollectionQuery> | undefined;
+  const promises: Promise<FeaturedCollectionQuery>[] = [];
 
   document.data?.sections?.forEach((section) => {
     if (section._type === 'featuredCollectionSection') {
-      const collectionHandle = section.collection?.store.slug.current;
+      const gid = section.collection?.store.gid;
 
-      if (!collectionHandle) {
+      if (!gid) {
         return undefined;
       }
 
       const promise = storefront.query(FEATURED_COLLECTION_QUERY, {
         variables: {
-          handle: collectionHandle,
+          id: gid,
           first: 4,
           country: storefront.i18n.country,
           language: storefront.i18n.language,
         },
       });
 
-      featuredCollectionPromise = promise;
+      promises.push(promise);
     }
   });
 
+  const featuredCollectionPromise = Promise.all(promises);
+
   return featuredCollectionPromise;
+}
+
+function resolveCollectionListPromise({
+  document,
+  storefront,
+}: PromiseResolverArgs) {
+  const promises: Promise<CollectionsQuery>[] = [];
+
+  document.data?.sections?.forEach((section) => {
+    if (section._type === 'collectionListSection') {
+      const first = section.collections?.length;
+      const ids = section.collections?.map(
+        (collection) => parseGid(collection.store.gid).id,
+      );
+      const query = ids?.map((id) => `(id:${id})`).join(' OR ');
+
+      if (!ids?.length || !first) {
+        return undefined;
+      }
+
+      const promise = storefront.query(COLLECTIONS_QUERY, {
+        variables: {
+          first,
+          query,
+          country: storefront.i18n.country,
+          language: storefront.i18n.language,
+        },
+      });
+
+      promises.push(promise);
+    }
+  });
+
+  const collectionListPromise = Promise.all(promises);
+
+  return collectionListPromise;
 }
