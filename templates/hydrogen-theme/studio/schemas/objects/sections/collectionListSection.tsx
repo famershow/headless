@@ -25,6 +25,16 @@ export default defineField({
         }),
     }),
     defineField({
+      name: 'desktopColumns',
+      title: 'Number of columns on desktop',
+      type: 'rangeSlider',
+      options: {
+        min: 1,
+        max: 5,
+      },
+      validation: (Rule: any) => Rule.required().min(1).max(5),
+    }),
+    defineField({
       type: 'sectionSettings',
       name: 'settings',
     }),
