@@ -5,15 +5,18 @@ import type {ProductCardFragment} from 'storefrontapi.generated';
 import {ProductCard} from './ProductCard';
 
 export function ProductCardGrid(props: {
-  products: ProductCardFragment[];
+  products?: ProductCardFragment[];
   columns?: number | null;
+  skeleton?: {
+    cardsNumber?: number;
+  };
 }) {
-  const {products} = props;
+  const {products, skeleton} = props;
   const columnsVar = {
     '--columns': props.columns ?? 3,
   } as CSSProperties;
 
-  return products.length > 0 ? (
+  return (
     <ul
       style={columnsVar}
       className={cx([
@@ -21,11 +24,24 @@ export function ProductCardGrid(props: {
         'lg:grid-cols-[repeat(var(--columns),_minmax(0,_1fr))]',
       ])}
     >
-      {products.map((product) => (
-        <li key={product.id}>
-          <ProductCard columns={props.columns} product={product} />
-        </li>
-      ))}
+      {!skeleton && products && products.length > 0
+        ? products.map((product) => (
+            <li key={product.id}>
+              <ProductCard columns={props.columns} product={product} />
+            </li>
+          ))
+        : skeleton
+          ? [...Array(skeleton.cardsNumber ?? 3)].map((_, i) => (
+              <li key={i}>
+                <ProductCard
+                  skeleton={{
+                    cardsNumber: skeleton.cardsNumber,
+                  }}
+                  columns={props.columns}
+                />
+              </li>
+            ))
+          : null}
     </ul>
-  ) : null;
+  );
 }

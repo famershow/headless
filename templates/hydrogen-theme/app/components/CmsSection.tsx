@@ -25,13 +25,18 @@ export function CmsSection(props: {
   const Section = useMemo(() => sections[type], [type]);
 
   return Section ? (
-    <Suspense>
-      <SectionWrapper type={props.type} data={data}>
+    <SectionWrapper type={props.type} data={data}>
+      <Suspense
+        fallback={
+          // Todo: add skeleton component for each section type
+          <div className="h-96" />
+        }
+      >
         <Section data={data} encodeDataAttribute={encodeDataAttribute} />
-      </SectionWrapper>
-    </Suspense>
+      </Suspense>
+    </SectionWrapper>
   ) : isDev ? (
-    <Fallback type={type} />
+    <MissingSection type={type} />
   ) : null;
 }
 
@@ -77,7 +82,7 @@ function SectionWrapper(props: {
   );
 }
 
-function Fallback({type}: {type?: string}) {
+function MissingSection({type}: {type?: string}) {
   return (
     <section className="w-full bg-slate-800 text-white">
       <div className="container py-10 text-center">

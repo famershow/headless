@@ -19,34 +19,56 @@ export function FeaturedCollectionSection(
   const featuredCollectionPromise = loaderData?.featuredCollectionPromise;
   const gid = props.data?.collection?.store.gid;
 
-  return featuredCollectionPromise ? (
-    <Suspense fallback={<div className="container">Loading...</div>}>
-      <Await resolve={featuredCollectionPromise}>
-        {(data) => {
-          // Resolve the collection data from Shopify with the gid from Sanity
-          const collection = data.find(
-            ({collection}) => gid?.includes(collection?.id!),
-          )?.collection;
+  return (
+    <div className="container">
+      <h2>{props.data.collection?.store.title}</h2>
+      {featuredCollectionPromise ? (
+        <Suspense
+          fallback={
+            <Skeleton
+              cardsNumber={props.data.maxProducts || 3}
+              columns={props.data.desktopColumns || 3}
+            />
+          }
+        >
+          <Await resolve={featuredCollectionPromise}>
+            {(data) => {
+              // Resolve the collection data from Shopify with the gid from Sanity
+              const collection = data.find(
+                ({collection}) => gid?.includes(collection?.id!),
+              )?.collection;
 
-          const products =
-            collection?.products?.nodes &&
-            collection?.products?.nodes?.length > 1
-              ? flattenConnection(collection?.products)
-              : [];
+              const products =
+                collection?.products?.nodes &&
+                collection?.products?.nodes?.length > 1
+                  ? flattenConnection(collection?.products)
+                  : [];
 
-          return collection ? (
-            <div className="container">
-              <h2>{collection.title}</h2>
-              <div>
-                <ProductCardGrid
-                  columns={props.data.desktopColumns}
-                  products={products}
-                />
-              </div>
-            </div>
-          ) : null;
+              return collection ? (
+                <>
+                  <ProductCardGrid
+                    columns={props.data.desktopColumns}
+                    products={products}
+                  />
+                </>
+              ) : null;
+            }}
+          </Await>
+        </Suspense>
+      ) : null}
+    </div>
+  );
+}
+
+function Skeleton(props: {columns: number; cardsNumber: number}) {
+  return (
+    <div aria-hidden>
+      <ProductCardGrid
+        columns={props.columns}
+        skeleton={{
+          cardsNumber: props.cardsNumber,
         }}
-      </Await>
-    </Suspense>
-  ) : null;
+      />
+    </div>
+  );
 }

@@ -71,6 +71,7 @@ export const FEATURED_COLLECTION_SECTION_FRAGMENT = {
     .grab({
       store: q('store').grab({
         gid: q.string(),
+        title: q.string(),
       }),
     })
     .nullable(),
