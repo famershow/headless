@@ -74,6 +74,8 @@ export const FEATURED_COLLECTION_SECTION_FRAGMENT = {
       }),
     })
     .nullable(),
+  maxProducts: q.number().nullable(),
+  desktopColumns: q.number().nullable(),
   settings: SECTION_SETTINGS_FRAGMENT,
 } satisfies Selection;
 
@@ -93,6 +95,7 @@ export const COLLECTION_LIST_SECTION_FRAGMENT = {
       }),
     })
     .nullable(),
+  desktopColumns: q.number().nullable(),
   settings: SECTION_SETTINGS_FRAGMENT,
 } satisfies Selection;
 

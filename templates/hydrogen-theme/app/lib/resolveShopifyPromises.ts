@@ -1,5 +1,6 @@
-import {parseGid, type Storefront} from '@shopify/hydrogen';
+import type {Storefront} from '@shopify/hydrogen';
 import type {InferType} from 'groqd';
+import {parseGid} from '@shopify/hydrogen';
 
 import type {
   CollectionsQuery,
@@ -45,6 +46,7 @@ function resolveFeaturedCollectionPromise({
   document.data?.sections?.forEach((section) => {
     if (section._type === 'featuredCollectionSection') {
       const gid = section.collection?.store.gid;
+      const first = section.maxProducts || 3;
 
       if (!gid) {
         return undefined;
@@ -53,7 +55,7 @@ function resolveFeaturedCollectionPromise({
       const promise = storefront.query(FEATURED_COLLECTION_QUERY, {
         variables: {
           id: gid,
-          first: 4,
+          first,
           country: storefront.i18n.country,
           language: storefront.i18n.language,
         },
