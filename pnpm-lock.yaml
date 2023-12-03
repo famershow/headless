@@ -129,6 +129,9 @@ importers:
       '@shopify/remix-oxygen':
         specifier: ^2.0.1
         version: 2.0.1(@shopify/oxygen-workers-types@3.17.3)
+      '@vercel/stega':
+        specifier: ^0.1.0
+        version: 0.1.0
       class-variance-authority:
         specifier: ^0.7.0
         version: 0.7.0

@@ -15,6 +15,11 @@ export const sections: {
       }),
     ),
   ),
+  collectionListSection: lazy(() =>
+    import('../components/sections/CollectionListSection').then((module) => ({
+      default: module.CollectionListSection,
+    })),
+  ),
   ctaSection: lazy(() =>
     import('../components/sections/CtaSection').then((module) => ({
       default: module.CtaSection,

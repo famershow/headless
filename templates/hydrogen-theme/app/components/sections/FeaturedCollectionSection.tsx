@@ -4,6 +4,7 @@ import {Await, useLoaderData} from '@remix-run/react';
 
 import type {FEATURED_COLLECTION_SECTION_FRAGMENT} from '~/qroq/sections';
 import type {loader as indexLoader} from '../../routes/_index';
+import type {SectionDefaultProps} from '~/lib/type';
 import {ProductCardGrid} from '../ProductCardGrid';
 import {flattenConnection} from '@shopify/hydrogen';
 
@@ -12,15 +13,21 @@ type FeaturedCollectionSectionProps = TypeFromSelection<
 >;
 
 export function FeaturedCollectionSection(
-  props: FeaturedCollectionSectionProps,
+  props: SectionDefaultProps & {data: FeaturedCollectionSectionProps},
 ) {
   const loaderData = useLoaderData<typeof indexLoader>();
   const featuredCollectionPromise = loaderData?.featuredCollectionPromise;
+  const gid = props.data?.collection?.store.gid;
 
   return featuredCollectionPromise ? (
     <Suspense fallback={<div className="container">Loading...</div>}>
       <Await resolve={featuredCollectionPromise}>
-        {({collection}) => {
+        {(data) => {
+          // Resolve the collection data from Shopify with the gid from Sanity
+          const collection = data.find(
+            ({collection}) => gid?.includes(collection?.id!),
+          )?.collection;
+
           const products =
             collection?.products?.nodes &&
             collection?.products?.nodes?.length > 1

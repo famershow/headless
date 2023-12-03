@@ -28,6 +28,7 @@
     "@shopify/cli-hydrogen": "^6.0.2",
     "@shopify/hydrogen": "^2023.10.2",
     "@shopify/remix-oxygen": "^2.0.1",
+    "@vercel/stega": "^0.1.0",
     "class-variance-authority": "^0.7.0",
     "cva": "1.0.0-beta.1",
     "framer-motion": "^10.16.12",

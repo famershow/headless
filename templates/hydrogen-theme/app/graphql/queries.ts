@@ -122,10 +122,11 @@ export const COLLECTIONS_QUERY = `#graphql
     $language: LanguageCode
     $first: Int
     $last: Int
+    $query: String
     $startCursor: String
     $endCursor: String
   ) @inContext(country: $country, language: $language) {
-    collections(first: $first, last: $last, before: $startCursor, after: $endCursor) {
+    collections(first: $first, last: $last, before: $startCursor, after: $endCursor, query: $query) {
       nodes {
         id
         title
@@ -223,12 +224,12 @@ export const COLLECTION_QUERY = `#graphql
 
 export const FEATURED_COLLECTION_QUERY = `#graphql
   query FeaturedCollection(
-    $handle: String!
+    $id: ID!
     $country: CountryCode
     $language: LanguageCode
     $first: Int
   ) @inContext(country: $country, language: $language) {
-    collection(handle: $handle) {
+    collection(id: $id) {
       id
       handle
       title
