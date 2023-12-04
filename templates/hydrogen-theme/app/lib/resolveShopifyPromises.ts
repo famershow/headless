@@ -3,13 +3,18 @@ import type {InferType} from 'groqd';
 import type {
   CollectionsQuery,
   FeaturedCollectionQuery,
+  FeaturedProductQuery,
 } from 'storefrontapi.generated';
 
 import {parseGid} from '@shopify/hydrogen';
 
 import type {PAGE_QUERY} from '~/qroq/queries';
 
-import {COLLECTIONS_QUERY, FEATURED_COLLECTION_QUERY} from '~/graphql/queries';
+import {
+  COLLECTIONS_QUERY,
+  FEATURED_COLLECTION_QUERY,
+  FEATURED_PRODUCT_QUERY,
+} from '~/graphql/queries';
 
 type SanityPageData = InferType<typeof PAGE_QUERY>;
 type PromiseResolverArgs = {
@@ -36,7 +41,16 @@ export function resolveShopifyPromises({
     storefront,
   });
 
-  return {collectionListPromise, featuredCollectionPromise};
+  const featuredProductPromise = resolveFeaturedProductPromise({
+    document,
+    storefront,
+  });
+
+  return {
+    collectionListPromise,
+    featuredCollectionPromise,
+    featuredProductPromise,
+  };
 }
 
 function resolveFeaturedCollectionPromise({
@@ -118,4 +132,41 @@ function resolveCollectionListPromise({
   const collectionListPromise = Promise.allSettled(promises);
 
   return collectionListPromise;
+}
+
+function resolveFeaturedProductPromise({
+  document,
+  storefront,
+}: PromiseResolverArgs) {
+  const promises: Promise<FeaturedProductQuery>[] = [];
+
+  document.data?.sections?.forEach((section) => {
+    if (section._type === 'featuredProductSection') {
+      const gid = section.product?.store.gid;
+
+      if (!gid) {
+        return undefined;
+      }
+
+      const promise = storefront.query(FEATURED_PRODUCT_QUERY, {
+        variables: {
+          country: storefront.i18n.country,
+          id: gid,
+          language: storefront.i18n.language,
+        },
+      });
+
+      promises.push(promise);
+    }
+  });
+
+  /**
+   * Promise.allSettled is used to resolve all promises even if one of them fails.
+   * This is useful when a page contains multiple sections that fetch data from Shopify.
+   * If one of the promises fails, the page will still be rendered and only
+   * the section that failed will be empty.
+   */
+  const featuredProductPromise = Promise.allSettled(promises);
+
+  return featuredProductPromise;
 }

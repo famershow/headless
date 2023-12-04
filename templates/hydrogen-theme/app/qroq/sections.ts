@@ -83,6 +83,26 @@ export const FEATURED_COLLECTION_SECTION_FRAGMENT = {
 
 /*
 |--------------------------------------------------------------------------
+| Featured Collection Section
+|--------------------------------------------------------------------------
+*/
+export const FEATURED_PRODUCT_SECTION_FRAGMENT = {
+  _key: q.string().nullable(),
+  _type: z.enum(['featuredProductSection']),
+  product: q('product')
+    .deref()
+    .grab({
+      store: q('store').grab({
+        gid: q.string(),
+        title: q.string(),
+      }),
+    })
+    .nullable(),
+  settings: SECTION_SETTINGS_FRAGMENT,
+} satisfies Selection;
+
+/*
+|--------------------------------------------------------------------------
 | Collection List Section
 |--------------------------------------------------------------------------
 */
@@ -128,6 +148,7 @@ export const SECTIONS_LIST_SELECTION = {
   "_type == 'collectionListSection'": COLLECTION_LIST_SECTION_FRAGMENT,
   "_type == 'ctaSection'": CTA_SECTION_FRAGMENT,
   "_type == 'featuredCollectionSection'": FEATURED_COLLECTION_SECTION_FRAGMENT,
+  "_type == 'featuredProductSection'": FEATURED_PRODUCT_SECTION_FRAGMENT,
   "_type == 'imageBannerSection'": IMAGE_BANNER_SECTION_FRAGMENT,
 };
 

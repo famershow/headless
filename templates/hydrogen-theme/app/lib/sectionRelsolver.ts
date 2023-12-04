@@ -20,6 +20,11 @@ export const sections: {
       }),
     ),
   ),
+  featuredProductSection: lazy(() =>
+    import('../components/sections/FeaturedProductSection').then((module) => ({
+      default: module.FeaturedProductSection,
+    })),
+  ),
   imageBannerSection: lazy(() =>
     import('../components/sections/ImageBannerSection').then((module) => ({
       default: module.ImageBannerSection,
