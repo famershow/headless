@@ -1,6 +1,6 @@
 import type {CSSProperties} from 'react';
 
-export function Overlay(props: {opacity?: number | null}) {
+export function Overlay(props: {opacity?: null | number}) {
   const style = {
     '--overlayOpacity': props?.opacity ? props.opacity / 100 : 0,
   } as CSSProperties;
@@ -12,8 +12,8 @@ export function Overlay(props: {opacity?: number | null}) {
   return (
     <div
       aria-hidden
-      style={style}
       className="absolute inset-0 bg-black bg-opacity-[var(--overlayOpacity)]"
+      style={style}
     ></div>
   );
 }

@@ -1,16 +1,17 @@
 import type {LoaderFunctionArgs} from '@shopify/remix-oxygen';
+
 import {useLoaderData} from '@remix-run/react';
 import {flattenConnection, getPaginationVariables} from '@shopify/hydrogen';
 import {json} from '@shopify/remix-oxygen';
 
-import {ALL_PRODUCTS_QUERY} from '~/graphql/queries';
 import {ProductCardGrid} from '~/components/ProductCardGrid';
+import {ALL_PRODUCTS_QUERY} from '~/graphql/queries';
 
 const PAGE_BY = 8;
 
 export async function loader({
-  request,
   context: {storefront},
+  request,
 }: LoaderFunctionArgs) {
   const variables = getPaginationVariables(request, {pageBy: PAGE_BY});
 

@@ -1,8 +1,9 @@
-import type {CSSProperties} from 'react';
 import type {InferType} from 'groqd';
+import type {CSSProperties} from 'react';
 
-import type {SECTION_SETTINGS_FRAGMENT} from '~/qroq/sections';
 import type {HEADER_QUERY} from '~/qroq/queries';
+import type {SECTION_SETTINGS_FRAGMENT} from '~/qroq/sections';
+
 import {useSanityRoot} from './useSanityRoot';
 
 type CmsSectionSettings = InferType<typeof SECTION_SETTINGS_FRAGMENT>;
@@ -14,9 +15,9 @@ export function useSettingsCssVars({
   settings?: CmsSectionSettings | HeaderQuery;
 }): CSSProperties & {
   '--backgroundColor'?: string;
-  '--textColor'?: string;
-  '--paddingTop'?: string;
   '--paddingBottom'?: string;
+  '--paddingTop'?: string;
+  '--textColor'?: string;
 } {
   const sanityRoot = useSanityRoot();
   const defaultColorScheme = sanityRoot?.data?.defaultColorScheme;
@@ -25,17 +26,17 @@ export function useSettingsCssVars({
     background: {
       hex: '#ffffff',
       rgb: {
-        r: 255,
-        g: 255,
         b: 255,
+        g: 255,
+        r: 255,
       },
     },
     text: {
       hex: '#000000',
       rgb: {
-        r: 0,
-        g: 0,
         b: 0,
+        g: 0,
+        r: 0,
       },
     },
   };
@@ -54,12 +55,12 @@ export function useSettingsCssVars({
 
   return {
     '--backgroundColor': scheme.background,
-    '--textColor': scheme.text,
-    '--paddingTop': paddingTop,
     '--paddingBottom': paddingBottom,
+    '--paddingTop': paddingTop,
+    '--textColor': scheme.text,
   };
 }
 
-function toRgb(rgb: {r: number; g: number; b: number}) {
+function toRgb(rgb: {b: number; g: number; r: number}) {
   return `${rgb.r} ${rgb.g} ${rgb.b}` as const;
 }

@@ -1,11 +1,12 @@
+import {Link} from '@remix-run/react';
 import {Suspense, lazy} from 'react';
 
-import {TogglePreviewMode} from '../sanity/TogglePreviewMode';
 import {useSanityPreviewMode} from '~/hooks/useSanityPreviewMode';
-import {Link} from '@remix-run/react';
+
 import {TailwindIndicator} from '../TailwindIndicator';
-import {Header} from './Header';
+import {TogglePreviewMode} from '../sanity/TogglePreviewMode';
 import {Footer} from './Footer';
+import {Header} from './Header';
 
 const VisualEditing = lazy(() =>
   import('~/components/sanity/VisualEditing').then((mod) => ({

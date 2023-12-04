@@ -1,10 +1,11 @@
-import type {LoaderFunctionArgs} from '@shopify/remix-oxygen';
 import type {ProductCollectionSortKeys} from '@shopify/hydrogen/storefront-api-types';
+import type {LoaderFunctionArgs} from '@shopify/remix-oxygen';
+
 import {useLoaderData} from '@remix-run/react';
 import {
+  Image,
   flattenConnection,
   getPaginationVariables,
-  Image,
 } from '@shopify/hydrogen';
 import {json} from '@shopify/remix-oxygen';
 import invariant from 'tiny-invariant';
@@ -13,11 +14,11 @@ import {ProductCardGrid} from '~/components/ProductCardGrid';
 import {COLLECTION_QUERY} from '~/graphql/queries';
 
 export type SortParam =
-  | 'price-low-high'
-  | 'price-high-low'
   | 'best-selling'
+  | 'featured'
   | 'newest'
-  | 'featured';
+  | 'price-high-low'
+  | 'price-low-high';
 
 export type AppliedFilter = {
   label: string;
@@ -27,17 +28,17 @@ export type AppliedFilter = {
   };
 };
 
-type VariantFilterParam = Record<string, string | boolean>;
+type VariantFilterParam = Record<string, boolean | string>;
 type PriceFiltersQueryParam = Record<'price', {max?: number; min?: number}>;
 type VariantOptionFiltersQueryParam = Record<
   'variantOption',
   {name: string; value: string}
 >;
 type FiltersQueryParams = Array<
-  VariantFilterParam | PriceFiltersQueryParam | VariantOptionFiltersQueryParam
+  PriceFiltersQueryParam | VariantFilterParam | VariantOptionFiltersQueryParam
 >;
 
-export async function loader({params, request, context}: LoaderFunctionArgs) {
+export async function loader({context, params, request}: LoaderFunctionArgs) {
   const paginationVariables = getPaginationVariables(request, {
     pageBy: 8,
   });
@@ -49,7 +50,7 @@ export async function loader({params, request, context}: LoaderFunctionArgs) {
   const knownFilters = ['productVendor', 'productType'];
   const available = 'available';
   const variantOption = 'variantOption';
-  const {sortKey, reverse} = getSortValuesFromParam(
+  const {reverse, sortKey} = getSortValuesFromParam(
     searchParams.get('sort') as SortParam,
   );
   const filters: FiltersQueryParams = [];
@@ -79,7 +80,7 @@ export async function loader({params, request, context}: LoaderFunctionArgs) {
   // the filters array. See price filters limitations:
   // https://shopify.dev/custom-storefronts/products-collections/filter-products#limitations
   if (searchParams.has('minPrice') || searchParams.has('maxPrice')) {
-    const price: {min?: number; max?: number} = {};
+    const price: {max?: number; min?: number} = {};
     if (searchParams.has('minPrice')) {
       price.min = Number(searchParams.get('minPrice')) || 0;
       appliedFilters.push({
@@ -104,12 +105,12 @@ export async function loader({params, request, context}: LoaderFunctionArgs) {
     {
       variables: {
         ...paginationVariables,
-        handle: collectionHandle,
-        filters,
-        sortKey,
-        reverse,
         country: context.storefront.i18n.country,
+        filters,
+        handle: collectionHandle,
         language: context.storefront.i18n.language,
+        reverse,
+        sortKey,
       },
     },
   );
@@ -119,8 +120,8 @@ export async function loader({params, request, context}: LoaderFunctionArgs) {
   }
 
   return json({
-    collection,
     appliedFilters,
+    collection,
     collections: flattenConnection(collections),
   });
 }
@@ -137,7 +138,7 @@ export default function Collection() {
       {collection.image && (
         <section>
           <div className="relative h-80 w-full overflow-hidden">
-            <Image className="" data={collection.image} crop="center" />
+            <Image className="" crop="center" data={collection.image} />
             <div className="absolute inset-0">
               <div className="flex h-full items-center justify-center text-white">
                 <h1>{collection.title}</h1>
@@ -156,39 +157,39 @@ export default function Collection() {
 }
 
 function getSortValuesFromParam(sortParam: SortParam | null): {
-  sortKey: ProductCollectionSortKeys;
   reverse: boolean;
+  sortKey: ProductCollectionSortKeys;
 } {
   switch (sortParam) {
     case 'price-high-low':
       return {
-        sortKey: 'PRICE',
         reverse: true,
+        sortKey: 'PRICE',
       };
     case 'price-low-high':
       return {
-        sortKey: 'PRICE',
         reverse: false,
+        sortKey: 'PRICE',
       };
     case 'best-selling':
       return {
-        sortKey: 'BEST_SELLING',
         reverse: false,
+        sortKey: 'BEST_SELLING',
       };
     case 'newest':
       return {
-        sortKey: 'CREATED',
         reverse: true,
+        sortKey: 'CREATED',
       };
     case 'featured':
       return {
-        sortKey: 'MANUAL',
         reverse: false,
+        sortKey: 'MANUAL',
       };
     default:
       return {
-        sortKey: 'RELEVANCE',
         reverse: false,
+        sortKey: 'RELEVANCE',
       };
   }
 }

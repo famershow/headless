@@ -1,12 +1,12 @@
 import {getFonts} from '~/components/Fonts';
 
 type PreloadLink = {
-  tagName: string;
-  rel: string;
   as: string;
-  href: string;
-  type: string;
   crossOrigin: string;
+  href: string;
+  rel: string;
+  tagName: string;
+  type: string;
 };
 
 export function generateFontsPreloadLinks({fontsData}: {fontsData: any}) {
@@ -18,12 +18,12 @@ export function generateFontsPreloadLinks({fontsData}: {fontsData: any}) {
     fontTypes.forEach((fontType) => {
       if (font[fontType]) {
         preloadLinks.push({
-          tagName: 'link',
-          rel: 'preload',
           as: 'font',
-          href: font[fontType].url,
-          type: `font/${fontType}`,
           crossOrigin: 'anonymous',
+          href: font[fontType].url,
+          rel: 'preload',
+          tagName: 'link',
+          type: `font/${fontType}`,
         });
       }
     });

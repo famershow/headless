@@ -1,7 +1,22 @@
 /** @type {import('@remix-run/dev').AppConfig} */
 module.exports = {
   appDirectory: 'app',
+  assetsBuildDirectory: 'dist/client/build',
   ignoredRouteFiles: ['**/.*'],
+  postcss: true,
+  /**
+   * The following settings are required to deploy Hydrogen apps to Oxygen:
+   */
+  publicPath: (process.env.HYDROGEN_ASSET_BASE_URL ?? '/') + 'build/',
+  server: './server.ts',
+  serverBuildPath: 'dist/worker/index.js',
+  serverConditions: ['worker', process.env.NODE_ENV],
+  serverDependenciesToBundle: 'all',
+  serverMainFields: ['browser', 'module', 'main'],
+  serverMinify: process.env.NODE_ENV === 'production',
+  serverModuleFormat: 'esm',
+  serverPlatform: 'neutral',
+  tailwind: true,
   watchPaths: [
     './public',
     './.env',
@@ -9,19 +24,4 @@ module.exports = {
     './tailwind.config.ts',
     './sanity.details.ts',
   ],
-  server: './server.ts',
-  /**
-   * The following settings are required to deploy Hydrogen apps to Oxygen:
-   */
-  publicPath: (process.env.HYDROGEN_ASSET_BASE_URL ?? '/') + 'build/',
-  assetsBuildDirectory: 'dist/client/build',
-  serverBuildPath: 'dist/worker/index.js',
-  serverMainFields: ['browser', 'module', 'main'],
-  serverConditions: ['worker', process.env.NODE_ENV],
-  serverDependenciesToBundle: 'all',
-  serverModuleFormat: 'esm',
-  serverPlatform: 'neutral',
-  serverMinify: process.env.NODE_ENV === 'production',
-  tailwind: true,
-  postcss: true,
 };

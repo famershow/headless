@@ -1,17 +1,18 @@
 import type {CartLineUpdateInput} from '@shopify/hydrogen/storefront-api-types';
-import {CartForm, Image, Money} from '@shopify/hydrogen';
-import {Link} from '@remix-run/react';
-
 import type {CartApiQueryFragment} from 'storefrontapi.generated';
+
+import {Link} from '@remix-run/react';
+import {CartForm, Image, Money} from '@shopify/hydrogen';
+
 import {useVariantUrl} from '~/lib/utils';
 
 type CartLine = CartApiQueryFragment['lines']['nodes'][0];
 type CartMainProps = {
   cart: CartApiQueryFragment | null;
-  layout: 'page' | 'aside';
+  layout: 'aside' | 'page';
 };
 
-export function CartMain({layout, cart}: CartMainProps) {
+export function CartMain({cart, layout}: CartMainProps) {
   const linesCount = Boolean(cart?.lines?.nodes?.length || 0);
   const withDiscount =
     cart &&
@@ -26,12 +27,12 @@ export function CartMain({layout, cart}: CartMainProps) {
   );
 }
 
-function CartDetails({layout, cart}: CartMainProps) {
+function CartDetails({cart, layout}: CartMainProps) {
   const cartHasItems = !!cart && cart.totalQuantity > 0;
 
   return (
     <div className="cart-details">
-      <CartLines lines={cart?.lines} layout={layout} />
+      <CartLines layout={layout} lines={cart?.lines} />
       {cartHasItems && (
         <CartSummary cost={cart.cost} layout={layout}>
           <CartDiscounts discountCodes={cart.discountCodes} />
@@ -43,8 +44,8 @@ function CartDetails({layout, cart}: CartMainProps) {
 }
 
 function CartLines({
-  lines,
   layout,
+  lines,
 }: {
   layout: CartMainProps['layout'];
   lines: CartApiQueryFragment['lines'] | undefined;
@@ -55,7 +56,7 @@ function CartLines({
     <div aria-labelledby="cart-lines">
       <ul>
         {lines.nodes.map((line) => (
-          <CartLineItem key={line.id} line={line} layout={layout} />
+          <CartLineItem key={line.id} layout={layout} line={line} />
         ))}
       </ul>
     </div>
@@ -70,11 +71,11 @@ function CartLineItem({
   line: CartLine;
 }) {
   const {id, merchandise} = line;
-  const {product, title, image, selectedOptions} = merchandise;
+  const {image, product, selectedOptions, title} = merchandise;
   const lineItemUrl = useVariantUrl(product.handle, selectedOptions);
 
   return (
-    <li key={id} className="cart-line">
+    <li className="cart-line" key={id}>
       {image && (
         <Image
           alt={title}
@@ -88,20 +89,20 @@ function CartLineItem({
 
       <div>
         <Link
-          prefetch="intent"
-          to={lineItemUrl}
           onClick={() => {
             if (layout === 'aside') {
               // close the drawer
               window.location.href = lineItemUrl;
             }
           }}
+          prefetch="intent"
+          to={lineItemUrl}
         >
           <p>
             <strong>{product.title}</strong>
           </p>
         </Link>
-        <CartLinePrice line={line} as="span" />
+        <CartLinePrice as="span" line={line} />
         <ul>
           {selectedOptions.map((option) => (
             <li key={option.name}>
@@ -131,9 +132,9 @@ function CartCheckoutActions({checkoutUrl}: {checkoutUrl: string}) {
 }
 
 export function CartSummary({
+  children = null,
   cost,
   layout,
-  children = null,
 }: {
   children?: React.ReactNode;
   cost: CartApiQueryFragment['cost'];
@@ -163,9 +164,9 @@ export function CartSummary({
 function CartLineRemoveButton({lineIds}: {lineIds: string[]}) {
   return (
     <CartForm
-      route="/cart"
       action={CartForm.ACTIONS.LinesRemove}
       inputs={{lineIds}}
+      route="/cart"
     >
       <button type="submit">Remove</button>
     </CartForm>
@@ -212,9 +213,9 @@ function CartLinePrice({
   priceType = 'regular',
   ...passthroughProps
 }: {
-  line: CartLine;
-  priceType?: 'regular' | 'compareAt';
   [key: string]: any;
+  line: CartLine;
+  priceType?: 'compareAt' | 'regular';
 }) {
   if (!line?.cost?.amountPerQuantity || !line?.cost?.totalAmount) return null;
 
@@ -250,12 +251,12 @@ export function CartEmpty({
       </p>
       <br />
       <Link
-        to="/collections"
         onClick={() => {
           if (layout === 'aside') {
             window.location.href = '/collections';
           }
         }}
+        to="/collections"
       >
         Continue shopping →
       </Link>
@@ -292,7 +293,7 @@ function CartDiscounts({
       {/* Show an input to apply a discount */}
       <UpdateDiscountForm discountCodes={codes}>
         <div>
-          <input type="text" name="discountCode" placeholder="Discount code" />
+          <input name="discountCode" placeholder="Discount code" type="text" />
           &nbsp;
           <button type="submit">Apply</button>
         </div>
@@ -302,19 +303,19 @@ function CartDiscounts({
 }
 
 function UpdateDiscountForm({
-  discountCodes,
   children,
+  discountCodes,
 }: {
-  discountCodes?: string[];
   children: React.ReactNode;
+  discountCodes?: string[];
 }) {
   return (
     <CartForm
-      route="/cart"
       action={CartForm.ACTIONS.DiscountCodesUpdate}
       inputs={{
         discountCodes: discountCodes || [],
       }}
+      route="/cart"
     >
       {children}
     </CartForm>
@@ -330,9 +331,9 @@ function CartLineUpdateButton({
 }) {
   return (
     <CartForm
-      route="/cart"
       action={CartForm.ACTIONS.LinesUpdate}
       inputs={{lines}}
+      route="/cart"
     >
       {children}
     </CartForm>

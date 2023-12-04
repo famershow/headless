@@ -1,25 +1,27 @@
 import type {LoaderFunctionArgs} from '@shopify/remix-oxygen';
-import {defer} from '@shopify/remix-oxygen';
+
 import {useLoaderData} from '@remix-run/react';
+import {defer} from '@shopify/remix-oxygen';
+import {DEFAULT_LOCALE} from 'countries';
 
 import type {I18nLocale} from '~/lib/type';
+
 import {CmsSection} from '~/components/CmsSection';
-import {PAGE_QUERY} from '~/qroq/queries';
-import {sanityPreviewPayload} from '~/lib/sanity/sanity.payload.server';
 import {useSanityData} from '~/hooks/useSanityData';
-import {DEFAULT_LOCALE} from 'countries';
 import {resolveShopifyPromises} from '~/lib/resolveShopifyPromises';
+import {sanityPreviewPayload} from '~/lib/sanity/sanity.payload.server';
+import {PAGE_QUERY} from '~/qroq/queries';
 
 export async function loader({context, params, request}: LoaderFunctionArgs) {
-  const {sanity, locale, storefront} = context;
+  const {locale, sanity, storefront} = context;
   const pathname = new URL(request.url).pathname;
-  const handle = getPageHandle({params, locale, pathname});
+  const handle = getPageHandle({locale, params, pathname});
   const language = locale?.language.toLowerCase();
 
   const queryParams = {
+    defaultLanguage: DEFAULT_LOCALE.language.toLowerCase(),
     handle,
     language,
-    defaultLanguage: DEFAULT_LOCALE.language.toLowerCase(),
   };
 
   const page = await sanity.query({
@@ -27,7 +29,7 @@ export async function loader({context, params, request}: LoaderFunctionArgs) {
     params: queryParams,
   });
 
-  const {featuredCollectionPromise, collectionListPromise} =
+  const {collectionListPromise, featuredCollectionPromise} =
     resolveShopifyPromises({
       document: page,
       storefront,
@@ -41,13 +43,13 @@ export async function loader({context, params, request}: LoaderFunctionArgs) {
   }
 
   return defer({
-    page,
-    featuredCollectionPromise,
     collectionListPromise,
+    featuredCollectionPromise,
+    page,
     ...sanityPreviewPayload({
-      query: PAGE_QUERY.query,
-      params: queryParams,
       context,
+      params: queryParams,
+      query: PAGE_QUERY.query,
     }),
   });
 }
@@ -60,19 +62,19 @@ export default function PageRoute() {
     ? data.sections.map((section) => (
         <CmsSection
           data={section}
-          key={section._key}
           encodeDataAttribute={encodeDataAttribute}
+          key={section._key}
         />
       ))
     : null;
 }
 
 function getPageHandle(args: {
-  params: LoaderFunctionArgs['params'];
   locale: I18nLocale;
+  params: LoaderFunctionArgs['params'];
   pathname: string;
 }) {
-  const {params, locale, pathname} = args;
+  const {locale, params, pathname} = args;
   const pathWithoutLocale = pathname.replace(`${locale?.pathPrefix}`, '');
   const pathWithoutSlash = pathWithoutLocale.replace(/^\/+/g, '');
   const isTranslatedHomePage =

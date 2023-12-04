@@ -1,34 +1,37 @@
-import type {LoaderFunctionArgs, MetaFunction} from '@shopify/remix-oxygen';
 import type {ShouldRevalidateFunction} from '@remix-run/react';
 import type {CustomerAccessToken} from '@shopify/hydrogen/storefront-api-types';
-import {useNonce} from '@shopify/hydrogen';
-import {defer} from '@shopify/remix-oxygen';
+import type {LoaderFunctionArgs, MetaFunction} from '@shopify/remix-oxygen';
+
 import {
   Links,
+  LiveReload,
   Meta,
   Outlet,
   Scripts,
-  LiveReload,
-  useRouteError,
   ScrollRestoration,
   isRouteErrorResponse,
+  useRouteError,
 } from '@remix-run/react';
+import {useNonce} from '@shopify/hydrogen';
+import {defer} from '@shopify/remix-oxygen';
+import {DEFAULT_LOCALE} from 'countries';
+
+import {Layout} from '~/components/layout/Layout';
 
 import type {HydrogenSession} from './lib/hydrogen.session.server';
+
 import favicon from '../public/favicon.svg';
-import tailwindCss from './styles/tailwind.css';
-import {Layout} from '~/components/layout/Layout';
 import {Fonts} from './components/Fonts';
+import {useLocale} from './hooks/useLocale';
 import {generateFontsPreloadLinks} from './lib/fonts';
 import {sanityPreviewPayload} from './lib/sanity/sanity.payload.server';
-import {useLocale} from './hooks/useLocale';
-import {DEFAULT_LOCALE} from 'countries';
 import {ROOT_QUERY} from './qroq/queries';
+import tailwindCss from './styles/tailwind.css';
 
 // This is important to avoid re-fetching root queries on sub-navigations
 export const shouldRevalidate: ShouldRevalidateFunction = ({
-  formMethod,
   currentUrl,
+  formMethod,
   nextUrl,
 }) => {
   // revalidate when a mutation is performed e.g add to cart, login...
@@ -47,15 +50,15 @@ export const shouldRevalidate: ShouldRevalidateFunction = ({
 export function links() {
   return [
     {
-      rel: 'preconnect',
       href: 'https://cdn.shopify.com',
+      rel: 'preconnect',
     },
     {
-      rel: 'preconnect',
       href: 'https://shop.app',
+      rel: 'preconnect',
     },
-    {rel: 'stylesheet', href: tailwindCss},
-    {rel: 'icon', type: 'image/svg+xml', href: favicon},
+    {href: tailwindCss, rel: 'stylesheet'},
+    {href: favicon, rel: 'icon', type: 'image/svg+xml'},
   ];
 }
 
@@ -68,23 +71,23 @@ export const meta: MetaFunction<typeof loader> = (loaderData) => {
 
   return [
     {
-      tagName: 'link',
-      rel: 'preconnect',
       // Preconnect to the Sanity CDN before loading fonts
       href: 'https://cdn.sanity.io',
+      rel: 'preconnect',
+      tagName: 'link',
     },
     ...fontsPreloadLinks,
   ];
 };
 
 export async function loader({context}: LoaderFunctionArgs) {
-  const {session, cart, env, sanity, locale, sanityPreviewMode} = context;
+  const {cart, env, locale, sanity, sanityPreviewMode, session} = context;
   const language = locale?.language.toLowerCase();
   const customerAccessToken = await session.get('customerAccessToken');
 
   const queryParams = {
-    language,
     defaultLanguage: DEFAULT_LOCALE.language.toLowerCase(),
+    language,
   };
 
   const sanityRoot = await sanity.query({
@@ -93,7 +96,7 @@ export async function loader({context}: LoaderFunctionArgs) {
   });
 
   // validate the customer access token is valid
-  const {isLoggedIn, headers} = await validateCustomerAccessToken(
+  const {headers, isLoggedIn} = await validateCustomerAccessToken(
     session,
     customerAccessToken,
   );
@@ -103,26 +106,26 @@ export async function loader({context}: LoaderFunctionArgs) {
 
   return defer(
     {
-      locale,
-      sanityPreviewMode,
-      sanityRoot,
       cart: cartPromise,
-      isLoggedIn,
       env: {
         /*
          * Be careful not to expose any sensitive environment variables here.
          */
         NODE_ENV: env.NODE_ENV,
+        SANITY_STUDIO_API_VERSION: env.SANITY_STUDIO_API_VERSION,
+        SANITY_STUDIO_DATASET: env.SANITY_STUDIO_DATASET,
+        SANITY_STUDIO_PROJECT_ID: env.SANITY_STUDIO_PROJECT_ID,
         SANITY_STUDIO_URL: env.SANITY_STUDIO_URL,
         SANITY_STUDIO_USE_STEGA: env.SANITY_STUDIO_USE_STEGA,
-        SANITY_STUDIO_PROJECT_ID: env.SANITY_STUDIO_PROJECT_ID,
-        SANITY_STUDIO_DATASET: env.SANITY_STUDIO_DATASET,
-        SANITY_STUDIO_API_VERSION: env.SANITY_STUDIO_API_VERSION,
       },
+      isLoggedIn,
+      locale,
+      sanityPreviewMode,
+      sanityRoot,
       ...sanityPreviewPayload({
-        query: ROOT_QUERY.query,
-        params: queryParams,
         context,
+        params: queryParams,
+        query: ROOT_QUERY.query,
       }),
     },
     {headers},
@@ -137,7 +140,7 @@ export default function App() {
     <html lang={locale?.language}>
       <head>
         <meta charSet="utf-8" />
-        <meta name="viewport" content="width=device-width,initial-scale=1" />
+        <meta content="width=device-width,initial-scale=1" name="viewport" />
         <Meta />
         <Fonts />
         <Links />
@@ -172,7 +175,7 @@ export function ErrorBoundary() {
     <html lang={locale?.language}>
       <head>
         <meta charSet="utf-8" />
-        <meta name="viewport" content="width=device-width,initial-scale=1" />
+        <meta content="width=device-width,initial-scale=1" name="viewport" />
         <Meta />
         <Fonts />
         <Links />
@@ -212,7 +215,7 @@ async function validateCustomerAccessToken(
   let isLoggedIn = false;
   const headers = new Headers();
   if (!customerAccessToken?.accessToken || !customerAccessToken?.expiresAt) {
-    return {isLoggedIn, headers};
+    return {headers, isLoggedIn};
   }
 
   const expiresAt = new Date(customerAccessToken.expiresAt).getTime();
@@ -226,5 +229,5 @@ async function validateCustomerAccessToken(
     isLoggedIn = true;
   }
 
-  return {isLoggedIn, headers};
+  return {headers, isLoggedIn};
 }

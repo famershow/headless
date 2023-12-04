@@ -4,8 +4,8 @@ import {useSanityData} from './useSanityData';
 export function useSanityRoot() {
   const rootLoaderdata = useRootLoaderData();
   const sanityGlobal = rootLoaderdata?.sanityRoot!;
-  const {data, loading, sourceMap, encodeDataAttribute} =
+  const {data, encodeDataAttribute, loading, sourceMap} =
     useSanityData(sanityGlobal);
 
-  return {data, loading, sourceMap, encodeDataAttribute};
+  return {data, encodeDataAttribute, loading, sourceMap};
 }

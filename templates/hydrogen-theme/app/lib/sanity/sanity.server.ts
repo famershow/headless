@@ -1,4 +1,3 @@
-import type {BaseQuery, InferType, z} from 'groqd';
 import type {
   ClientPerspective,
   ContentSourceMap,
@@ -7,6 +6,8 @@ import type {
   SanityStegaClient,
   UnfilteredResponseQueryOptions,
 } from '@sanity/client/stega';
+import type {BaseQuery, InferType, z} from 'groqd';
+
 import {CacheShort, createWithCache} from '@shopify/hydrogen';
 
 import {getSanityClient} from './client';
@@ -14,15 +15,15 @@ import {loadQuery, queryStore} from './sanity.loader';
 
 type CreateSanityClientOptions = {
   cache: Cache;
-  waitUntil: ExecutionContext['waitUntil'];
   config: {
-    projectId: string;
-    dataset: string;
-    useStega: string;
-    studioUrl: string;
     apiVersion: string;
+    dataset: string;
+    projectId: string;
+    studioUrl: string;
     useCdn: boolean;
+    useStega: string;
   };
+  waitUntil: ExecutionContext['waitUntil'];
 };
 
 type CachingStrategy = ReturnType<typeof CacheShort>;
@@ -32,32 +33,32 @@ type GroqdQuery = BaseQuery<BaseType<any>>;
 export type Sanity = {
   client: SanityStegaClient;
   query<T extends GroqdQuery>(options: {
+    cache?: CachingStrategy;
     groqdQuery: T;
     params?: QueryParams;
-    cache?: CachingStrategy;
     queryOptions?:
       | FilteredResponseQueryOptions
       | UnfilteredResponseQueryOptions;
   }): Promise<{
     data: InferType<T>;
-    sourceMap?: ContentSourceMap;
     perspective?: ClientPerspective;
+    sourceMap?: ContentSourceMap;
   }>;
 };
 
 let sanityServerClientHasBeenInitialized = false;
 
 export function createSanityClient(options: CreateSanityClientOptions) {
-  const {cache, waitUntil, config} = options;
-  const {projectId, dataset, useStega, useCdn, studioUrl, apiVersion} = config;
+  const {cache, config, waitUntil} = options;
+  const {apiVersion, dataset, projectId, studioUrl, useCdn, useStega} = config;
 
   const {client} = getSanityClient({
-    projectId,
-    dataset,
-    useCdn,
     apiVersion,
-    useStega,
+    dataset,
+    projectId,
     studioUrl,
+    useCdn,
+    useStega,
   });
 
   if (!sanityServerClientHasBeenInitialized) {
@@ -68,9 +69,9 @@ export function createSanityClient(options: CreateSanityClientOptions) {
   const sanity: Sanity = {
     client,
     async query({
+      cache: strategy = CacheShort(),
       groqdQuery,
       params,
-      cache: strategy = CacheShort(),
       queryOptions,
     }) {
       const {query} = groqdQuery as GroqdQuery;

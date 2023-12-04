@@ -1,4 +1,5 @@
 import type {HTMLMotionProps} from 'framer-motion';
+
 import {LazyMotion, m} from 'framer-motion';
 
 export function Animation(

@@ -1,8 +1,9 @@
 import type {HistoryUpdate} from '@sanity/overlays';
-import {useEffect, useRef} from 'react';
+
 import {useFetcher, useLocation, useNavigate} from '@remix-run/react';
 import {enableOverlays} from '@sanity/overlays';
 import {cx} from 'class-variance-authority';
+import {useEffect, useRef} from 'react';
 
 import {useEnvironmentVariables} from '~/hooks/useEnvironmentVariables';
 import {useIsInIframe} from '~/hooks/useIsInIframe';
@@ -14,7 +15,7 @@ export function VisualEditing() {
   const isInIframe = useIsInIframe();
   const navigateRemix = useNavigate();
   const location = useLocation();
-  const navigateComposerRef = useRef<null | ((update: HistoryUpdate) => void)>(
+  const navigateComposerRef = useRef<((update: HistoryUpdate) => void) | null>(
     null,
   );
   const sanityStudioUrl = env?.SANITY_STUDIO_URL!;
@@ -25,7 +26,6 @@ export function VisualEditing() {
 
     const disable = enableOverlays({
       allowStudioOrigin: sanityStudioUrl,
-      zIndex: 999999,
       history: {
         subscribe: (navigate) => {
           navigateComposerRef.current = navigate;
@@ -41,6 +41,7 @@ export function VisualEditing() {
           }
         },
       },
+      zIndex: 999999,
     });
     return () => disable();
   }, [navigateRemix, sanityStudioUrl]);
@@ -68,17 +69,17 @@ function ExitBanner() {
     <section className="bg-gray-700 text-white">
       <div className="container py-6">
         <fetcher.Form action="/sanity/preview" method="POST">
-          <input type="hidden" name="slug" value={location.pathname} />
+          <input name="slug" type="hidden" value={location.pathname} />
           <div className="flex items-center justify-center gap-6">
             <small>Sanity Preview mode activated</small>
             <button
-              type="submit"
-              disabled={fetcher.state === 'submitting'}
               className={cx(
                 'flex h-[2.5rem] shrink-0 items-center justify-center rounded-full border border-white p-4 text-sm font-bold duration-200 ease-out',
                 'hover:bg-white hover:text-gray-700',
                 'disabled:bg-opacity-100 disabled:opacity-20',
               )}
+              disabled={fetcher.state === 'submitting'}
+              type="submit"
             >
               Exit Preview Mode
             </button>

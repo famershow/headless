@@ -1,13 +1,15 @@
 import type {TypeFromSelection} from 'groqd';
-import * as NavigationMenu from '@radix-ui/react-navigation-menu';
+
 import {CaretDownIcon} from '@radix-ui/react-icons';
+import * as NavigationMenu from '@radix-ui/react-navigation-menu';
+import {cx} from 'class-variance-authority';
 
 import type {NESTED_NAVIGATION_FRAGMENT} from '~/qroq/links';
-import {NavigationTrigger} from './NestedNavigationTrigger';
-import {SanityInternalLink} from '../sanity/link/SanityInternalLink';
+
 import {SanityExternalLink} from '../sanity/link/SanityExternalLink';
+import {SanityInternalLink} from '../sanity/link/SanityInternalLink';
 import {NestedNavigationContent} from './NestedNavigationContent';
-import {cx} from 'class-variance-authority';
+import {NavigationTrigger} from './NestedNavigationTrigger';
 
 type SanityNestedNavigationProps = TypeFromSelection<
   typeof NESTED_NAVIGATION_FRAGMENT
@@ -25,8 +27,8 @@ export function NestedNavigation(props: {data?: SanityNestedNavigationProps}) {
       <NavigationTrigger link={data.link}>
         {data.name}
         <CaretDownIcon
-          className="transition-transform duration-100 ease-in group-data-[state=open]:-rotate-180"
           aria-hidden
+          className="transition-transform duration-100 ease-in group-data-[state=open]:-rotate-180"
         />
       </NavigationTrigger>
       <NestedNavigationContent>
@@ -37,7 +39,7 @@ export function NestedNavigation(props: {data?: SanityNestedNavigationProps}) {
           ])}
         >
           {childLinks.map((child) => (
-            <NavigationMenu.Link key={child._key} asChild>
+            <NavigationMenu.Link asChild key={child._key}>
               <li
                 className={cx([
                   'rounded px-2 py-1 transition-colors duration-100',
@@ -60,11 +62,11 @@ export function NestedNavigation(props: {data?: SanityNestedNavigationProps}) {
     // Render internal link if no child links
     <SanityInternalLink
       data={{
-        _type: 'internalLink',
         _key: data._key,
-        name: data.name,
-        link: data.link,
+        _type: 'internalLink',
         anchor: null,
+        link: data.link,
+        name: data.name,
       }}
     />
   ) : null;

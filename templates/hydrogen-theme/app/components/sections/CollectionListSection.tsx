@@ -1,10 +1,13 @@
 import type {TypeFromSelection} from 'groqd';
-import {Suspense} from 'react';
-import {Await, useLoaderData} from '@remix-run/react';
 
-import type {COLLECTION_LIST_SECTION_FRAGMENT} from '~/qroq/sections';
-import type {loader as indexLoader} from '../../routes/_index';
+import {Await, useLoaderData} from '@remix-run/react';
+import {Suspense} from 'react';
+
 import type {SectionDefaultProps} from '~/lib/type';
+import type {COLLECTION_LIST_SECTION_FRAGMENT} from '~/qroq/sections';
+
+import type {loader as indexLoader} from '../../routes/_index';
+
 import {CollectionListGrid} from '../CollectionListGrid';
 
 type CollectionListSectionProps = TypeFromSelection<
@@ -35,8 +38,8 @@ export function CollectionListSection(
           return (
             <div className="container">
               <CollectionListGrid
-                columns={props.data.desktopColumns}
                 collections={collections}
+                columns={props.data.desktopColumns}
               />
             </div>
           );

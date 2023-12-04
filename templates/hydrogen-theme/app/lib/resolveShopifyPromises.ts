@@ -1,12 +1,14 @@
 import type {Storefront} from '@shopify/hydrogen';
 import type {InferType} from 'groqd';
-import {parseGid} from '@shopify/hydrogen';
-
 import type {
   CollectionsQuery,
   FeaturedCollectionQuery,
 } from 'storefrontapi.generated';
+
+import {parseGid} from '@shopify/hydrogen';
+
 import type {PAGE_QUERY} from '~/qroq/queries';
+
 import {COLLECTIONS_QUERY, FEATURED_COLLECTION_QUERY} from '~/graphql/queries';
 
 type SanityPageData = InferType<typeof PAGE_QUERY>;
@@ -34,7 +36,7 @@ export function resolveShopifyPromises({
     storefront,
   });
 
-  return {featuredCollectionPromise, collectionListPromise};
+  return {collectionListPromise, featuredCollectionPromise};
 }
 
 function resolveFeaturedCollectionPromise({
@@ -54,9 +56,9 @@ function resolveFeaturedCollectionPromise({
 
       const promise = storefront.query(FEATURED_COLLECTION_QUERY, {
         variables: {
-          id: gid,
-          first,
           country: storefront.i18n.country,
+          first,
+          id: gid,
           language: storefront.i18n.language,
         },
       });
@@ -90,10 +92,10 @@ function resolveCollectionListPromise({
 
       const promise = storefront.query(COLLECTIONS_QUERY, {
         variables: {
-          first,
-          query,
           country: storefront.i18n.country,
+          first,
           language: storefront.i18n.language,
+          query,
         },
       });
 

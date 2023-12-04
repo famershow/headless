@@ -11,13 +11,14 @@ import {
   createRequestHandler,
   getStorefrontHeaders,
 } from '@shopify/remix-oxygen';
-
 import {getLocaleFromRequest} from 'countries';
-import {createSanityClient} from './app/lib/sanity/sanity.server';
+
 import {CART_QUERY_FRAGMENT} from '~/graphql/fragments';
 import {envVariables} from '~/lib/env.server';
 import {HydrogenSession} from '~/lib/hydrogen.session.server';
 import {SanitySession} from '~/lib/sanity/sanity.session.server';
+
+import {createSanityClient} from './app/lib/sanity/sanity.server';
 
 /*
  * Export a fetch handler in module format.
@@ -53,14 +54,14 @@ export default {
        */
       const {storefront} = createStorefrontClient({
         cache,
-        waitUntil,
-        i18n: {language: locale.language, country: locale.country},
-        publicStorefrontToken: env.PUBLIC_STOREFRONT_API_TOKEN,
+        i18n: {country: locale.country, language: locale.language},
         privateStorefrontToken: env.PRIVATE_STOREFRONT_API_TOKEN,
-        storefrontApiVersion: env.PUBLIC_STOREFRONT_API_VERSION || '2023-10',
+        publicStorefrontToken: env.PUBLIC_STOREFRONT_API_TOKEN,
         storeDomain: env.PUBLIC_STORE_DOMAIN,
-        storefrontId: env.PUBLIC_STOREFRONT_ID,
+        storefrontApiVersion: env.PUBLIC_STOREFRONT_API_VERSION || '2023-10',
         storefrontHeaders: getStorefrontHeaders(request),
+        storefrontId: env.PUBLIC_STOREFRONT_ID,
+        waitUntil,
       });
 
       /*
@@ -68,10 +69,10 @@ export default {
        * create and update the cart in the session.
        */
       const cart = createCartHandler({
-        storefront,
+        cartQueryFragment: CART_QUERY_FRAGMENT,
         getCartId: cartGetIdDefault(request.headers),
         setCartId: cartSetIdDefault(),
-        cartQueryFragment: CART_QUERY_FRAGMENT,
+        storefront,
       });
 
       /*
@@ -79,15 +80,15 @@ export default {
        */
       const sanity = createSanityClient({
         cache,
-        waitUntil,
         config: {
-          projectId: envVars.SANITY_STUDIO_PROJECT_ID,
-          dataset: envVars.SANITY_STUDIO_DATASET,
           apiVersion: envVars.SANITY_STUDIO_API_VERSION,
+          dataset: envVars.SANITY_STUDIO_DATASET,
+          projectId: envVars.SANITY_STUDIO_PROJECT_ID,
+          studioUrl: envVars.SANITY_STUDIO_URL,
           useCdn: envVars.NODE_ENV === 'production',
           useStega: envVars.SANITY_STUDIO_USE_STEGA,
-          studioUrl: envVars.SANITY_STUDIO_URL,
         },
+        waitUntil,
       });
 
       /*
@@ -96,19 +97,19 @@ export default {
        */
       const handleRequest = createRequestHandler({
         build: remixBuild,
-        mode: process.env.NODE_ENV,
         getLoadContext: () => ({
-          session,
-          sanitySession,
-          sanityPreviewMode,
-          storefront,
           cart,
           env: envVars,
-          waitUntil,
-          sanity,
-          locale,
           isDev,
+          locale,
+          sanity,
+          sanityPreviewMode,
+          sanitySession,
+          session,
+          storefront,
+          waitUntil,
         }),
+        mode: process.env.NODE_ENV,
       });
 
       const response = await handleRequest(request);

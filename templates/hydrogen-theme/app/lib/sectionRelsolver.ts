@@ -3,9 +3,14 @@ import {lazy} from 'react';
 export const sections: {
   [key: string]: React.FC<any>;
 } = {
-  imageBannerSection: lazy(() =>
-    import('../components/sections/ImageBannerSection').then((module) => ({
-      default: module.ImageBannerSection,
+  collectionListSection: lazy(() =>
+    import('../components/sections/CollectionListSection').then((module) => ({
+      default: module.CollectionListSection,
+    })),
+  ),
+  ctaSection: lazy(() =>
+    import('../components/sections/CtaSection').then((module) => ({
+      default: module.CtaSection,
     })),
   ),
   featuredCollectionSection: lazy(() =>
@@ -15,14 +20,9 @@ export const sections: {
       }),
     ),
   ),
-  collectionListSection: lazy(() =>
-    import('../components/sections/CollectionListSection').then((module) => ({
-      default: module.CollectionListSection,
-    })),
-  ),
-  ctaSection: lazy(() =>
-    import('../components/sections/CtaSection').then((module) => ({
-      default: module.CtaSection,
+  imageBannerSection: lazy(() =>
+    import('../components/sections/ImageBannerSection').then((module) => ({
+      default: module.ImageBannerSection,
     })),
   ),
   socialLinksOnly: lazy(() =>
