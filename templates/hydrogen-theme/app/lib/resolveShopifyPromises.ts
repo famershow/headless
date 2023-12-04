@@ -18,9 +18,9 @@ type PromiseResolverArgs = {
 };
 
 /**
- * Looks for promises in the sections of the given document.
- * For example if a page contains a **Featured Collection Section**, a promise to fetch the `collection` data is needed.
- * The promise will be resolved within the component.
+ * Looks for promises in a list of sections of the given Sanity document.
+ * For example if a Sanity page contains a **Featured Collection Section**, a promise to fetch
+ * the `collection` data is needed. The promise will be resolved within the component.
  */
 export function resolveShopifyPromises({
   document,
@@ -67,7 +67,13 @@ function resolveFeaturedCollectionPromise({
     }
   });
 
-  const featuredCollectionPromise = Promise.all(promises);
+  /**
+   * Promise.allSettled is used to resolve all promises even if one of them fails.
+   * This is useful when a page contains multiple sections that fetch data from Shopify.
+   * If one of the promises fails, the page will still be rendered and only
+   * the section that failed will be empty.
+   */
+  const featuredCollectionPromise = Promise.allSettled(promises);
 
   return featuredCollectionPromise;
 }
@@ -103,7 +109,13 @@ function resolveCollectionListPromise({
     }
   });
 
-  const collectionListPromise = Promise.all(promises);
+  /**
+   * Promise.allSettled is used to resolve all promises even if one of them fails.
+   * This is useful when a page contains multiple sections that fetch data from Shopify.
+   * If one of the promises fails, the page will still be rendered and only
+   * the section that failed will be empty.
+   */
+  const collectionListPromise = Promise.allSettled(promises);
 
   return collectionListPromise;
 }

@@ -1,4 +1,5 @@
 import type {TypeFromSelection} from 'groqd';
+import type {ProductCardFragment} from 'storefrontapi.generated';
 
 import {Await, useLoaderData} from '@remix-run/react';
 import {flattenConnection} from '@shopify/hydrogen';
@@ -15,50 +16,34 @@ type FeaturedCollectionSectionProps = TypeFromSelection<
   typeof FEATURED_COLLECTION_SECTION_FRAGMENT
 >;
 
+/**
+ * `FeaturedCollectionSection` is a section that displays a collection of products.
+ * The collection data is fetched from Shopify using the `featuredCollectionPromise`
+ * returned by the loader. The data is streamed to the client so we need to use a `Suspense`
+ * component and to display a `Skeleton` while waiting for the data to be available.
+ */
 export function FeaturedCollectionSection(
   props: SectionDefaultProps & {data: FeaturedCollectionSectionProps},
 ) {
-  const loaderData = useLoaderData<typeof indexLoader>();
-  const featuredCollectionPromise = loaderData?.featuredCollectionPromise;
-  const gid = props.data?.collection?.store.gid;
-
   return (
     <div className="container">
       <h2>{props.data.collection?.store.title}</h2>
-      {featuredCollectionPromise ? (
-        <Suspense
-          fallback={
-            <Skeleton
-              cardsNumber={props.data.maxProducts || 3}
-              columns={props.data.desktopColumns || 3}
-            />
-          }
-        >
-          <Await resolve={featuredCollectionPromise}>
-            {(data) => {
-              // Resolve the collection data from Shopify with the gid from Sanity
-              const collection = data.find(
-                ({collection}) => gid?.includes(collection?.id!),
-              )?.collection;
-
-              const products =
-                collection?.products?.nodes &&
-                collection?.products?.nodes?.length > 1
-                  ? flattenConnection(collection?.products)
-                  : [];
-
-              return collection ? (
-                <>
-                  <ProductCardGrid
-                    columns={props.data.desktopColumns}
-                    products={products}
-                  />
-                </>
-              ) : null;
-            }}
-          </Await>
-        </Suspense>
-      ) : null}
+      <AwaitFeaturedCollection
+        fallback={
+          <Skeleton
+            cardsNumber={props.data.maxProducts || 3}
+            columns={props.data.desktopColumns || 3}
+          />
+        }
+        sanityData={props.data}
+      >
+        {(products) => (
+          <ProductCardGrid
+            columns={props.data.desktopColumns}
+            products={products}
+          />
+        )}
+      </AwaitFeaturedCollection>
     </div>
   );
 }
@@ -73,5 +58,45 @@ function Skeleton(props: {cardsNumber: number; columns: number}) {
         }}
       />
     </div>
+  );
+}
+
+function AwaitFeaturedCollection(props: {
+  children: (products: ProductCardFragment[]) => React.ReactNode;
+  fallback: React.ReactNode;
+  sanityData: FeaturedCollectionSectionProps;
+}) {
+  const loaderData = useLoaderData<typeof indexLoader>();
+  const featuredCollectionPromise = loaderData?.featuredCollectionPromise;
+  const sanityCollectionGid = props.sanityData?.collection?.store.gid;
+
+  return (
+    <Suspense fallback={props.fallback}>
+      <Await resolve={featuredCollectionPromise}>
+        {(data) => {
+          // Resolve the collection data from Shopify with the gid from Sanity
+          const collection = data.map((result) => {
+            // Check if the promise is fulfilled
+            if (result.status === 'fulfilled') {
+              const {collection} = result.value;
+              // Check if the gid from Sanity is the same as the gid from Shopify
+              if (sanityCollectionGid?.includes(collection?.id!)) {
+                return collection;
+              }
+            }
+
+            return null;
+          })[0];
+
+          const products =
+            collection?.products?.nodes &&
+            collection?.products?.nodes?.length > 1
+              ? flattenConnection(collection?.products)
+              : [];
+
+          return <>{products && props.children(products)}</>;
+        }}
+      </Await>
+    </Suspense>
   );
 }
