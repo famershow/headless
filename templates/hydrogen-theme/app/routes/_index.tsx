@@ -51,6 +51,5 @@ export async function loader({context}: LoaderFunctionArgs) {
 /*
  * Homepage route component is the same as the page route component
  * so we can just export the page route component as the homepage route component.
- * Homepage loader needs to return a cmsPage object.
  */
 export default PageRoute;

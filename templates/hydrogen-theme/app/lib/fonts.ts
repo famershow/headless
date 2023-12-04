@@ -1,3 +1,7 @@
+import type {InferType} from 'groqd';
+
+import type {FONTS_QUERY} from '~/qroq/queries';
+
 import {getFonts} from '~/components/Fonts';
 
 type PreloadLink = {
@@ -9,18 +13,24 @@ type PreloadLink = {
   type: string;
 };
 
-export function generateFontsPreloadLinks({fontsData}: {fontsData: any}) {
+type FontsData = InferType<typeof FONTS_QUERY>;
+
+export function generateFontsPreloadLinks({
+  fontsData,
+}: {
+  fontsData?: FontsData;
+}) {
   const fonts = fontsData ? getFonts({fontsData}) : [];
   const preloadLinks: Array<PreloadLink> = [];
-  const fontTypes = ['woff2', 'woff', 'ttf'];
+  const fontTypes = ['woff2', 'woff', 'ttf'] as const;
 
-  fonts.forEach((font: any) => {
+  fonts.forEach((font) => {
     fontTypes.forEach((fontType) => {
       if (font[fontType]) {
         preloadLinks.push({
           as: 'font',
           crossOrigin: 'anonymous',
-          href: font[fontType].url,
+          href: font[fontType]?.url!,
           rel: 'preload',
           tagName: 'link',
           type: `font/${fontType}`,
