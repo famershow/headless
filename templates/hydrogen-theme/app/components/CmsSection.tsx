@@ -84,15 +84,17 @@ function SectionWrapper(props: {
   );
 }
 
-function MissingSection({type}: {type?: string}) {
+function MissingSection(props: {type?: string}) {
   return (
     <section className="w-full bg-slate-800 text-white">
       <div className="container py-10 text-center">
         <div className="rounded-md border-2 border-dashed border-gray-400 px-5 py-10">
           <div>
             The section component{' '}
-            {type && <strong className="px-2 text-xl">{type}</strong>} does not
-            exist yet.
+            {props.type && (
+              <strong className="px-2 text-xl">{props.type}</strong>
+            )}{' '}
+            does not exist yet.
           </div>
         </div>
       </div>

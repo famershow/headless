@@ -29,11 +29,14 @@ export async function loader({context, params, request}: LoaderFunctionArgs) {
     params: queryParams,
   });
 
-  const {collectionListPromise, featuredCollectionPromise} =
-    resolveShopifyPromises({
-      document: page,
-      storefront,
-    });
+  const {
+    collectionListPromise,
+    featuredCollectionPromise,
+    featuredProductPromise,
+  } = resolveShopifyPromises({
+    document: page,
+    storefront,
+  });
 
   if (!page.data) {
     throw new Response(null, {
@@ -45,6 +48,7 @@ export async function loader({context, params, request}: LoaderFunctionArgs) {
   return defer({
     collectionListPromise,
     featuredCollectionPromise,
+    featuredProductPromise,
     page,
     ...sanityPreviewPayload({
       context,

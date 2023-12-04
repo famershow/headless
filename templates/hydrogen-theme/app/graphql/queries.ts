@@ -46,6 +46,32 @@ ${MEDIA_FRAGMENT}
 ${PRODUCT_VARIANT_FRAGMENT}
 ` as const;
 
+export const FEATURED_PRODUCT_QUERY = `#graphql
+query FeaturedProduct(
+  $country: CountryCode
+  $language: LanguageCode
+  $id: ID!
+) @inContext(country: $country, language: $language) {
+  product(id: $id) {
+    id
+    title
+    vendor
+    handle
+    descriptionHtml
+    options {
+      name
+      values
+    }
+    variants(first: 1) {
+      nodes {
+        ...ProductVariantFragment
+      }
+    }
+  }
+}
+${PRODUCT_VARIANT_FRAGMENT}
+` as const;
+
 export const RECOMMENDED_PRODUCTS_QUERY = `#graphql
   query productRecommendations(
     $productId: ID!

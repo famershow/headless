@@ -29,14 +29,16 @@ import footersList from './objects/global/footersList';
 import socialLinksOnly from './objects/footers/socialLinksOnly';
 import overlayOpacity from './objects/global/overlayOpacity';
 import contentAlignment from './objects/global/contentAlignment';
-import featuredCollection from './objects/sections/featuredCollection';
+import featuredCollection from './objects/sections/featuredCollectionSection';
 import collectionListSection from './objects/sections/collectionListSection';
+import featuredProductSection from './objects/sections/featuredProductSection';
 
 const singletons = [home, header, footer, settings, themeContent];
 const documents = [page, color, collection, product, blogPost, productVariant];
 const sections = [
   imageBannerSection,
   featuredCollection,
+  featuredProductSection,
   collectionListSection,
   ctaSection,
 ];

@@ -70,7 +70,13 @@ function AwaitFeaturedCollection(props: {
   const featuredCollectionPromise = loaderData?.featuredCollectionPromise;
   const sanityCollectionGid = props.sanityData?.collection?.store.gid;
 
-  return (
+  if (!featuredCollectionPromise) {
+    console.warn(
+      '[FeaturedCollectionSection] No featuredCollectionPromise found in loader data.',
+    );
+  }
+
+  return featuredCollectionPromise ? (
     <Suspense fallback={props.fallback}>
       <Await
         // Todo => Add an error component
@@ -102,5 +108,5 @@ function AwaitFeaturedCollection(props: {
         }}
       </Await>
     </Suspense>
-  );
+  ) : null;
 }

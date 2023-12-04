@@ -53,7 +53,13 @@ function AwaitCollectionList(props: {
     ?.map((collection) => collection.store.gid)
     .join(',');
 
-  return (
+  if (!collectionListPromise) {
+    console.warn(
+      '[CollectionListSection] No collectionListPromise found in loader data.',
+    );
+  }
+
+  return collectionListPromise ? (
     <Suspense fallback={props.fallback}>
       <Await
         // Todo => Add an error component
@@ -82,5 +88,5 @@ function AwaitCollectionList(props: {
         }}
       </Await>
     </Suspense>
-  );
+  ) : null;
 }
