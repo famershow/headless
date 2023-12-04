@@ -10,7 +10,6 @@ module.exports = {
   extends: [
     '@remix-run/eslint-config',
     'plugin:perfectionist/recommended-natural',
-    // 'plugin:hydrogen/recommended', // => has conflicts with prettier v3
     'plugin:hydrogen/typescript',
   ],
   ignorePatterns: ['studio/*'],

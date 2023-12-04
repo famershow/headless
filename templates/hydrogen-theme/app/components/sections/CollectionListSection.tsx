@@ -55,7 +55,11 @@ function AwaitCollectionList(props: {
 
   return (
     <Suspense fallback={props.fallback}>
-      <Await resolve={collectionListPromise}>
+      <Await
+        // Todo => Add an error component
+        errorElement={<div>Error</div>}
+        resolve={collectionListPromise}
+      >
         {(data) => {
           // Resolve the collection list data from Shopify with the gids from Sanity
           const collections = data.map((result) => {
@@ -70,6 +74,7 @@ function AwaitCollectionList(props: {
                 ? collections
                 : null;
             }
+            // Todo => Return error component if the promise is rejected
             return null;
           })[0];
 
