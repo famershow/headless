@@ -65,7 +65,7 @@ export function FeaturedCollectionSection(
 
 function Skeleton(props: {cardsNumber: number; columns: number}) {
   return (
-    <div aria-hidden>
+    <div aria-hidden className="animate-pulse">
       <ProductCardGrid
         columns={props.columns}
         skeleton={{
