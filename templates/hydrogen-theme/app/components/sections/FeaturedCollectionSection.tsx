@@ -72,7 +72,11 @@ function AwaitFeaturedCollection(props: {
 
   return (
     <Suspense fallback={props.fallback}>
-      <Await resolve={featuredCollectionPromise}>
+      <Await
+        // Todo => Add an error component
+        errorElement={<div>Error</div>}
+        resolve={featuredCollectionPromise}
+      >
         {(data) => {
           // Resolve the collection data from Shopify with the gid from Sanity
           const collection = data.map((result) => {
@@ -84,7 +88,7 @@ function AwaitFeaturedCollection(props: {
                 return collection;
               }
             }
-
+            // Todo => Return error component if the promise is rejected
             return null;
           })[0];
 
