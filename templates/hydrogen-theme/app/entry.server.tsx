@@ -1,9 +1,9 @@
 import type {EntryContext} from '@shopify/remix-oxygen';
 
 import {RemixServer} from '@remix-run/react';
+import {createContentSecurityPolicy} from '@shopify/hydrogen';
 import isbot from 'isbot';
 import {renderToReadableStream} from 'react-dom/server';
-import {createContentSecurityPolicy} from '@shopify/hydrogen';
 
 export default async function handleRequest(
   request: Request,
@@ -11,10 +11,10 @@ export default async function handleRequest(
   responseHeaders: Headers,
   remixContext: EntryContext,
 ) {
-  const {nonce, header, NonceProvider} = createContentSecurityPolicy({
-    frameAncestors: ['localhost:*', '*.sanity.studio'],
+  const {NonceProvider, header, nonce} = createContentSecurityPolicy({
     connectSrc: ['*'],
     fontSrc: ['*.sanity.io', "'self'"],
+    frameAncestors: ['localhost:*', '*.sanity.studio'],
     imgSrc: ['*.sanity.io', 'https://cdn.shopify.com', "'self'"],
   });
 
@@ -24,12 +24,12 @@ export default async function handleRequest(
     </NonceProvider>,
     {
       nonce,
-      signal: request.signal,
       onError(error) {
         // eslint-disable-next-line no-console
         console.error(error);
         responseStatusCode = 500;
       },
+      signal: request.signal,
     },
   );
 

@@ -1,7 +1,8 @@
 import type {InferType} from 'groqd';
 
-import type {FONTS_QUERY} from '~/qroq/queries';
 import type {FONT_CATEGORY_FRAGMENT} from '~/qroq/fragments';
+import type {FONTS_QUERY} from '~/qroq/queries';
+
 import {useSanityRoot} from '~/hooks/useSanityRoot';
 
 type FontsQuery = InferType<typeof FONTS_QUERY>;
@@ -84,10 +85,10 @@ function resolveFontAssetUrls(font: FontAssetsFragment[0]) {
 
 function generateCssFontVariables({fontsData}: {fontsData: FontsQuery}) {
   const fontCategories: Array<{
+    antialiased: boolean | null;
     categoryName: string;
     fontName: string;
     fontType: string;
-    antialiased: boolean | null;
   }> = [];
 
   fontsData?.heading &&

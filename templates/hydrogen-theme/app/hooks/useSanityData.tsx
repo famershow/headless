@@ -1,19 +1,21 @@
-import type {EncodeDataAttributeCallback} from '@sanity/react-loader';
 import type {
   ClientPerspective,
   ContentSourceMap,
   QueryParams,
 } from '@sanity/client';
+import type {EncodeDataAttributeCallback} from '@sanity/react-loader';
+
 import {useLoaderData} from '@remix-run/react';
+import {useEncodeDataAttribute} from '@sanity/react-loader';
 
 import {useQuery} from '~/lib/sanity/sanity.loader';
-import {useEncodeDataAttribute} from '@sanity/react-loader';
+
 import {useEnvironmentVariables} from './useEnvironmentVariables';
 
 type Initial = {
   data: unknown;
-  sourceMap?: ContentSourceMap;
   perspective?: ClientPerspective;
+  sourceMap?: ContentSourceMap;
 };
 type InitialData<U> = U extends {data: infer V} ? V : never;
 /**
@@ -23,8 +25,8 @@ type InitialData<U> = U extends {data: infer V} ? V : never;
 export function useSanityData<T extends Initial>(initial: T) {
   const loaderData = useLoaderData<{
     sanity?: {
-      query?: string;
       params?: QueryParams;
+      query?: string;
     };
   }>();
   const sanity = loaderData?.sanity;
@@ -53,10 +55,10 @@ export function useSanityData<T extends Initial>(initial: T) {
     studioUrl,
   );
 
-  return {data, loading, sourceMap, encodeDataAttribute} as {
+  return {data, encodeDataAttribute, loading, sourceMap} as {
     data: InitialData<T>;
+    encodeDataAttribute: EncodeDataAttributeCallback;
     loading: boolean;
     sourceMap?: ContentSourceMap;
-    encodeDataAttribute: EncodeDataAttributeCallback;
   };
 }

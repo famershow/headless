@@ -1,4 +1,5 @@
 import {useSanityRoot} from '~/hooks/useSanityRoot';
+
 import {CmsSection} from '../CmsSection';
 
 export function Footer() {
@@ -13,18 +14,18 @@ export function Footer() {
         ? footerSections.map((section) => (
             <CmsSection
               data={section}
-              key={section._key}
               encodeDataAttribute={sanityRoot.encodeDataAttribute}
+              key={section._key}
             />
           ))
         : null}
       {/* Footer Section */}
       {footer ? (
         <CmsSection
-          type="footer"
           data={footer}
-          key={footer._key}
           encodeDataAttribute={sanityRoot.encodeDataAttribute}
+          key={footer._key}
+          type="footer"
         />
       ) : null}
     </>

@@ -1,19 +1,21 @@
 import type {TypeFromSelection} from 'groqd';
+
 import {Link} from '@remix-run/react';
 import {vercelStegaCleanAll} from '@sanity/client/stega';
 
 import type {INTERNAL_LINK_FRAGMENT} from '~/qroq/links';
+
 import {useLocale} from '~/hooks/useLocale';
 
 type SanityInternalLinkProps = TypeFromSelection<typeof INTERNAL_LINK_FRAGMENT>;
 
 export function SanityInternalLink(props: {
-  data?: SanityInternalLinkProps;
   children?: React.ReactNode;
   className?: string;
+  data?: SanityInternalLinkProps;
 }) {
   const locale = useLocale();
-  const {data, children, className} = props;
+  const {children, className, data} = props;
 
   if (!data) return null;
 
@@ -45,7 +47,7 @@ export function SanityInternalLink(props: {
 
   // Todo: add Navlink support
   return (
-    <Link prefetch="viewport" to={url} className={className}>
+    <Link className={className} prefetch="viewport" to={url}>
       {children ? children : name}
     </Link>
   );

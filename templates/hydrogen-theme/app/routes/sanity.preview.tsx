@@ -2,6 +2,7 @@ import type {
   ActionFunctionArgs,
   LoaderFunctionArgs,
 } from '@shopify/remix-oxygen';
+
 import {json, redirectDocument} from '@shopify/remix-oxygen';
 
 import {notFound} from '~/lib/utils';
@@ -27,7 +28,7 @@ export async function action({context, request}: ActionFunctionArgs) {
 }
 
 export async function loader({context, request}: LoaderFunctionArgs) {
-  const {sanitySession, env} = context;
+  const {env, sanitySession} = context;
   const useStega = env.SANITY_STUDIO_USE_STEGA === 'true';
 
   if (!sanitySession) {
@@ -45,7 +46,7 @@ export async function loader({context, request}: LoaderFunctionArgs) {
   };
 
   return redirectDocument(redirectTo, {
-    status: 307,
     headers,
+    status: 307,
   });
 }

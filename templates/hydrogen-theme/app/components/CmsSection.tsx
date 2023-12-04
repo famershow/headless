@@ -1,23 +1,25 @@
 import type {EncodeDataAttributeCallback} from '@sanity/react-loader';
 import type {InferType} from 'groqd';
+
 import {Suspense, useMemo} from 'react';
 
-import type {SECTIONS_FRAGMENT} from '~/qroq/sections';
 import type {FOOTERS_FRAGMENT} from '~/qroq/footers';
+import type {SECTIONS_FRAGMENT} from '~/qroq/sections';
+
 import {useIsDev} from '~/hooks/useIsDev';
-import {sections} from '~/lib/sectionRelsolver';
 import {useSettingsCssVars} from '~/hooks/useSettingsCssVars';
+import {sections} from '~/lib/sectionRelsolver';
 
 type CmsSectionsProps =
-  | NonNullable<InferType<typeof SECTIONS_FRAGMENT>>[0]
-  | NonNullable<InferType<typeof FOOTERS_FRAGMENT>>;
+  | NonNullable<InferType<typeof FOOTERS_FRAGMENT>>
+  | NonNullable<InferType<typeof SECTIONS_FRAGMENT>>[0];
 
 type CmsSectionType = 'footer' | 'section';
 
 export function CmsSection(props: {
   data: CmsSectionsProps;
-  type?: CmsSectionType;
   encodeDataAttribute?: EncodeDataAttributeCallback;
+  type?: CmsSectionType;
 }) {
   const {data, encodeDataAttribute} = props;
   const isDev = useIsDev();
@@ -25,7 +27,7 @@ export function CmsSection(props: {
   const Section = useMemo(() => sections[type], [type]);
 
   return Section ? (
-    <SectionWrapper type={props.type} data={data}>
+    <SectionWrapper data={data} type={props.type}>
       <Suspense
         fallback={
           // Todo: add skeleton component for each section type
@@ -45,7 +47,7 @@ function SectionWrapper(props: {
   data: CmsSectionsProps;
   type?: CmsSectionType;
 }) {
-  const {data, children} = props;
+  const {children, data} = props;
   const isDev = useIsDev();
   const cssVars = useSettingsCssVars({
     settings: data?.settings,
@@ -58,9 +60,9 @@ function SectionWrapper(props: {
 
   return props.type === 'footer' ? (
     <footer
+      className="color-scheme section-padding relative"
       data-footer-type={isDev ? sectionType : null}
       style={cssVars}
-      className="color-scheme section-padding relative"
     >
       {children}
       {data.settings?.customCss && (
@@ -69,10 +71,10 @@ function SectionWrapper(props: {
     </footer>
   ) : (
     <section
+      className="color-scheme section-padding relative"
       data-section-type={isDev ? sectionType : null}
       id={`section-${data._key}`}
       style={cssVars}
-      className="color-scheme section-padding relative"
     >
       {children}
       {data.settings?.customCss && (

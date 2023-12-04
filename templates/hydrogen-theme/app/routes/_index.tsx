@@ -1,19 +1,21 @@
 import type {LoaderFunctionArgs} from '@shopify/remix-oxygen';
+
 import {defer} from '@shopify/remix-oxygen';
+import {DEFAULT_LOCALE} from 'countries';
+
+import {resolveShopifyPromises} from '~/lib/resolveShopifyPromises';
+import {sanityPreviewPayload} from '~/lib/sanity/sanity.payload.server';
+import {PAGE_QUERY} from '~/qroq/queries';
 
 import PageRoute from './($locale).$';
-import {PAGE_QUERY} from '~/qroq/queries';
-import {sanityPreviewPayload} from '~/lib/sanity/sanity.payload.server';
-import {DEFAULT_LOCALE} from 'countries';
-import {resolveShopifyPromises} from '~/lib/resolveShopifyPromises';
 
 export async function loader({context}: LoaderFunctionArgs) {
   const {locale, sanity, storefront} = context;
   const language = locale?.language.toLowerCase();
   const queryParams = {
+    defaultLanguage: DEFAULT_LOCALE.language.toLowerCase(),
     handle: 'home',
     language,
-    defaultLanguage: DEFAULT_LOCALE.language.toLowerCase(),
   };
 
   const page = await sanity.query({
@@ -21,7 +23,7 @@ export async function loader({context}: LoaderFunctionArgs) {
     params: queryParams,
   });
 
-  const {featuredCollectionPromise, collectionListPromise} =
+  const {collectionListPromise, featuredCollectionPromise} =
     resolveShopifyPromises({
       document: page,
       storefront,
@@ -35,13 +37,13 @@ export async function loader({context}: LoaderFunctionArgs) {
   }
 
   return defer({
-    page,
-    featuredCollectionPromise,
     collectionListPromise,
+    featuredCollectionPromise,
+    page,
     ...sanityPreviewPayload({
-      query: PAGE_QUERY.query,
-      params: queryParams,
       context,
+      params: queryParams,
+      query: PAGE_QUERY.query,
     }),
   });
 }

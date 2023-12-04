@@ -1,13 +1,13 @@
+import type {CollectionsQuery} from 'storefrontapi.generated';
+
 import {Link} from '@remix-run/react';
 import {Image} from '@shopify/hydrogen';
 import {cx} from 'class-variance-authority';
 
-import type {CollectionsQuery} from 'storefrontapi.generated';
-
 export function CollectionCard(props: {
-  collection: CollectionsQuery['collections']['nodes'][0];
   className?: string;
-  columns?: number | null;
+  collection: CollectionsQuery['collections']['nodes'][0];
+  columns?: null | number;
 }) {
   const {collection} = props;
   const sizes = cx([
@@ -23,8 +23,8 @@ export function CollectionCard(props: {
           <Image
             aspectRatio="16/9"
             className="h-auto w-full object-cover"
-            sizes={sizes}
             data={collection.image}
+            sizes={sizes}
           />
         )}
         <div className="p-3">

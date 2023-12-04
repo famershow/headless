@@ -1,4 +1,5 @@
 import type {Selection} from 'groqd';
+
 import {q, z} from 'groqd';
 
 import {COLOR_SCHEME_FRAGMENT} from './fragments';
@@ -10,15 +11,15 @@ import {COLOR_SCHEME_FRAGMENT} from './fragments';
 */
 export const FOOTER_SETTINGS_FRAGMENT = q('settings').grab({
   colorScheme: q('colorScheme').deref().grab(COLOR_SCHEME_FRAGMENT),
-  padding: q
-    .object({
-      top: q.number().nullable(),
-      bottom: q.number().nullable(),
-    })
-    .nullable(),
   customCss: q
     .object({
       code: q.string().optional(),
+    })
+    .nullable(),
+  padding: q
+    .object({
+      bottom: q.number().nullable(),
+      top: q.number().nullable(),
     })
     .nullable(),
 });
@@ -29,9 +30,8 @@ export const FOOTER_SETTINGS_FRAGMENT = q('settings').grab({
 |--------------------------------------------------------------------------
 */
 export const FOOTER_SOCIAL_LINKS_ONLY_FRAGMENT = {
-  _type: z.enum(['socialLinksOnly']),
   _key: q.string().nullable(),
-  settings: FOOTER_SETTINGS_FRAGMENT,
+  _type: z.enum(['socialLinksOnly']),
   copyright: [
     `coalesce(
       copyright[_key == $language][0].value,
@@ -39,6 +39,7 @@ export const FOOTER_SOCIAL_LINKS_ONLY_FRAGMENT = {
     )`,
     q.string(),
   ],
+  settings: FOOTER_SETTINGS_FRAGMENT,
 } satisfies Selection;
 
 /*

@@ -1,19 +1,19 @@
+import type {ProductCardFragment} from 'storefrontapi.generated';
+
 import {Link} from '@remix-run/react';
-import {flattenConnection, Image, Money} from '@shopify/hydrogen';
+import {Image, Money, flattenConnection} from '@shopify/hydrogen';
 import {cx} from 'class-variance-authority';
 import {LazyMotion, m} from 'framer-motion';
 
-import type {ProductCardFragment} from 'storefrontapi.generated';
-
 export function ProductCard(props: {
-  product?: ProductCardFragment;
   className?: string;
-  columns?: number | null;
+  columns?: null | number;
+  product?: ProductCardFragment;
   skeleton?: {
     cardsNumber?: number;
   };
 }) {
-  const {product, columns, skeleton} = props;
+  const {columns, product, skeleton} = props;
   const firstVariant = product ? flattenConnection(product?.variants)[0] : null;
   const sizes = cx([
     '(min-width: 1024px)',
@@ -27,10 +27,10 @@ export function ProductCard(props: {
         <Link prefetch="viewport" to={`/products/${product.handle}`}>
           {firstVariant?.image && (
             <Image
-              className="h-auto w-full object-cover"
               aspectRatio="16/9"
-              sizes={sizes}
+              className="h-auto w-full object-cover"
               data={firstVariant.image}
+              sizes={sizes}
             />
           )}
           <div className="p-3">
@@ -54,8 +54,8 @@ function Skeleton() {
     <LazyMotion features={loadFeatures} strict>
       <m.div
         animate={{opacity: [0.3, 1, 0.3]}}
-        transition={{repeatType: 'loop', duration: 3, repeat: Infinity}}
         className="aspect-video w-full bg-slate-200"
+        transition={{duration: 3, repeat: Infinity, repeatType: 'loop'}}
       />
       <div className="p-3 text-black/0">
         <div className="text-lg">

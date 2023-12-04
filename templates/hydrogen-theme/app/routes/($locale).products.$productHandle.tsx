@@ -1,24 +1,25 @@
 import type {Storefront} from '@shopify/hydrogen';
 import type {LoaderFunctionArgs} from '@shopify/remix-oxygen';
+import type {ProductQuery} from 'storefrontapi.generated';
+
+import {useLoaderData} from '@remix-run/react';
 import {getSelectedProductOptions} from '@shopify/hydrogen';
 import {defer, redirect} from '@shopify/remix-oxygen';
-import {useLoaderData} from '@remix-run/react';
+import {DEFAULT_LOCALE} from 'countries';
 import invariant from 'tiny-invariant';
 
-import type {ProductQuery} from 'storefrontapi.generated';
 import {
   PRODUCT_QUERY,
   RECOMMENDED_PRODUCTS_QUERY,
   VARIANTS_QUERY,
 } from '~/graphql/queries';
-import {PRODUCT_QUERY as CMS_PRODUCT_QUERY} from '~/qroq/queries';
-import {sanityPreviewPayload} from '~/lib/sanity/sanity.payload.server';
 import {useSanityData} from '~/hooks/useSanityData';
-import {DEFAULT_LOCALE} from 'countries';
+import {sanityPreviewPayload} from '~/lib/sanity/sanity.payload.server';
+import {PRODUCT_QUERY as CMS_PRODUCT_QUERY} from '~/qroq/queries';
 
 export async function loader({context, params, request}: LoaderFunctionArgs) {
   const {productHandle} = params;
-  const {storefront, sanity, locale} = context;
+  const {locale, sanity, storefront} = context;
   const language = locale?.language.toLowerCase();
 
   invariant(productHandle, 'Missing productHandle param, check route filename');
@@ -26,9 +27,9 @@ export async function loader({context, params, request}: LoaderFunctionArgs) {
   const selectedOptions = getSelectedProductOptions(request);
 
   const queryParams = {
-    productHandle,
-    language,
     defaultLanguage: DEFAULT_LOCALE.language.toLowerCase(),
+    language,
+    productHandle,
   };
 
   const productData = Promise.all([
@@ -38,10 +39,10 @@ export async function loader({context, params, request}: LoaderFunctionArgs) {
     }),
     storefront.query<ProductQuery>(PRODUCT_QUERY, {
       variables: {
-        handle: productHandle,
-        selectedOptions,
         country: context.storefront.i18n.country,
+        handle: productHandle,
         language: context.storefront.i18n.language,
+        selectedOptions,
       },
     }),
   ]);
@@ -63,8 +64,8 @@ export async function loader({context, params, request}: LoaderFunctionArgs) {
   // this deferred query resolves, the UI will update.
   const variants = context.storefront.query(VARIANTS_QUERY, {
     variables: {
-      handle: productHandle,
       country: context.storefront.i18n.country,
+      handle: productHandle,
       language: context.storefront.i18n.language,
     },
   });
@@ -77,14 +78,14 @@ export async function loader({context, params, request}: LoaderFunctionArgs) {
   const selectedVariant = product.selectedVariant ?? firstVariant;
 
   return defer({
-    variants,
-    product,
     cmsProduct,
+    product,
     recommended,
+    variants,
     ...sanityPreviewPayload({
-      query: CMS_PRODUCT_QUERY.query,
-      params: queryParams,
       context,
+      params: queryParams,
+      query: CMS_PRODUCT_QUERY.query,
     }),
   });
 }
@@ -109,7 +110,7 @@ function redirectToFirstVariant({
 }
 
 export default function Product() {
-  const {product, cmsProduct} = useLoaderData<typeof loader>();
+  const {cmsProduct, product} = useLoaderData<typeof loader>();
   const {data} = useSanityData(cmsProduct);
 
   return (
@@ -124,7 +125,7 @@ async function getRecommendedProducts(
   productId: string,
 ) {
   const products = await storefront.query(RECOMMENDED_PRODUCTS_QUERY, {
-    variables: {productId, count: 12},
+    variables: {count: 12, productId},
   });
 
   invariant(products, 'No data returned from Shopify API');

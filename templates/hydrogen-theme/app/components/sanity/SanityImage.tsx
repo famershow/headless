@@ -2,17 +2,18 @@ import imageUrlBuilder from '@sanity/image-url';
 import {cx} from 'class-variance-authority';
 
 import type {SanityImageFragment} from '~/lib/type';
+
 import {useEnvironmentVariables} from '~/hooks/useEnvironmentVariables';
 
 export function SanityImage(props: {
-  data?: SanityImageFragment | null;
   className?: string;
-  style?: React.CSSProperties;
-  sizes?: string | null;
-  loading?: 'lazy' | 'eager';
+  data?: SanityImageFragment | null;
+  loading?: 'eager' | 'lazy';
   sanityEncodeData?: string;
+  sizes?: null | string;
+  style?: React.CSSProperties;
 }) {
-  const {data, className, style, sizes, loading, sanityEncodeData} = props;
+  const {className, data, loading, sanityEncodeData, sizes, style} = props;
   const env = useEnvironmentVariables();
 
   if (!data) {
@@ -20,8 +21,8 @@ export function SanityImage(props: {
   }
 
   const urlBuilder = imageUrlBuilder({
-    projectId: env?.SANITY_STUDIO_PROJECT_ID!,
     dataset: env?.SANITY_STUDIO_DATASET!,
+    projectId: env?.SANITY_STUDIO_PROJECT_ID!,
   })
     .image({
       _ref: data._ref,
@@ -54,7 +55,13 @@ export function SanityImage(props: {
 
   return (
     <img
+      alt={data.altText || ''}
       className={cx([className, 'object-[var(--focalX)_var(--focalY)]'])}
+      // Adding this attribute makes sure the image is always clickable in the Presentation tool
+      data-sanity={sanityEncodeData}
+      height={data.height}
+      loading={loading}
+      sizes={sizes || undefined}
       src={urlDefault}
       srcSet={srcSet}
       style={
@@ -64,13 +71,7 @@ export function SanityImage(props: {
           ...style,
         } as React.CSSProperties
       }
-      sizes={sizes || undefined}
       width={data.width}
-      height={data.height}
-      loading={loading}
-      alt={data.altText || ''}
-      // Adding this attribute makes sure the image is always clickable in the Presentation tool
-      data-sanity={sanityEncodeData}
     />
   );
 }

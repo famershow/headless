@@ -1,4 +1,5 @@
 import type {Selection} from 'groqd';
+
 import {q, z} from 'groqd';
 
 import {COLOR_SCHEME_FRAGMENT, IMAGE_FRAGMENT} from './fragments';
@@ -22,15 +23,15 @@ export const contentAlignmentValues = [
 */
 export const SECTION_SETTINGS_FRAGMENT = q('settings').grab({
   colorScheme: q('colorScheme').deref().grab(COLOR_SCHEME_FRAGMENT),
-  padding: q
-    .object({
-      top: q.number().nullable(),
-      bottom: q.number().nullable(),
-    })
-    .nullable(),
   customCss: q
     .object({
       code: q.string().optional(),
+    })
+    .nullable(),
+  padding: q
+    .object({
+      bottom: q.number().nullable(),
+      top: q.number().nullable(),
     })
     .nullable(),
 });
@@ -41,14 +42,14 @@ export const SECTION_SETTINGS_FRAGMENT = q('settings').grab({
 |--------------------------------------------------------------------------
 */
 export const IMAGE_BANNER_SECTION_FRAGMENT = {
-  _type: z.enum(['imageBannerSection']),
   _key: q.string().nullable(),
-  settings: SECTION_SETTINGS_FRAGMENT,
+  _type: z.enum(['imageBannerSection']),
+  animateContent: q.boolean().nullable(),
   backgroundImage: q('backgroundImage').grab(IMAGE_FRAGMENT).nullable(),
   bannerHeight: q.number().nullable(),
-  overlayOpacity: q.number().nullable(),
   contentAlignment: z.enum(contentAlignmentValues).nullable(),
-  animateContent: q.boolean().nullable(),
+  overlayOpacity: q.number().nullable(),
+  settings: SECTION_SETTINGS_FRAGMENT,
   title: [
     `coalesce(
       title[_key == $language][0].value,
@@ -64,8 +65,8 @@ export const IMAGE_BANNER_SECTION_FRAGMENT = {
 |--------------------------------------------------------------------------
 */
 export const FEATURED_COLLECTION_SECTION_FRAGMENT = {
-  _type: z.enum(['featuredCollectionSection']),
   _key: q.string().nullable(),
+  _type: z.enum(['featuredCollectionSection']),
   collection: q('collection')
     .deref()
     .grab({
@@ -75,8 +76,8 @@ export const FEATURED_COLLECTION_SECTION_FRAGMENT = {
       }),
     })
     .nullable(),
-  maxProducts: q.number().nullable(),
   desktopColumns: q.number().nullable(),
+  maxProducts: q.number().nullable(),
   settings: SECTION_SETTINGS_FRAGMENT,
 } satisfies Selection;
 
@@ -86,8 +87,8 @@ export const FEATURED_COLLECTION_SECTION_FRAGMENT = {
 |--------------------------------------------------------------------------
 */
 export const COLLECTION_LIST_SECTION_FRAGMENT = {
-  _type: z.enum(['collectionListSection']),
   _key: q.string().nullable(),
+  _type: z.enum(['collectionListSection']),
   collections: q('collections[]', {isArray: true})
     .deref()
     .grab({
@@ -106,8 +107,8 @@ export const COLLECTION_LIST_SECTION_FRAGMENT = {
 |--------------------------------------------------------------------------
 */
 export const CTA_SECTION_FRAGMENT = {
-  _type: z.enum(['ctaSection']),
   _key: q.string().nullable(),
+  _type: z.enum(['ctaSection']),
   settings: SECTION_SETTINGS_FRAGMENT,
   title: [
     `coalesce(
@@ -124,10 +125,10 @@ export const CTA_SECTION_FRAGMENT = {
 |--------------------------------------------------------------------------
 */
 export const SECTIONS_LIST_SELECTION = {
-  "_type == 'imageBannerSection'": IMAGE_BANNER_SECTION_FRAGMENT,
-  "_type == 'featuredCollectionSection'": FEATURED_COLLECTION_SECTION_FRAGMENT,
   "_type == 'collectionListSection'": COLLECTION_LIST_SECTION_FRAGMENT,
   "_type == 'ctaSection'": CTA_SECTION_FRAGMENT,
+  "_type == 'featuredCollectionSection'": FEATURED_COLLECTION_SECTION_FRAGMENT,
+  "_type == 'imageBannerSection'": IMAGE_BANNER_SECTION_FRAGMENT,
 };
 
 /*

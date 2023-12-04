@@ -1,11 +1,14 @@
 import type {TypeFromSelection} from 'groqd';
-import {Suspense} from 'react';
+
 import {Await, useLoaderData} from '@remix-run/react';
 import {flattenConnection} from '@shopify/hydrogen';
+import {Suspense} from 'react';
 
-import type {FEATURED_COLLECTION_SECTION_FRAGMENT} from '~/qroq/sections';
-import type {loader as indexLoader} from '../../routes/_index';
 import type {SectionDefaultProps} from '~/lib/type';
+import type {FEATURED_COLLECTION_SECTION_FRAGMENT} from '~/qroq/sections';
+
+import type {loader as indexLoader} from '../../routes/_index';
+
 import {ProductCardGrid} from '../ProductCardGrid';
 
 type FeaturedCollectionSectionProps = TypeFromSelection<
@@ -60,7 +63,7 @@ export function FeaturedCollectionSection(
   );
 }
 
-function Skeleton(props: {columns: number; cardsNumber: number}) {
+function Skeleton(props: {cardsNumber: number; columns: number}) {
   return (
     <div aria-hidden>
       <ProductCardGrid

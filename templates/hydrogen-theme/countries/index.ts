@@ -1,29 +1,30 @@
+/* eslint perfectionist/sort-objects: 0 */
 import type {I18nLocale, Localizations} from '../app/lib/type';
 
 export const countries: Localizations = {
   default: {
-    label: 'United States (USD $)',
-    language: 'EN',
-    languageLabel: 'English',
     country: 'US',
     currency: 'USD',
     isoCode: 'en-us',
+    label: 'United States (USD $)',
+    language: 'EN',
+    languageLabel: 'English',
   },
   '/fr': {
-    label: 'France (EUR €)',
-    language: 'FR',
-    languageLabel: 'French',
     country: 'FR',
     currency: 'EUR',
     isoCode: 'fr-fr',
+    label: 'France (EUR €)',
+    language: 'FR',
+    languageLabel: 'French',
   },
   '/gb': {
-    label: 'United Kingdom (GBP £)',
-    language: 'EN',
-    languageLabel: 'English',
     country: 'GB',
     currency: 'GBP',
     isoCode: 'gb-en',
+    label: 'United Kingdom (GBP £)',
+    language: 'EN',
+    languageLabel: 'English',
   },
 };
 

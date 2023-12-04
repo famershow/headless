@@ -1,23 +1,24 @@
-import type {TypeFromSelection} from 'groqd';
+import type {EncodeDataAttributeCallback} from '@sanity/react-loader';
 import type {
   CountryCode,
   CurrencyCode,
   LanguageCode,
 } from '@shopify/hydrogen/storefront-api-types';
+import type {TypeFromSelection} from 'groqd';
+
 import type {IMAGE_FRAGMENT} from '~/qroq/fragments';
-import type {EncodeDataAttributeCallback} from '@sanity/react-loader';
 
 export type I18nLocale = Locale & {
   pathPrefix: string;
 };
 
 export type Locale = {
-  language: LanguageCode;
-  languageLabel: string;
   country: CountryCode;
-  label: string;
   currency: CurrencyCode;
   isoCode: string;
+  label: string;
+  language: LanguageCode;
+  languageLabel: string;
 };
 
 export type Localizations = Record<string, Locale>;

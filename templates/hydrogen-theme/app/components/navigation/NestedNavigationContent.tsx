@@ -1,6 +1,7 @@
 import type {CSSProperties} from 'react';
-import {useMemo} from 'react';
+
 import * as NavigationMenu from '@radix-ui/react-navigation-menu';
+import {useMemo} from 'react';
 
 import {useSanityRoot} from '~/hooks/useSanityRoot';
 
@@ -19,12 +20,12 @@ export function NestedNavigationContent(props: {children: React.ReactNode}) {
 
   return (
     <NavigationMenu.Content
+      className="absolute left-0 top-[var(--topDistance)] w-full"
       style={
         {
           '--topDistance': `${topDistance}px`,
         } as CSSProperties
       }
-      className="absolute left-0 top-[var(--topDistance)] w-full"
     >
       {props.children}
     </NavigationMenu.Content>

@@ -1,4 +1,5 @@
 import type {VariantProps} from 'class-variance-authority';
+
 import {cva} from 'class-variance-authority';
 
 export type HeaderVariantsProps = VariantProps<typeof header>;

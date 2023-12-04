@@ -1,17 +1,19 @@
 import type {InferType} from 'groqd';
 
 import type {SETTINGS_FRAGMENT} from '~/qroq/fragments';
-import {SanityImage} from '../sanity/SanityImage';
+
 import {useSanityRoot} from '~/hooks/useSanityRoot';
+
+import {SanityImage} from '../sanity/SanityImage';
 
 type Logo = InferType<typeof SETTINGS_FRAGMENT.logo>;
 
 export function Logo(props: {
-  sizes?: string | null;
   className?: string;
-  loading?: 'lazy' | 'eager';
-  style?: React.CSSProperties;
+  loading?: 'eager' | 'lazy';
   sanityEncodeData?: string;
+  sizes?: null | string;
+  style?: React.CSSProperties;
 }) {
   const {data, encodeDataAttribute} = useSanityRoot();
   const sanitySettings = data?.settings;

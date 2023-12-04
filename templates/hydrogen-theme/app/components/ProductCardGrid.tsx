@@ -1,12 +1,13 @@
 import type {CSSProperties} from 'react';
+import type {ProductCardFragment} from 'storefrontapi.generated';
+
 import {cx} from 'class-variance-authority';
 
-import type {ProductCardFragment} from 'storefrontapi.generated';
 import {ProductCard} from './ProductCard';
 
 export function ProductCardGrid(props: {
+  columns?: null | number;
   products?: ProductCardFragment[];
-  columns?: number | null;
   skeleton?: {
     cardsNumber?: number;
   };
@@ -18,11 +19,11 @@ export function ProductCardGrid(props: {
 
   return (
     <ul
-      style={columnsVar}
       className={cx([
         'grid gap-6',
         'lg:grid-cols-[repeat(var(--columns),_minmax(0,_1fr))]',
       ])}
+      style={columnsVar}
     >
       {!skeleton && products && products.length > 0
         ? products.map((product) => (
@@ -34,10 +35,10 @@ export function ProductCardGrid(props: {
           ? [...Array(skeleton.cardsNumber ?? 3)].map((_, i) => (
               <li key={i}>
                 <ProductCard
+                  columns={props.columns}
                   skeleton={{
                     cardsNumber: skeleton.cardsNumber,
                   }}
-                  columns={props.columns}
                 />
               </li>
             ))
