@@ -4,16 +4,18 @@ import type {ProductQuery} from 'storefrontapi.generated';
 
 import {useLoaderData} from '@remix-run/react';
 import {getSelectedProductOptions} from '@shopify/hydrogen';
-import {defer, redirect} from '@shopify/remix-oxygen';
+import {defer} from '@shopify/remix-oxygen';
 import {DEFAULT_LOCALE} from 'countries';
 import invariant from 'tiny-invariant';
 
+import {CmsSection} from '~/components/CmsSection';
 import {
   PRODUCT_QUERY,
   RECOMMENDED_PRODUCTS_QUERY,
   VARIANTS_QUERY,
 } from '~/graphql/queries';
 import {useSanityData} from '~/hooks/useSanityData';
+import {resolveShopifyPromises} from '~/lib/resolveShopifyPromises';
 import {sanityPreviewPayload} from '~/lib/sanity/sanity.payload.server';
 import {PRODUCT_QUERY as CMS_PRODUCT_QUERY} from '~/qroq/queries';
 
@@ -53,10 +55,6 @@ export async function loader({context, params, request}: LoaderFunctionArgs) {
     throw new Response('product', {status: 404});
   }
 
-  if (!product.selectedVariant) {
-    throw redirectToFirstVariant({product, request});
-  }
-
   // In order to show which variants are available in the UI, we need to query
   // all of them. But there might be a *lot*, so instead separate the variants
   // into it's own separate query that is deferred. So there's a brief moment
@@ -72,13 +70,20 @@ export async function loader({context, params, request}: LoaderFunctionArgs) {
 
   const recommended = getRecommendedProducts(context.storefront, product.id);
 
-  // TODO: firstVariant is never used because we will always have a selectedVariant due to redirect
-  // Investigate if we can avoid the redirect for product pages with no search params for first variant
-  const firstVariant = product.variants.nodes[0];
-  const selectedVariant = product.selectedVariant ?? firstVariant;
+  const {
+    collectionListPromise,
+    featuredCollectionPromise,
+    featuredProductPromise,
+  } = resolveShopifyPromises({
+    document: cmsProduct,
+    storefront,
+  });
 
   return defer({
     cmsProduct,
+    collectionListPromise,
+    featuredCollectionPromise,
+    featuredProductPromise,
     product,
     recommended,
     variants,
@@ -90,34 +95,20 @@ export async function loader({context, params, request}: LoaderFunctionArgs) {
   });
 }
 
-function redirectToFirstVariant({
-  product,
-  request,
-}: {
-  product: ProductQuery['product'];
-  request: Request;
-}) {
-  const searchParams = new URLSearchParams(new URL(request.url).search);
-  const firstVariant = product!.variants.nodes[0];
-  for (const option of firstVariant.selectedOptions) {
-    searchParams.set(option.name, option.value);
-  }
-
-  return redirect(
-    `/products/${product!.handle}?${searchParams.toString()}`,
-    302,
-  );
-}
-
 export default function Product() {
-  const {cmsProduct, product} = useLoaderData<typeof loader>();
-  const {data} = useSanityData(cmsProduct);
+  const {cmsProduct} = useLoaderData<typeof loader>();
+  const {data, encodeDataAttribute} = useSanityData(cmsProduct);
 
-  return (
-    <div className="container">
-      <h1>{product.title}</h1>
-    </div>
-  );
+  // Todo => Add a template mechanism to CMS products so we can attach a same template to multiple products
+  return data?.sections && data.sections.length > 0
+    ? data.sections.map((section) => (
+        <CmsSection
+          data={section}
+          encodeDataAttribute={encodeDataAttribute}
+          key={section._key}
+        />
+      ))
+    : null;
 }
 
 async function getRecommendedProducts(

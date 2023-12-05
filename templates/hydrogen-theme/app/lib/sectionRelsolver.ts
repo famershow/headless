@@ -30,6 +30,13 @@ export const sections: {
       default: module.ImageBannerSection,
     })),
   ),
+  productInformationSection: lazy(() =>
+    import('../components/sections/ProductInformationSection').then(
+      (module) => ({
+        default: module.ProductInformationSection,
+      }),
+    ),
+  ),
   socialLinksOnly: lazy(() =>
     import('../components/footers/SocialLinksOnly').then((module) => ({
       default: module.SocialLinksOnly,

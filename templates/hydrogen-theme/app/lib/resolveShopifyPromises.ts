@@ -8,7 +8,7 @@ import type {
 
 import {parseGid} from '@shopify/hydrogen';
 
-import type {PAGE_QUERY} from '~/qroq/queries';
+import type {PAGE_QUERY, PRODUCT_QUERY} from '~/qroq/queries';
 
 import {
   COLLECTIONS_QUERY,
@@ -17,8 +17,9 @@ import {
 } from '~/graphql/queries';
 
 type SanityPageData = InferType<typeof PAGE_QUERY>;
+type SanityProductData = InferType<typeof PRODUCT_QUERY>;
 type PromiseResolverArgs = {
-  document: {data: SanityPageData};
+  document: {data: SanityPageData | SanityProductData};
   storefront: Storefront;
 };
 

@@ -10,7 +10,7 @@ import home from './singletons/home';
 import collection from './documents/collection';
 import product from './documents/product';
 import blogPost from './documents/blogPost';
-import sectionsList from './objects/global/sectionsList';
+import sectionsList, {productSections} from './objects/global/sectionsList';
 import seo from './objects/global/seo';
 import sectionSettings from './objects/global/sectionSettings';
 import headerNavigation from './objects/global/headerNavigation';
@@ -32,6 +32,8 @@ import contentAlignment from './objects/global/contentAlignment';
 import featuredCollection from './objects/sections/featuredCollectionSection';
 import collectionListSection from './objects/sections/collectionListSection';
 import featuredProductSection from './objects/sections/featuredProductSection';
+import productInformationSection from './objects/sections/productInformationSection';
+import productRichtext from './objects/global/productRichtext';
 
 const singletons = [home, header, footer, settings, themeContent];
 const documents = [page, color, collection, product, blogPost, productVariant];
@@ -40,12 +42,15 @@ const sections = [
   featuredCollection,
   featuredProductSection,
   collectionListSection,
+  productInformationSection,
   ctaSection,
 ];
 const footers = [socialLinksOnly];
 const objects = [
   footersList,
   sectionsList,
+  productSections,
+  productRichtext,
   seo,
   sectionSettings,
   headerNavigation,

@@ -7,7 +7,7 @@ import {
   MENU_FRAGMENT,
   SETTINGS_FRAGMENT,
 } from './fragments';
-import {SECTIONS_FRAGMENT} from './sections';
+import {PRODUCT_SECTIONS_FRAGMENT, SECTIONS_FRAGMENT} from './sections';
 
 /*
 |--------------------------------------------------------------------------
@@ -16,8 +16,8 @@ import {SECTIONS_FRAGMENT} from './sections';
 */
 export const PAGE_QUERY = q('*')
   .filter(
-    ` (
-        _type == "page" &&
+    `(
+      _type == "page" &&
         ($handle != "home" && slug[_key == $language][0].value.current == $handle) ||
         ($handle != "home" && slug[_key == $defaultLanguage][0].value.current == $handle)
       ) ||
@@ -39,10 +39,9 @@ export const PAGE_QUERY = q('*')
 |--------------------------------------------------------------------------
 */
 export const PRODUCT_QUERY = q('*')
-  .filter(`_type == "product" && slug.current == $productHandle`)
+  .filter(`_type == "product" && store.slug.current == $productHandle`)
   .grab({
-    sections: SECTIONS_FRAGMENT,
-    slug: q.string(),
+    sections: PRODUCT_SECTIONS_FRAGMENT,
   })
   .slice(0)
   .nullable();
@@ -105,6 +104,24 @@ export const FOOTER_QUERY = q('*')
   .slice(0)
   .nullable();
 
+export const THEME_CONTENT_QUERY = q('*')
+  .filter("_type == 'themeContent'")
+  .grab({
+    product: q('product')
+      .grab({
+        addToCart: [
+          `coalesce(
+            addToCart[_key == $language][0].value,
+            addToCart[_key == $defaultLanguage][0].value,
+          )`,
+          q.string().nullable(),
+        ],
+      })
+      .nullable(),
+  })
+  .slice(0)
+  .nullable();
+
 export const ROOT_QUERY = q('')
   .grab({
     defaultColorScheme: DEFAULT_COLOR_SCHEME_QUERY,
@@ -112,5 +129,6 @@ export const ROOT_QUERY = q('')
     footer: FOOTER_QUERY,
     header: HEADER_QUERY,
     settings: SETTINGS_QUERY,
+    themeContent: THEME_CONTENT_QUERY,
   })
   .nullable();

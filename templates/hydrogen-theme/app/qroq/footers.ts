@@ -31,7 +31,7 @@ export const FOOTER_SETTINGS_FRAGMENT = q('settings').grab({
 */
 export const FOOTER_SOCIAL_LINKS_ONLY_FRAGMENT = {
   _key: q.string().nullable(),
-  _type: z.enum(['socialLinksOnly']),
+  _type: q.literal('socialLinksOnly'),
   copyright: [
     `coalesce(
       copyright[_key == $language][0].value,
