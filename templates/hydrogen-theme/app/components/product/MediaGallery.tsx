@@ -12,7 +12,15 @@ export function MediaGallery(props: {
       {medias.map((media) => {
         return (
           <li key={media.id}>
-            <MediaFile className="rounded" data={media} />
+            <MediaFile
+              className="rounded"
+              data={media}
+              mediaOptions={{
+                image: {
+                  sizes: '(min-width: 1024px) 50vw, 100vw',
+                },
+              }}
+            />
           </li>
         );
       })}
