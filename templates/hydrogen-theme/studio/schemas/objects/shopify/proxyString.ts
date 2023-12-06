@@ -1,5 +1,5 @@
-import {defineField} from 'sanity'
-import {ProxyStringInput} from '../../../components/shopify/ProxyString'
+import {defineField} from 'sanity';
+import {ProxyStringInput} from '../../../components/shopify/ProxyString';
 
 export default defineField({
   name: 'proxyString',
@@ -8,4 +8,4 @@ export default defineField({
   components: {
     input: ProxyStringInput,
   },
-})
+});

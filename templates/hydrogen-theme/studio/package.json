@@ -26,6 +26,7 @@
     "@sanity/language-filter": "^3.2.1",
     "@sanity/ui": "^1.9.3",
     "@sanity/util": "^3.20.2",
+    "@sanity/uuid": "^3.0.2",
     "@sanity/vision": "^3.20.2",
     "@shopify/polaris": "^12.1.1",
     "@shopify/polaris-icons": "^7.9.0",

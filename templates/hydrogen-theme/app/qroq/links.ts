@@ -9,7 +9,7 @@ import {q, z} from 'groqd';
 */
 export const INTERNAL_LINK_FRAGMENT = {
   _key: q.string().nullable(),
-  _type: z.enum(['internalLink']),
+  _type: q.literal('internalLink'),
   anchor: q.string().nullable(),
   link: q('link')
     .deref()
@@ -33,7 +33,7 @@ export const INTERNAL_LINK_FRAGMENT = {
 
 export const EXTERNAL_LINK_FRAGMENT = {
   _key: q.string().nullable(),
-  _type: z.enum(['externalLink']),
+  _type: q.literal('externalLink'),
   link: q.string().nullable(),
   name: q.string().nullable(),
   openInNewTab: q.boolean().nullable(),
@@ -41,7 +41,7 @@ export const EXTERNAL_LINK_FRAGMENT = {
 
 export const NESTED_NAVIGATION_FRAGMENT = {
   _key: q.string().nullable(),
-  _type: z.enum(['nestedNavigation']),
+  _type: q.literal('nestedNavigation'),
   childLinks: q('childLinks[]', {isArray: true}).select({
     '_type == "externalLink"': EXTERNAL_LINK_FRAGMENT,
     '_type == "internalLink"': INTERNAL_LINK_FRAGMENT,

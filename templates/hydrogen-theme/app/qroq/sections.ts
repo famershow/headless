@@ -2,6 +2,11 @@ import type {Selection} from 'groqd';
 
 import {q, z} from 'groqd';
 
+import {
+  ADD_TO_CART_BUTTON_BLOCK,
+  SHOPIFY_DESCRIPTION_BLOCK,
+  SHOPIFY_TITLE_BLOCK,
+} from './blocks';
 import {COLOR_SCHEME_FRAGMENT, IMAGE_FRAGMENT} from './fragments';
 
 export const contentAlignmentValues = [
@@ -43,7 +48,7 @@ export const SECTION_SETTINGS_FRAGMENT = q('settings').grab({
 */
 export const IMAGE_BANNER_SECTION_FRAGMENT = {
   _key: q.string().nullable(),
-  _type: z.enum(['imageBannerSection']),
+  _type: q.literal('imageBannerSection'),
   animateContent: q.boolean().nullable(),
   backgroundImage: q('backgroundImage').grab(IMAGE_FRAGMENT).nullable(),
   bannerHeight: q.number().nullable(),
@@ -66,7 +71,7 @@ export const IMAGE_BANNER_SECTION_FRAGMENT = {
 */
 export const FEATURED_COLLECTION_SECTION_FRAGMENT = {
   _key: q.string().nullable(),
-  _type: z.enum(['featuredCollectionSection']),
+  _type: q.literal('featuredCollectionSection'),
   collection: q('collection')
     .deref()
     .grab({
@@ -83,12 +88,12 @@ export const FEATURED_COLLECTION_SECTION_FRAGMENT = {
 
 /*
 |--------------------------------------------------------------------------
-| Featured Collection Section
+| Featured Product Section
 |--------------------------------------------------------------------------
 */
 export const FEATURED_PRODUCT_SECTION_FRAGMENT = {
   _key: q.string().nullable(),
-  _type: z.enum(['featuredProductSection']),
+  _type: q.literal('featuredProductSection'),
   product: q('product')
     .deref()
     .grab({
@@ -103,12 +108,39 @@ export const FEATURED_PRODUCT_SECTION_FRAGMENT = {
 
 /*
 |--------------------------------------------------------------------------
+| Product Information Section
+|--------------------------------------------------------------------------
+*/
+export const PRODUCT_INFORMATION_SECTION_FRAGMENT = {
+  _key: q.string().nullable(),
+  _type: q.literal('productInformationSection'),
+  richtext: [
+    `coalesce(
+      richtext[_key == $language][0].value,
+      richtext[_key == $defaultLanguage][0].value,
+    )`,
+    q
+      .array(
+        q.union([
+          SHOPIFY_TITLE_BLOCK,
+          SHOPIFY_DESCRIPTION_BLOCK,
+          ADD_TO_CART_BUTTON_BLOCK,
+          q.contentBlock(),
+        ]),
+      )
+      .nullable(),
+  ],
+  settings: SECTION_SETTINGS_FRAGMENT,
+} satisfies Selection;
+
+/*
+|--------------------------------------------------------------------------
 | Collection List Section
 |--------------------------------------------------------------------------
 */
 export const COLLECTION_LIST_SECTION_FRAGMENT = {
   _key: q.string().nullable(),
-  _type: z.enum(['collectionListSection']),
+  _type: q.literal('collectionListSection'),
   collections: q('collections[]', {isArray: true})
     .deref()
     .grab({
@@ -128,7 +160,7 @@ export const COLLECTION_LIST_SECTION_FRAGMENT = {
 */
 export const CTA_SECTION_FRAGMENT = {
   _key: q.string().nullable(),
-  _type: z.enum(['ctaSection']),
+  _type: q.literal('ctaSection'),
   settings: SECTION_SETTINGS_FRAGMENT,
   title: [
     `coalesce(
@@ -159,4 +191,12 @@ export const SECTIONS_LIST_SELECTION = {
 */
 export const SECTIONS_FRAGMENT = q('sections[]', {isArray: true})
   .select(SECTIONS_LIST_SELECTION)
+  .nullable();
+
+export const PRODUCT_SECTIONS_FRAGMENT = q('sections[]', {isArray: true})
+  .select({
+    "_type == 'productInformationSection'":
+      PRODUCT_INFORMATION_SECTION_FRAGMENT,
+    ...SECTIONS_LIST_SELECTION,
+  })
   .nullable();

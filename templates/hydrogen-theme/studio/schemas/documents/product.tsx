@@ -1,10 +1,11 @@
-import pluralize from 'pluralize-esm'
-import {defineField, defineType} from 'sanity'
+import pluralize from 'pluralize-esm';
+import {defineField, defineType} from 'sanity';
+import {uuid} from '@sanity/uuid';
 
-import {ShopifyIcon} from '../../components/icons/ShopifyIcon'
-import {ShopifyDocumentStatus} from '../../components/shopify/ShopifyDocumentStatus'
-import {ProductHiddenInput} from '../../components/shopify/ProductHidden'
-import {getPriceRange} from '../../utils/getPriceRange'
+import {ShopifyIcon} from '../../components/icons/ShopifyIcon';
+import {ShopifyDocumentStatus} from '../../components/shopify/ShopifyDocumentStatus';
+import {ProductHiddenInput} from '../../components/shopify/ProductHidden';
+import {getPriceRange} from '../../utils/getPriceRange';
 
 const GROUPS = [
   {
@@ -17,7 +18,7 @@ const GROUPS = [
     title: 'Shopify sync',
     icon: ShopifyIcon,
   },
-]
+];
 
 export default defineType({
   name: 'product',
@@ -33,15 +34,15 @@ export default defineType({
       },
       group: GROUPS.map((group) => group.name),
       hidden: ({parent}) => {
-        const isActive = parent?.store?.status === 'active'
-        const isDeleted = parent?.store?.isDeleted
-        return !parent?.store || (isActive && !isDeleted)
+        const isActive = parent?.store?.status === 'active';
+        const isDeleted = parent?.store?.isDeleted;
+        return !parent?.store || (isActive && !isDeleted);
       },
     }),
     // Sections
     defineField({
       name: 'sections',
-      type: 'sections',
+      type: 'productSections',
       group: 'editorial',
     }),
     // Title (proxy)
@@ -66,6 +67,14 @@ export default defineType({
       group: 'shopifySync',
     }),
   ],
+  initialValue: () => ({
+    sections: [
+      {
+        _type: 'productInformationSection',
+        _key: uuid(),
+      },
+    ],
+  }),
   orderings: [
     {
       name: 'titleAsc',
@@ -100,22 +109,30 @@ export default defineType({
       variants: 'store.variants',
     },
     prepare(selection) {
-      const {isDeleted, options, previewImageUrl, priceRange, status, title, variants} = selection
+      const {
+        isDeleted,
+        options,
+        previewImageUrl,
+        priceRange,
+        status,
+        title,
+        variants,
+      } = selection;
 
-      const optionCount = options?.length
-      const variantCount = variants?.length
+      const optionCount = options?.length;
+      const variantCount = variants?.length;
 
       let description = [
         variantCount ? pluralize('variant', variantCount, true) : 'No variants',
         optionCount ? pluralize('option', optionCount, true) : 'No options',
-      ]
+      ];
 
-      let subtitle = getPriceRange(priceRange)
+      let subtitle = getPriceRange(priceRange);
       if (status !== 'active') {
-        subtitle = '(Unavailable in Shopify)'
+        subtitle = '(Unavailable in Shopify)';
       }
       if (isDeleted) {
-        subtitle = '(Deleted from Shopify)'
+        subtitle = '(Deleted from Shopify)';
       }
 
       return {
@@ -131,7 +148,7 @@ export default defineType({
             title={title}
           />
         ),
-      }
+      };
     },
   },
-})
+});

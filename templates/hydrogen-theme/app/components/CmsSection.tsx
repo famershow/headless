@@ -4,7 +4,10 @@ import type {InferType} from 'groqd';
 import {Suspense, useMemo} from 'react';
 
 import type {FOOTERS_FRAGMENT} from '~/qroq/footers';
-import type {SECTIONS_FRAGMENT} from '~/qroq/sections';
+import type {
+  PRODUCT_SECTIONS_FRAGMENT,
+  SECTIONS_FRAGMENT,
+} from '~/qroq/sections';
 
 import {useIsDev} from '~/hooks/useIsDev';
 import {useSettingsCssVars} from '~/hooks/useSettingsCssVars';
@@ -12,6 +15,7 @@ import {sections} from '~/lib/sectionRelsolver';
 
 type CmsSectionsProps =
   | NonNullable<InferType<typeof FOOTERS_FRAGMENT>>
+  | NonNullable<InferType<typeof PRODUCT_SECTIONS_FRAGMENT>>[0]
   | NonNullable<InferType<typeof SECTIONS_FRAGMENT>>[0];
 
 type CmsSectionType = 'footer' | 'section';
