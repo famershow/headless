@@ -7,6 +7,7 @@ import {ShopPayButton, useProduct} from '@shopify/hydrogen-react';
 import {cx} from 'class-variance-authority';
 import {Button} from 'react-aria-components';
 
+import {useIsInIframe} from '~/hooks/useIsInIframe';
 import {useSanityThemeContent} from '~/hooks/useSanityThemeContent';
 import {useSelectedVariant} from '~/hooks/useSelectedVariant';
 
@@ -17,6 +18,7 @@ export function ProductForm({
 }: {
   variants: ProductVariantFragmentFragment[];
 }) {
+  const isInIframe = useIsInIframe();
   const {themeContent} = useSanityThemeContent();
   const {product} = useProduct() as {
     product: NonNullable<ProductQuery['product']>;
@@ -39,22 +41,25 @@ export function ProductForm({
               className="inverted-color-scheme rounded px-3 py-2 disabled:opacity-50"
               isDisabled={isOutOfStock}
             >
-              {isOutOfStock
-                ? themeContent?.product?.soldOut
-                : themeContent?.product?.addToCart}
+              {isOutOfStock ? (
+                <span>{themeContent?.product?.soldOut}</span>
+              ) : (
+                <span>{themeContent?.product?.addToCart}</span>
+              )}
             </Button>
-
-            <div className="h-10">
-              <ShopPayButton
-                className={cx([
-                  'h-full',
-                  isOutOfStock &&
-                    'pointer-events-none cursor-default opacity-50',
-                ])}
-                variantIds={[selectedVariant?.id!]}
-                width="100%"
-              />
-            </div>
+            {!isInIframe && (
+              <div className="h-10">
+                <ShopPayButton
+                  className={cx([
+                    'h-full',
+                    isOutOfStock &&
+                      'pointer-events-none cursor-default opacity-50',
+                  ])}
+                  variantIds={[selectedVariant?.id!]}
+                  width="100%"
+                />
+              </div>
+            )}
           </div>
         )}
       </div>

@@ -16,6 +16,10 @@ export function useSelectedVariant(props: {
     [props.variants],
   );
 
+  const firstVariantFound = useMemo(() => {
+    return props.variants?.[0];
+  }, [props.variants]);
+
   const selectedVariant = useMemo(() => {
     if (variantIdParam) {
       return props.variants?.find((variant) => {
@@ -27,7 +31,7 @@ export function useSelectedVariant(props: {
   }, [props.variants, variantIdParam]);
 
   if (!selectedVariant) {
-    return firstAvailableVariant;
+    return firstAvailableVariant ?? firstVariantFound;
   }
 
   return selectedVariant;

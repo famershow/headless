@@ -26,60 +26,62 @@ export function VariantSelector(props: {
 
   const options = useMemo(
     () =>
-      props.options?.map((option) => {
-        let activeValue;
-        const optionValues: VariantOptionValue[] = [];
-        const variantSelectedOptions = selectedVariant?.selectedOptions;
+      props.options
+        ?.filter((option) => option.values && option.values?.length > 1)
+        .map((option) => {
+          let activeValue;
+          const optionValues: VariantOptionValue[] = [];
+          const variantSelectedOptions = selectedVariant?.selectedOptions;
 
-        for (const value of option.values ?? []) {
-          const valueIsActive =
-            value ===
-            variantSelectedOptions?.find(
-              (selectedOption) => selectedOption.name === option.name,
-            )?.value;
+          for (const value of option.values ?? []) {
+            const valueIsActive =
+              value ===
+              variantSelectedOptions?.find(
+                (selectedOption) => selectedOption.name === option.name,
+              )?.value;
 
-          if (valueIsActive) {
-            activeValue = value;
-          }
-
-          const newOptions = variantSelectedOptions?.map((selectedOption) => {
-            if (selectedOption.name === option.name) {
-              return {
-                ...selectedOption,
-                value,
-              };
+            if (valueIsActive) {
+              activeValue = value;
             }
 
-            return selectedOption;
-          });
+            const newOptions = variantSelectedOptions?.map((selectedOption) => {
+              if (selectedOption.name === option.name) {
+                return {
+                  ...selectedOption,
+                  value,
+                };
+              }
 
-          const matchedVariant = props.variants?.find(
-            (variant) =>
-              variant?.selectedOptions?.every((selectedOption) => {
-                return newOptions?.find(
-                  (newOption) =>
-                    newOption.name === selectedOption.name &&
-                    newOption.value === selectedOption.value,
-                );
-              }),
-          );
+              return selectedOption;
+            });
 
-          const matchedVariantId = parseGid(matchedVariant?.id)?.id;
+            const matchedVariant = props.variants?.find(
+              (variant) =>
+                variant?.selectedOptions?.every((selectedOption) => {
+                  return newOptions?.find(
+                    (newOption) =>
+                      newOption.name === selectedOption.name &&
+                      newOption.value === selectedOption.value,
+                  );
+                }),
+            );
 
-          optionValues.push({
-            isActive: valueIsActive,
-            isAvailable: matchedVariant?.availableForSale ?? true,
-            search: `?variant=${matchedVariantId}`,
-            value,
-          });
-        }
+            const matchedVariantId = parseGid(matchedVariant?.id)?.id;
 
-        return {
-          name: option.name,
-          value: activeValue,
-          values: optionValues,
-        };
-      }),
+            optionValues.push({
+              isActive: valueIsActive,
+              isAvailable: matchedVariant?.availableForSale ?? true,
+              search: `?variant=${matchedVariantId}`,
+              value,
+            });
+          }
+
+          return {
+            name: option.name,
+            value: activeValue,
+            values: optionValues,
+          };
+        }),
     [props.options, selectedVariant, props.variants],
   );
 
