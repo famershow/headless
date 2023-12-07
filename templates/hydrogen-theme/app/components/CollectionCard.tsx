@@ -18,7 +18,7 @@ export function CollectionCard(props: {
 
   return (
     <div className="overflow-hidden rounded-lg border">
-      <Link prefetch="viewport" to={`/collections/${collection.handle}`}>
+      <Link prefetch="intent" to={`/collections/${collection.handle}`}>
         {collection.image && (
           <Image
             aspectRatio="16/9"

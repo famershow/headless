@@ -47,7 +47,7 @@ export function SanityInternalLink(props: {
 
   // Todo: add Navlink support
   return (
-    <Link className={className} prefetch="viewport" to={url}>
+    <Link className={className} prefetch="intent" to={url}>
       {children ? children : name}
     </Link>
   );
