@@ -26,11 +26,6 @@ export function ProductForm({
   const selectedVariant = useSelectedVariant({variants});
   const isOutOfStock = !selectedVariant?.availableForSale;
 
-  const isOnSale =
-    selectedVariant?.price?.amount &&
-    selectedVariant?.compareAtPrice?.amount &&
-    selectedVariant?.price?.amount < selectedVariant?.compareAtPrice?.amount;
-
   return (
     <div className="grid gap-10">
       <div className="grid gap-4">

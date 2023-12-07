@@ -3,6 +3,7 @@ import {PortableText} from '@portabletext/react';
 import type {ProductInformationSectionProps} from '../sections/ProductInformationSection';
 
 import {AddToCartButtonBlock} from '../blocks/AddToCartButtonBlock';
+import {PriceBlock} from '../blocks/PriceBlock';
 import {ShopifyDescriptionBlock} from '../blocks/ShopifyDescriptionBlock';
 import {ShopifyTitleBlock} from '../blocks/ShopifyTitleBlock';
 
@@ -16,6 +17,7 @@ export function ProductDetails(props: {data: ProductInformationSectionProps}) {
               addToCartButton: ({value}) => {
                 return <AddToCartButtonBlock {...value} />;
               },
+              price: ({value}) => <PriceBlock {...value} />,
               shopifyDescription: ({value}) => (
                 <ShopifyDescriptionBlock {...value} />
               ),
