@@ -8,6 +8,7 @@ import {useSettingsCssVars} from '~/hooks/useSettingsCssVars';
 
 import {headerVariants} from '../cva/header';
 import {Navigation} from '../navigation/Navigation';
+import {CartCount} from './CartCount';
 import {Logo} from './Logo';
 
 export function Header() {
@@ -44,7 +45,10 @@ export function Header() {
               }
             />
           </Link>
-          <Navigation data={header?.menu} />
+          <div className="flex items-center gap-3">
+            <Navigation data={header?.menu} />
+            <CartCount />
+          </div>
         </div>
       </div>
     </header>

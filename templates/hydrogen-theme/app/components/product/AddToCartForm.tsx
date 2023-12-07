@@ -1,8 +1,9 @@
 import type {ProductVariantFragmentFragment} from 'storefrontapi.generated';
 
-import {ShopPayButton} from '@shopify/hydrogen';
+import {Form, useFetchers, useSubmit} from '@remix-run/react';
+import {CartForm, ShopPayButton} from '@shopify/hydrogen';
 import {cx} from 'class-variance-authority';
-import {useState} from 'react';
+import {useCallback, useState} from 'react';
 import {Button} from 'react-aria-components';
 
 import {useIsInIframe} from '~/hooks/useIsInIframe';
@@ -22,6 +23,33 @@ export function AddToCartForm(props: {
   const selectedVariant = useSelectedVariant({variants});
   const isOutOfStock = !selectedVariant?.availableForSale;
   const [quantity, setQuantity] = useState(1);
+  const submit = useSubmit();
+  const fetchers = useFetchers();
+
+  const addToCartFetcher = fetchers.find(
+    (fetcher) => fetcher.key === CartForm.ACTIONS.LinesAdd,
+  );
+
+  const loading =
+    addToCartFetcher?.state === 'loading' ||
+    addToCartFetcher?.state === 'submitting';
+
+  const handleSubmit = useCallback(
+    (event: React.FormEvent<HTMLFormElement>) => {
+      event.preventDefault();
+
+      const formData = new FormData(event.currentTarget);
+
+      submit(formData, {
+        action: '/cart',
+        fetcherKey: CartForm.ACTIONS.LinesAdd,
+        method: 'post',
+        navigate: false,
+        preventScrollReset: true,
+      });
+    },
+    [submit],
+  );
 
   return (
     selectedVariant && (
@@ -33,10 +61,27 @@ export function AddToCartForm(props: {
           />
         )}
         <div className="grid gap-3">
-          <div>
+          <Form method="post" onSubmit={(e) => handleSubmit(e)}>
+            <input
+              name={CartForm.INPUT_NAME}
+              type="hidden"
+              value={JSON.stringify({
+                action: CartForm.ACTIONS.LinesAdd,
+                inputs: {
+                  lines: {
+                    merchandiseId: selectedVariant?.id!,
+                    quantity,
+                  },
+                },
+              })}
+            />
             <Button
-              className="inverted-color-scheme w-full rounded px-3 py-2 disabled:opacity-50"
-              isDisabled={isOutOfStock}
+              className={cx([
+                'inverted-color-scheme w-full rounded px-3 py-2',
+                isOutOfStock && 'opacity-50',
+              ])}
+              isDisabled={isOutOfStock || loading}
+              type="submit"
             >
               {isOutOfStock ? (
                 <span>{themeContent?.product?.soldOut}</span>
@@ -44,14 +89,16 @@ export function AddToCartForm(props: {
                 <span>{themeContent?.product?.addToCart}</span>
               )}
             </Button>
-          </div>
+          </Form>
           {!isInIframe && showShopPay && (
             <div className="h-10">
               <ShopPayButton
                 className={cx([
                   'h-full',
-                  isOutOfStock &&
-                    'pointer-events-none cursor-default opacity-50',
+                  loading || isOutOfStock
+                    ? 'pointer-events-none cursor-default'
+                    : '',
+                  isOutOfStock && 'opacity-50',
                 ])}
                 variantIdsAndQuantities={[
                   {
