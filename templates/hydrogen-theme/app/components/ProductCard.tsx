@@ -25,7 +25,7 @@ export function ProductCard(props: {
   return (
     <div className="overflow-hidden rounded-lg border">
       {!skeleton && product && firstVariant ? (
-        <Link prefetch="viewport" to={`/products/${product.handle}`}>
+        <Link prefetch="intent" to={`/products/${product.handle}`}>
           {firstVariant?.image && (
             <Image
               aspectRatio="16/9"

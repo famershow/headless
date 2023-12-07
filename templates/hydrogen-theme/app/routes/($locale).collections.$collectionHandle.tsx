@@ -137,7 +137,12 @@ export default function Collection() {
       {collection.image && (
         <section>
           <div className="relative h-80 w-full overflow-hidden">
-            <Image className="" crop="center" data={collection.image} />
+            <Image
+              crop="center"
+              data={collection.image}
+              loading="eager"
+              sizes="100vw"
+            />
             <div className="absolute inset-0">
               <div className="flex h-full items-center justify-center text-white">
                 <h1>{collection.title}</h1>
