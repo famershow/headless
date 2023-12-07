@@ -15,6 +15,7 @@ export function QuantitySelector(props: {
     'disabled:opacity-50',
   ]);
 
+  // Todo => Add same quantity selector as the one in the Cart component
   return (
     <NumberField
       defaultValue={1}
