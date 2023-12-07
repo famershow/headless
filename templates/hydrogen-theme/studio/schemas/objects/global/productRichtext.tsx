@@ -1,4 +1,4 @@
-import {ShoppingCart, Text, Type} from 'lucide-react';
+import {BadgeDollarSign, ShoppingCart, Text, Type} from 'lucide-react';
 import {defineField} from 'sanity';
 
 export default defineField({
@@ -46,6 +46,26 @@ export default defineField({
         prepare: () => {
           return {
             title: 'Description',
+          };
+        },
+      },
+    },
+    {
+      name: 'price',
+      type: 'object',
+      fields: [
+        defineField({
+          name: 'priceProxy',
+          title: 'Price',
+          type: 'proxyString',
+          options: {field: 'store.priceRange.minVariantPrice'},
+        }),
+      ],
+      icon: () => <BadgeDollarSign size="18px" />,
+      preview: {
+        prepare: () => {
+          return {
+            title: 'Price',
           };
         },
       },

@@ -4,6 +4,7 @@ import {q, z} from 'groqd';
 
 import {
   ADD_TO_CART_BUTTON_BLOCK,
+  PRICE_BLOCK,
   SHOPIFY_DESCRIPTION_BLOCK,
   SHOPIFY_TITLE_BLOCK,
 } from './blocks';
@@ -117,6 +118,7 @@ export const PRODUCT_INFORMATION_SECTION_FRAGMENT = {
           SHOPIFY_TITLE_BLOCK,
           SHOPIFY_DESCRIPTION_BLOCK,
           ADD_TO_CART_BUTTON_BLOCK,
+          PRICE_BLOCK,
           q.contentBlock(),
         ]),
       )

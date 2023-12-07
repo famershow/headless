@@ -20,3 +20,8 @@ export const ADD_TO_CART_BUTTON_BLOCK = q.object({
   _type: q.literal('addToCartButton'),
   size: z.enum(['small', 'medium', 'large']),
 });
+
+export const PRICE_BLOCK = q.object({
+  _key: q.string(),
+  _type: q.literal('price'),
+});
