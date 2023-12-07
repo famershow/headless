@@ -8,6 +8,7 @@ import {
   SETTINGS_FRAGMENT,
 } from './fragments';
 import {PRODUCT_SECTIONS_FRAGMENT, SECTIONS_FRAGMENT} from './sections';
+import {getIntValue} from './utils';
 
 /*
 |--------------------------------------------------------------------------
@@ -109,13 +110,8 @@ export const THEME_CONTENT_QUERY = q('*')
   .grab({
     product: q('product')
       .grab({
-        addToCart: [
-          `coalesce(
-            addToCart[_key == $language][0].value,
-            addToCart[_key == $defaultLanguage][0].value,
-          )`,
-          q.string().nullable(),
-        ],
+        addToCart: [getIntValue('addToCart'), q.string().nullable()],
+        soldOut: [getIntValue('soldOut'), q.string().nullable()],
       })
       .nullable(),
   })

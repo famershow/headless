@@ -1,6 +1,8 @@
-import {Link} from '@remix-run/react';
+import {ShopifyProvider} from '@shopify/hydrogen-react';
 import {Suspense, lazy} from 'react';
 
+import {useEnvironmentVariables} from '~/hooks/useEnvironmentVariables';
+import {useLocale} from '~/hooks/useLocale';
 import {useSanityPreviewMode} from '~/hooks/useSanityPreviewMode';
 
 import {TailwindIndicator} from '../TailwindIndicator';
@@ -20,12 +22,22 @@ export type LayoutProps = {
 
 export function Layout({children = null}: LayoutProps) {
   const previewMode = useSanityPreviewMode();
+  const env = useEnvironmentVariables();
+  const locale = useLocale();
 
   return (
     <>
-      <Header />
-      <main>{children}</main>
-      <Footer />
+      <ShopifyProvider
+        countryIsoCode={locale?.country!}
+        languageIsoCode={locale?.language!}
+        storeDomain={`https://${env?.PUBLIC_STORE_DOMAIN!}`}
+        storefrontApiVersion={env?.PUBLIC_STOREFRONT_API_VERSION!}
+        storefrontToken={env?.PUBLIC_STOREFRONT_API_TOKEN!}
+      >
+        <Header />
+        <main>{children}</main>
+        <Footer />
+      </ShopifyProvider>
       <TailwindIndicator />
       {previewMode ? (
         <Suspense>

@@ -1,8 +1,9 @@
 import type {Selection} from 'groqd';
 
-import {q, z} from 'groqd';
+import {q} from 'groqd';
 
 import {COLOR_SCHEME_FRAGMENT} from './fragments';
+import {getIntValue} from './utils';
 
 /*
 |--------------------------------------------------------------------------
@@ -32,13 +33,7 @@ export const FOOTER_SETTINGS_FRAGMENT = q('settings').grab({
 export const FOOTER_SOCIAL_LINKS_ONLY_FRAGMENT = {
   _key: q.string().nullable(),
   _type: q.literal('socialLinksOnly'),
-  copyright: [
-    `coalesce(
-      copyright[_key == $language][0].value,
-      copyright[_key == $defaultLanguage][0].value,
-    )`,
-    q.string(),
-  ],
+  copyright: [getIntValue('copyright'), q.string()],
   settings: FOOTER_SETTINGS_FRAGMENT,
 } satisfies Selection;
 

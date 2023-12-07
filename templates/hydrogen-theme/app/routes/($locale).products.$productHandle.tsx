@@ -4,6 +4,7 @@ import type {ProductQuery} from 'storefrontapi.generated';
 
 import {useLoaderData} from '@remix-run/react';
 import {getSelectedProductOptions} from '@shopify/hydrogen';
+import {ProductProvider} from '@shopify/hydrogen-react';
 import {defer} from '@shopify/remix-oxygen';
 import {DEFAULT_LOCALE} from 'countries';
 import invariant from 'tiny-invariant';
@@ -96,19 +97,23 @@ export async function loader({context, params, request}: LoaderFunctionArgs) {
 }
 
 export default function Product() {
-  const {cmsProduct} = useLoaderData<typeof loader>();
+  const {cmsProduct, product} = useLoaderData<typeof loader>();
   const {data, encodeDataAttribute} = useSanityData(cmsProduct);
 
   // Todo => Add a template mechanism to CMS products so we can attach a same template to multiple products
-  return data?.sections && data.sections.length > 0
-    ? data.sections.map((section) => (
-        <CmsSection
-          data={section}
-          encodeDataAttribute={encodeDataAttribute}
-          key={section._key}
-        />
-      ))
-    : null;
+  return (
+    <ProductProvider data={product}>
+      {data?.sections && data.sections.length > 0
+        ? data.sections.map((section) => (
+            <CmsSection
+              data={section}
+              encodeDataAttribute={encodeDataAttribute}
+              key={section._key}
+            />
+          ))
+        : null}
+    </ProductProvider>
+  );
 }
 
 async function getRecommendedProducts(

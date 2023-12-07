@@ -1,22 +1,34 @@
 import type {InferType} from 'groqd';
-import type {ProductQuery} from 'storefrontapi.generated';
 
-import {Button} from 'react-aria-components';
+import {Await, useLoaderData} from '@remix-run/react';
+import {flattenConnection} from '@shopify/hydrogen-react';
+import {Suspense} from 'react';
 
 import type {ADD_TO_CART_BUTTON_BLOCK} from '~/qroq/blocks';
+import type {loader} from '~/routes/($locale).products.$productHandle';
 
-import {useSanityThemeContent} from '~/hooks/useSanityThemeContent';
+import {ProductForm} from '../product/ProductForm';
 
 export function AddToCartButtonBlock(
-  props: InferType<typeof ADD_TO_CART_BUTTON_BLOCK> & {
-    product: ProductQuery['product'];
-  },
+  props: InferType<typeof ADD_TO_CART_BUTTON_BLOCK>,
 ) {
-  const {themeContent} = useSanityThemeContent();
+  const loaderData = useLoaderData<typeof loader>();
+  const variantsPromise = loaderData.variants;
 
   return (
-    <Button className="inverted-color-scheme rounded px-3 py-2">
-      {themeContent?.product?.addToCart}
-    </Button>
+    <>
+      {/* Todo => Add skeleton and errorElement */}
+      <Suspense>
+        <Await resolve={variantsPromise}>
+          {({product}) => {
+            const variants = product?.variants?.nodes.length
+              ? flattenConnection(product.variants)
+              : [];
+
+            return <ProductForm variants={variants} />;
+          }}
+        </Await>
+      </Suspense>
+    </>
   );
 }

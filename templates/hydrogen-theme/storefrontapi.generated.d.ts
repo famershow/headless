@@ -196,9 +196,6 @@ export type ProductQueryVariables = StorefrontAPI.Exact<{
   country?: StorefrontAPI.InputMaybe<StorefrontAPI.CountryCode>;
   language?: StorefrontAPI.InputMaybe<StorefrontAPI.LanguageCode>;
   handle: StorefrontAPI.Scalars['String']['input'];
-  selectedOptions:
-    | Array<StorefrontAPI.SelectedOptionInput>
-    | StorefrontAPI.SelectedOptionInput;
 }>;
 
 export type ProductQuery = {
@@ -208,30 +205,6 @@ export type ProductQuery = {
       'id' | 'title' | 'vendor' | 'handle' | 'descriptionHtml' | 'description'
     > & {
       options: Array<Pick<StorefrontAPI.ProductOption, 'name' | 'values'>>;
-      selectedVariant?: StorefrontAPI.Maybe<
-        Pick<
-          StorefrontAPI.ProductVariant,
-          'id' | 'availableForSale' | 'sku' | 'title'
-        > & {
-          selectedOptions: Array<
-            Pick<StorefrontAPI.SelectedOption, 'name' | 'value'>
-          >;
-          image?: StorefrontAPI.Maybe<
-            Pick<
-              StorefrontAPI.Image,
-              'id' | 'url' | 'altText' | 'width' | 'height'
-            >
-          >;
-          price: Pick<StorefrontAPI.MoneyV2, 'amount' | 'currencyCode'>;
-          compareAtPrice?: StorefrontAPI.Maybe<
-            Pick<StorefrontAPI.MoneyV2, 'amount' | 'currencyCode'>
-          >;
-          unitPrice?: StorefrontAPI.Maybe<
-            Pick<StorefrontAPI.MoneyV2, 'amount' | 'currencyCode'>
-          >;
-          product: Pick<StorefrontAPI.Product, 'title' | 'handle'>;
-        }
-      >;
       media: {
         nodes: Array<
           | ({__typename: 'ExternalVideo'} & Pick<
@@ -675,11 +648,11 @@ export type FeaturedCollectionQuery = {
 };
 
 interface GeneratedQueryTypes {
-  '#graphql\nquery Product(\n  $country: CountryCode\n  $language: LanguageCode\n  $handle: String!\n  $selectedOptions: [SelectedOptionInput!]!\n) @inContext(country: $country, language: $language) {\n  product(handle: $handle) {\n    id\n    title\n    vendor\n    handle\n    descriptionHtml\n    description\n    options {\n      name\n      values\n    }\n    selectedVariant: variantBySelectedOptions(selectedOptions: $selectedOptions) {\n      ...ProductVariantFragment\n    }\n    media(first: 7) {\n      nodes {\n        ...Media\n      }\n    }\n    variants(first: 1) {\n      nodes {\n        ...ProductVariantFragment\n      }\n    }\n  }\n}\n#graphql\n  fragment Media on Media {\n    __typename\n    mediaContentType\n    alt\n    previewImage {\n      url\n    }\n    ... on MediaImage {\n      id\n      image {\n        id\n        url\n        width\n        height\n      }\n    }\n    ... on Video {\n      id\n      sources {\n        mimeType\n        url\n      }\n    }\n    ... on Model3d {\n      id\n      sources {\n        mimeType\n        url\n      }\n    }\n    ... on ExternalVideo {\n      id\n      embedUrl\n      host\n    }\n  }\n\n#graphql\n  fragment ProductVariantFragment on ProductVariant {\n    id\n    availableForSale\n    selectedOptions {\n      name\n      value\n    }\n    image {\n      id\n      url\n      altText\n      width\n      height\n    }\n    price {\n      amount\n      currencyCode\n    }\n    compareAtPrice {\n      amount\n      currencyCode\n    }\n    sku\n    title\n    unitPrice {\n      amount\n      currencyCode\n    }\n    product {\n      title\n      handle\n    }\n  }\n\n': {
+  '#graphql\nquery Product(\n  $country: CountryCode\n  $language: LanguageCode\n  $handle: String!\n) @inContext(country: $country, language: $language) {\n  product(handle: $handle) {\n    id\n    title\n    vendor\n    handle\n    descriptionHtml\n    description\n    options {\n      name\n      values\n    }\n    media(first: 7) {\n      nodes {\n        ...Media\n      }\n    }\n    variants(first: 1) {\n      nodes {\n        ...ProductVariantFragment\n      }\n    }\n  }\n}\n#graphql\n  fragment Media on Media {\n    __typename\n    mediaContentType\n    alt\n    previewImage {\n      url\n    }\n    ... on MediaImage {\n      id\n      image {\n        id\n        url\n        width\n        height\n      }\n    }\n    ... on Video {\n      id\n      sources {\n        mimeType\n        url\n      }\n    }\n    ... on Model3d {\n      id\n      sources {\n        mimeType\n        url\n      }\n    }\n    ... on ExternalVideo {\n      id\n      embedUrl\n      host\n    }\n  }\n\n#graphql\n  fragment ProductVariantFragment on ProductVariant {\n    id\n    availableForSale\n    selectedOptions {\n      name\n      value\n    }\n    image {\n      id\n      url\n      altText\n      width\n      height\n    }\n    price {\n      amount\n      currencyCode\n    }\n    compareAtPrice {\n      amount\n      currencyCode\n    }\n    sku\n    title\n    unitPrice {\n      amount\n      currencyCode\n    }\n    product {\n      title\n      handle\n    }\n  }\n\n': {
     return: ProductQuery;
     variables: ProductQueryVariables;
   };
-  '#graphql\nquery FeaturedProduct(\n  $country: CountryCode\n  $language: LanguageCode\n  $id: ID!\n) @inContext(country: $country, language: $language) {\n  product(id: $id) {\n    id\n    title\n    vendor\n    handle\n    descriptionHtml\n    options {\n      name\n      values\n    }\n    variants(first: 1) {\n      nodes {\n        ...ProductVariantFragment\n      }\n    }\n  }\n}\n#graphql\n  fragment ProductVariantFragment on ProductVariant {\n    id\n    availableForSale\n    selectedOptions {\n      name\n      value\n    }\n    image {\n      id\n      url\n      altText\n      width\n      height\n    }\n    price {\n      amount\n      currencyCode\n    }\n    compareAtPrice {\n      amount\n      currencyCode\n    }\n    sku\n    title\n    unitPrice {\n      amount\n      currencyCode\n    }\n    product {\n      title\n      handle\n    }\n  }\n\n': {
+  "#graphql\nquery FeaturedProduct(\n  $country: CountryCode\n  $language: LanguageCode\n  $id: ID!\n) @inContext(country: $country, language: $language) {\n  product(id: $id) {\n    id\n    title\n    vendor\n    handle\n    descriptionHtml\n    options {\n      name\n      values\n    }\n    # There is a lot of variants to fetch but this query is deferred\n    # so it won't block the main page from loading.\n    variants(first: 250) {\n      nodes {\n        ...ProductVariantFragment\n      }\n    }\n  }\n}\n#graphql\n  fragment ProductVariantFragment on ProductVariant {\n    id\n    availableForSale\n    selectedOptions {\n      name\n      value\n    }\n    image {\n      id\n      url\n      altText\n      width\n      height\n    }\n    price {\n      amount\n      currencyCode\n    }\n    compareAtPrice {\n      amount\n      currencyCode\n    }\n    sku\n    title\n    unitPrice {\n      amount\n      currencyCode\n    }\n    product {\n      title\n      handle\n    }\n  }\n\n": {
     return: FeaturedProductQuery;
     variables: FeaturedProductQueryVariables;
   };
