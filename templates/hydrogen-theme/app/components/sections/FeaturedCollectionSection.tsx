@@ -99,8 +99,7 @@ function AwaitFeaturedCollection(props: {
           })[0];
 
           const products =
-            collection?.products?.nodes &&
-            collection?.products?.nodes?.length > 1
+            collection?.products?.nodes && collection?.products?.nodes?.length
               ? flattenConnection(collection?.products)
               : [];
 

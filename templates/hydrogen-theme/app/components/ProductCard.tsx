@@ -13,7 +13,9 @@ export function ProductCard(props: {
   };
 }) {
   const {columns, product, skeleton} = props;
-  const firstVariant = product ? flattenConnection(product?.variants)[0] : null;
+  const firstVariant = product?.variants?.nodes.length
+    ? flattenConnection(product?.variants)[0]
+    : null;
   const sizes = cx([
     '(min-width: 1024px)',
     columns ? `${100 / columns}vw,` : '33vw,',

@@ -10,7 +10,9 @@ export function CollectionListGrid(props: {
   collections?: CollectionsQuery['collections'];
   columns?: null | number;
 }) {
-  const collections = flattenConnection(props.collections);
+  const collections = props.collections?.nodes.length
+    ? flattenConnection(props.collections)
+    : [];
   const columnsVar = {
     '--columns': props.columns ?? 3,
   } as CSSProperties;

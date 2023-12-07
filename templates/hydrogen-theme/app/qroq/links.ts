@@ -1,6 +1,6 @@
 import type {Selection} from 'groqd';
 
-import {q, z} from 'groqd';
+import {q} from 'groqd';
 
 /*
 |--------------------------------------------------------------------------

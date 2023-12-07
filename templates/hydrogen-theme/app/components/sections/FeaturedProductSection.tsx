@@ -3,6 +3,7 @@ import type {FeaturedProductQuery} from 'storefrontapi.generated';
 
 import {Await, useLoaderData} from '@remix-run/react';
 import {Image, Money, flattenConnection} from '@shopify/hydrogen';
+import {ProductProvider} from '@shopify/hydrogen-react';
 import {Suspense} from 'react';
 
 import type {SectionDefaultProps} from '~/lib/type';
@@ -33,32 +34,39 @@ export function FeaturedProductSection(
         sanityData={props.data}
       >
         {(product) => {
-          const variants = flattenConnection(product.variants);
+          const variants = product.variants.nodes.length
+            ? flattenConnection(product.variants)
+            : [];
           const firstAvailableVariant = variants.find(
             (variant) => variant.availableForSale,
           );
 
           return (
-            <div className="grid gap-10 lg:grid-cols-2">
-              <div>
-                {firstAvailableVariant?.image && (
-                  <Image
-                    aspectRatio="1/1"
-                    className="h-full w-full rounded object-cover"
-                    data={firstAvailableVariant.image}
-                    sizes="(min-width: 1024px) 50vw, 100vw"
-                  />
-                )}
-              </div>
-              <div>
-                <h2>{product.title}</h2>
+            <ProductProvider
+              data={product}
+              initialVariantId={firstAvailableVariant?.id}
+            >
+              <div className="grid gap-10 lg:grid-cols-2">
                 <div>
-                  {firstAvailableVariant?.price && (
-                    <Money data={firstAvailableVariant.price} />
+                  {firstAvailableVariant?.image && (
+                    <Image
+                      aspectRatio="1/1"
+                      className="h-full w-full rounded object-cover"
+                      data={firstAvailableVariant.image}
+                      sizes="(min-width: 1024px) 50vw, 100vw"
+                    />
                   )}
                 </div>
+                <div>
+                  <h2>{product.title}</h2>
+                  <div>
+                    {firstAvailableVariant?.price && (
+                      <Money data={firstAvailableVariant.price} />
+                    )}
+                  </div>
+                </div>
               </div>
-            </div>
+            </ProductProvider>
           );
         }}
       </AwaitFeaturedProduct>

@@ -1,11 +1,14 @@
 import type {ProductQuery} from 'storefrontapi.generated';
 
 import {MediaFile, flattenConnection} from '@shopify/hydrogen';
+import {useProduct} from '@shopify/hydrogen-react';
 
-export function MediaGallery(props: {
-  media: NonNullable<ProductQuery['product']>['media'];
-}) {
-  const medias = props.media ? flattenConnection(props.media) : [];
+export function MediaGallery() {
+  const {product} = useProduct() as {product: ProductQuery['product']};
+
+  const medias = product?.media?.nodes.length
+    ? flattenConnection(product.media)
+    : [];
 
   return (
     <ul className="grid">

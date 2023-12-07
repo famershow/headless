@@ -28,8 +28,9 @@ export async function loader({
 
 export default function AllProducts() {
   const data = useLoaderData<typeof loader>();
-  const products =
-    data.products?.nodes.length > 1 ? flattenConnection(data.products) : [];
+  const products = data.products?.nodes.length
+    ? flattenConnection(data.products)
+    : [];
 
   return (
     <div className="container py-20">

@@ -14,7 +14,6 @@ query Product(
   $country: CountryCode
   $language: LanguageCode
   $handle: String!
-  $selectedOptions: [SelectedOptionInput!]!
 ) @inContext(country: $country, language: $language) {
   product(handle: $handle) {
     id
@@ -26,9 +25,6 @@ query Product(
     options {
       name
       values
-    }
-    selectedVariant: variantBySelectedOptions(selectedOptions: $selectedOptions) {
-      ...ProductVariantFragment
     }
     media(first: 7) {
       nodes {
@@ -62,7 +58,9 @@ query FeaturedProduct(
       name
       values
     }
-    variants(first: 1) {
+    # There is a lot of variants to fetch but this query is deferred
+    # so it won't block the main page from loading.
+    variants(first: 250) {
       nodes {
         ...ProductVariantFragment
       }

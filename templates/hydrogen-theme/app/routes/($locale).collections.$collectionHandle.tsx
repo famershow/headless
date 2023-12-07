@@ -122,16 +122,15 @@ export async function loader({context, params, request}: LoaderFunctionArgs) {
   return json({
     appliedFilters,
     collection,
-    collections: flattenConnection(collections),
+    collections: collections.edges.length ? flattenConnection(collections) : [],
   });
 }
 
 export default function Collection() {
   const {collection} = useLoaderData<typeof loader>();
-  const products =
-    collection.products.nodes.length > 1
-      ? flattenConnection(collection.products)
-      : [];
+  const products = collection.products.nodes.length
+    ? flattenConnection(collection.products)
+    : [];
 
   return (
     <>

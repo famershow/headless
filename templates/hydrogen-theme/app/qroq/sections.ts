@@ -8,6 +8,7 @@ import {
   SHOPIFY_TITLE_BLOCK,
 } from './blocks';
 import {COLOR_SCHEME_FRAGMENT, IMAGE_FRAGMENT} from './fragments';
+import {getIntValue} from './utils';
 
 export const contentAlignmentValues = [
   'top_left',
@@ -55,13 +56,7 @@ export const IMAGE_BANNER_SECTION_FRAGMENT = {
   contentAlignment: z.enum(contentAlignmentValues).nullable(),
   overlayOpacity: q.number().nullable(),
   settings: SECTION_SETTINGS_FRAGMENT,
-  title: [
-    `coalesce(
-      title[_key == $language][0].value,
-      title[_key == $defaultLanguage][0].value,
-    )`,
-    q.string(),
-  ],
+  title: [getIntValue('title'), q.string()],
 } satisfies Selection;
 
 /*
@@ -115,10 +110,7 @@ export const PRODUCT_INFORMATION_SECTION_FRAGMENT = {
   _key: q.string().nullable(),
   _type: q.literal('productInformationSection'),
   richtext: [
-    `coalesce(
-      richtext[_key == $language][0].value,
-      richtext[_key == $defaultLanguage][0].value,
-    )`,
+    getIntValue('richtext'),
     q
       .array(
         q.union([
@@ -162,13 +154,7 @@ export const CTA_SECTION_FRAGMENT = {
   _key: q.string().nullable(),
   _type: q.literal('ctaSection'),
   settings: SECTION_SETTINGS_FRAGMENT,
-  title: [
-    `coalesce(
-    title[_key == $language][0].value,
-    title[_key == $defaultLanguage][0].value,
-  )`,
-    q.string(),
-  ],
+  title: [getIntValue('title'), q.string()],
 } satisfies Selection;
 
 /*

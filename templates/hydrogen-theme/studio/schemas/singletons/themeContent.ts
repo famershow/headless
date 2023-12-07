@@ -1,4 +1,4 @@
-import {defineField, defineType} from 'sanity'
+import {defineField, defineType} from 'sanity';
 
 export default defineType({
   name: 'themeContent',
@@ -35,13 +35,39 @@ export default defineType({
           name: 'addToCart',
           type: 'internationalizedArrayString',
         }),
+        defineField({
+          title: 'Sold out',
+          name: 'soldOut',
+          type: 'internationalizedArrayString',
+        }),
       ],
-      initialValue: {
-        addToCart: 'Add to cart',
-      },
     }),
   ],
+  initialValue: {
+    cart: {
+      view: [
+        {
+          _key: 'en',
+          value: 'View cart',
+        },
+      ],
+    },
+    product: {
+      addToCart: [
+        {
+          _key: 'en',
+          value: 'Add to cart',
+        },
+      ],
+      souldOut: [
+        {
+          _key: 'en',
+          value: 'Sold out',
+        },
+      ],
+    },
+  },
   preview: {
     prepare: () => ({title: 'Theme Content'}),
   },
-})
+});

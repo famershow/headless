@@ -112,6 +112,9 @@ export async function loader({context}: LoaderFunctionArgs) {
          * Be careful not to expose any sensitive environment variables here.
          */
         NODE_ENV: env.NODE_ENV,
+        PUBLIC_STORE_DOMAIN: env.PUBLIC_STORE_DOMAIN,
+        PUBLIC_STOREFRONT_API_TOKEN: env.PUBLIC_STOREFRONT_API_TOKEN,
+        PUBLIC_STOREFRONT_API_VERSION: env.PUBLIC_STOREFRONT_API_VERSION,
         SANITY_STUDIO_API_VERSION: env.SANITY_STUDIO_API_VERSION,
         SANITY_STUDIO_DATASET: env.SANITY_STUDIO_DATASET,
         SANITY_STUDIO_PROJECT_ID: env.SANITY_STUDIO_PROJECT_ID,
