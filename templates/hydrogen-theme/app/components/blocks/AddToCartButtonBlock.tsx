@@ -25,7 +25,7 @@ export function AddToCartButtonBlock(
               ? flattenConnection(product.variants)
               : [];
 
-            return <ProductForm variants={variants} />;
+            return <ProductForm variants={variants} {...props} />;
           }}
         </Await>
       </Suspense>

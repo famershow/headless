@@ -111,6 +111,10 @@ export const THEME_CONTENT_QUERY = q('*')
     product: q('product')
       .grab({
         addToCart: [getIntValue('addToCart'), q.string().nullable()],
+        quantitySelector: [
+          getIntValue('quantitySelector'),
+          q.boolean().nullable(),
+        ],
         soldOut: [getIntValue('soldOut'), q.string().nullable()],
       })
       .nullable(),

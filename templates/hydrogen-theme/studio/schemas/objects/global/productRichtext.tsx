@@ -75,11 +75,12 @@ export default defineField({
       type: 'object',
       fields: [
         defineField({
-          name: 'size',
-          type: 'string',
-          options: {
-            list: ['small', 'medium', 'large'],
-          },
+          name: 'quantitySelector',
+          type: 'boolean',
+        }),
+        defineField({
+          name: 'shopPayButton',
+          type: 'boolean',
         }),
       ],
       icon: () => <ShoppingCart size="18px" />,
