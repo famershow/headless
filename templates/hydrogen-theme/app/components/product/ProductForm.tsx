@@ -1,63 +1,39 @@
+import type {ProductVariant} from '@shopify/hydrogen-react/storefront-api-types';
+import type {InferType} from 'groqd';
 import type {
   ProductQuery,
   ProductVariantFragmentFragment,
 } from 'storefrontapi.generated';
+import type {PartialObjectDeep} from 'type-fest/source/partial-deep';
 
 import {ShopPayButton, useProduct} from '@shopify/hydrogen-react';
 import {cx} from 'class-variance-authority';
+import {useState} from 'react';
 import {Button} from 'react-aria-components';
 
-import {useIsInIframe} from '~/hooks/useIsInIframe';
-import {useSanityThemeContent} from '~/hooks/useSanityThemeContent';
-import {useSelectedVariant} from '~/hooks/useSelectedVariant';
+import type {ADD_TO_CART_BUTTON_BLOCK} from '~/qroq/blocks';
 
+import {AddToCartForm} from './AddToCartForm';
 import {VariantSelector} from './VariantSelector';
 
-export function ProductForm({
-  variants,
-}: {
-  variants: ProductVariantFragmentFragment[];
-}) {
-  const isInIframe = useIsInIframe();
-  const {themeContent} = useSanityThemeContent();
+export function ProductForm(
+  props: {
+    variants: ProductVariantFragmentFragment[];
+  } & InferType<typeof ADD_TO_CART_BUTTON_BLOCK>,
+) {
   const {product} = useProduct() as {
     product: NonNullable<ProductQuery['product']>;
   };
-  const selectedVariant = useSelectedVariant({variants});
-  const isOutOfStock = !selectedVariant?.availableForSale;
+  const showQuantitySelector = props.quantitySelector;
 
   return (
-    <div className="grid gap-10">
-      <div className="grid gap-4">
-        <VariantSelector options={product.options} variants={variants} />
-        {selectedVariant && (
-          <div className="grid items-stretch gap-4">
-            <Button
-              className="inverted-color-scheme rounded px-3 py-2 disabled:opacity-50"
-              isDisabled={isOutOfStock}
-            >
-              {isOutOfStock ? (
-                <span>{themeContent?.product?.soldOut}</span>
-              ) : (
-                <span>{themeContent?.product?.addToCart}</span>
-              )}
-            </Button>
-            {!isInIframe && (
-              <div className="h-10">
-                <ShopPayButton
-                  className={cx([
-                    'h-full',
-                    isOutOfStock &&
-                      'pointer-events-none cursor-default opacity-50',
-                  ])}
-                  variantIds={[selectedVariant?.id!]}
-                  width="100%"
-                />
-              </div>
-            )}
-          </div>
-        )}
-      </div>
+    <div className="grid gap-4">
+      <VariantSelector options={product.options} variants={props.variants} />
+      <AddToCartForm
+        showQuantitySelector={showQuantitySelector}
+        showShopPay={props.shopPayButton}
+        variants={props.variants}
+      />
     </div>
   );
 }

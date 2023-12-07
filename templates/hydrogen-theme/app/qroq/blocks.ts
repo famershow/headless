@@ -18,7 +18,9 @@ export const SHOPIFY_DESCRIPTION_BLOCK = q.object({
 export const ADD_TO_CART_BUTTON_BLOCK = q.object({
   _key: q.string(),
   _type: q.literal('addToCartButton'),
-  size: z.enum(['small', 'medium', 'large']),
+  quantitySelector: q.boolean().nullable(),
+  shopPayButton: q.boolean().nullable(),
+  size: z.enum(['small', 'medium', 'large']).nullable(),
 });
 
 export const PRICE_BLOCK = q.object({

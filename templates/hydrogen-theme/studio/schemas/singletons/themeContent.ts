@@ -40,6 +40,11 @@ export default defineType({
           name: 'soldOut',
           type: 'internationalizedArrayString',
         }),
+        defineField({
+          title: 'Quantity Selector Label',
+          name: 'quantitySelector',
+          type: 'internationalizedArrayString',
+        }),
       ],
     }),
   ],
@@ -63,6 +68,12 @@ export default defineType({
         {
           _key: 'en',
           value: 'Sold out',
+        },
+      ],
+      quantitySelector: [
+        {
+          _key: 'en',
+          value: 'Quantity selector',
         },
       ],
     },
