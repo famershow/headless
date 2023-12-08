@@ -72,11 +72,14 @@ ${PRODUCT_VARIANT_FRAGMENT}
 
 export const RECOMMENDED_PRODUCTS_QUERY = `#graphql
   query productRecommendations(
-    $productId: ID!
     $count: Int
     $country: CountryCode
     $language: LanguageCode
+    $productId: ID!
   ) @inContext(country: $country, language: $language) {
+    mainProduct: product(id: $productId) {
+      id
+    }
     recommended: productRecommendations(productId: $productId) {
       ...ProductCard
     }

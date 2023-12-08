@@ -10,7 +10,7 @@ import type {FEATURED_COLLECTION_SECTION_FRAGMENT} from '~/qroq/sections';
 
 import type {loader as indexLoader} from '../../routes/_index';
 
-import {ProductCardGrid} from '../ProductCardGrid';
+import {ProductCardGrid} from '../product/ProductCardGrid';
 
 type FeaturedCollectionSectionProps = TypeFromSelection<
   typeof FEATURED_COLLECTION_SECTION_FRAGMENT

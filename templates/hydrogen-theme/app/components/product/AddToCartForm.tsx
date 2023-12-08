@@ -5,6 +5,7 @@ import {cx} from 'class-variance-authority';
 import {useState} from 'react';
 import {Button} from 'react-aria-components';
 
+import {useEnvironmentVariables} from '~/hooks/useEnvironmentVariables';
 import {useSanityThemeContent} from '~/hooks/useSanityThemeContent';
 import {useSelectedVariant} from '~/hooks/useSelectedVariant';
 
@@ -20,6 +21,7 @@ export function AddToCartForm(props: {
   variants: ProductVariantFragmentFragment[];
 }) {
   const {showQuantitySelector, showShopPay, variants} = props;
+  const env = useEnvironmentVariables();
   const {themeContent} = useSanityThemeContent();
   const selectedVariant = useSelectedVariant({variants});
   const isOutOfStock = !selectedVariant?.availableForSale;
@@ -82,6 +84,7 @@ export function AddToCartForm(props: {
                         'pointer-events-none cursor-default',
                       isOutOfStock && 'opacity-50',
                     ])}
+                    storeDomain={`https://${env?.PUBLIC_STORE_DOMAIN!}`}
                     variantIdsAndQuantities={[
                       {
                         id: selectedVariant?.id!,

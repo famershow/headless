@@ -29,6 +29,7 @@ export const PAGE_QUERY = q('*')
     `,
   )
   .grab({
+    _type: q.literal('page'),
     sections: SECTIONS_FRAGMENT,
   })
   .slice(0)
@@ -42,7 +43,11 @@ export const PAGE_QUERY = q('*')
 export const PRODUCT_QUERY = q('*')
   .filter(`_type == "product" && store.slug.current == $productHandle`)
   .grab({
+    _type: q.literal('product'),
     sections: PRODUCT_SECTIONS_FRAGMENT,
+    store: q('store').grab({
+      gid: q.string(),
+    }),
   })
   .slice(0)
   .nullable();

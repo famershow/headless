@@ -1,6 +1,6 @@
 import type {ProductVariantFragmentFragment} from 'storefrontapi.generated';
 
-import {Money} from '@shopify/hydrogen-react';
+import {Money} from '@shopify/hydrogen';
 
 import {useSelectedVariant} from '~/hooks/useSelectedVariant';
 

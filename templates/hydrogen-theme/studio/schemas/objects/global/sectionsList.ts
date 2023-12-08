@@ -24,6 +24,9 @@ const pdpSections = [
   {
     type: 'productInformationSection',
   },
+  {
+    type: 'relatedProductsSection',
+  },
   ...globalSections,
 ];
 

@@ -10,7 +10,7 @@ import {
 import {json} from '@shopify/remix-oxygen';
 import invariant from 'tiny-invariant';
 
-import {ProductCardGrid} from '~/components/ProductCardGrid';
+import {ProductCardGrid} from '~/components/product/ProductCardGrid';
 import {COLLECTION_QUERY} from '~/graphql/queries';
 
 export type SortParam =

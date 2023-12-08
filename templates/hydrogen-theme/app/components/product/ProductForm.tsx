@@ -1,17 +1,10 @@
-import type {ProductVariant} from '@shopify/hydrogen-react/storefront-api-types';
 import type {InferType} from 'groqd';
-import type {
-  ProductQuery,
-  ProductVariantFragmentFragment,
-} from 'storefrontapi.generated';
-import type {PartialObjectDeep} from 'type-fest/source/partial-deep';
+import type {ProductVariantFragmentFragment} from 'storefrontapi.generated';
 
-import {ShopPayButton, useProduct} from '@shopify/hydrogen-react';
-import {cx} from 'class-variance-authority';
-import {useState} from 'react';
-import {Button} from 'react-aria-components';
+import {useLoaderData} from '@remix-run/react';
 
 import type {ADD_TO_CART_BUTTON_BLOCK} from '~/qroq/blocks';
+import type {loader} from '~/routes/($locale).products.$productHandle';
 
 import {AddToCartForm} from './AddToCartForm';
 import {VariantSelector} from './VariantSelector';
@@ -21,9 +14,7 @@ export function ProductForm(
     variants: ProductVariantFragmentFragment[];
   } & InferType<typeof ADD_TO_CART_BUTTON_BLOCK>,
 ) {
-  const {product} = useProduct() as {
-    product: NonNullable<ProductQuery['product']>;
-  };
+  const {product} = useLoaderData<typeof loader>();
   const showQuantitySelector = props.quantitySelector;
 
   return (
