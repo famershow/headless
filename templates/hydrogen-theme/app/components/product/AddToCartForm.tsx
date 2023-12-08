@@ -8,7 +8,11 @@ import {Button} from 'react-aria-components';
 import {useSanityThemeContent} from '~/hooks/useSanityThemeContent';
 import {useSelectedVariant} from '~/hooks/useSelectedVariant';
 
-import {QuantitySelector} from './QuantitySelector';
+import {
+  QuantitySelector,
+  QuantitySelectorButton,
+  QuantitySelectorValue,
+} from '../QuantitySelector';
 
 export function AddToCartForm(props: {
   showQuantitySelector?: boolean | null;
@@ -25,10 +29,21 @@ export function AddToCartForm(props: {
     selectedVariant && (
       <>
         {showQuantitySelector && (
-          <QuantitySelector
-            isOutOfStock={isOutOfStock}
-            setQuantity={setQuantity}
-          />
+          <div className="flex">
+            <QuantitySelector>
+              <QuantitySelectorButton
+                disabled={isOutOfStock || quantity === 1}
+                onClick={() => setQuantity(quantity - 1)}
+                variant="decrease"
+              />
+              <QuantitySelectorValue>{quantity}</QuantitySelectorValue>
+              <QuantitySelectorButton
+                disabled={isOutOfStock}
+                onClick={() => setQuantity(quantity + 1)}
+                variant="increase"
+              />
+            </QuantitySelector>
+          </div>
         )}
         <CartForm
           action={CartForm.ACTIONS.LinesAdd}

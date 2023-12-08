@@ -9,7 +9,7 @@ import {CartForm} from '@shopify/hydrogen';
 import {defer, json} from '@shopify/remix-oxygen';
 import invariant from 'tiny-invariant';
 
-import {Cart} from '~/components/Cart';
+import {Cart} from '~/components/cart/Cart';
 import {isLocalPath} from '~/lib/utils';
 
 export async function action({context, request}: ActionFunctionArgs) {
