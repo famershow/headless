@@ -9,9 +9,11 @@ import type {loader} from '~/routes/($locale).products.$productHandle';
 
 import {ProductForm} from '../product/ProductForm';
 
-export function AddToCartButtonBlock(
-  props: InferType<typeof ADD_TO_CART_BUTTON_BLOCK>,
-) {
+export type AddToCartButtonBlockProps = InferType<
+  typeof ADD_TO_CART_BUTTON_BLOCK
+>;
+
+export function AddToCartButtonBlock(props: AddToCartButtonBlockProps) {
   const loaderData = useLoaderData<typeof loader>();
   const variantsPromise = loaderData.variants;
 

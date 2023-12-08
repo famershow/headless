@@ -5,9 +5,11 @@ import {useProduct} from '@shopify/hydrogen-react';
 
 import type {SHOPIFY_DESCRIPTION_BLOCK} from '~/qroq/blocks';
 
-export function ShopifyDescriptionBlock(
-  props: InferType<typeof SHOPIFY_DESCRIPTION_BLOCK>,
-) {
+export type ShopifyDescriptionBlockProps = InferType<
+  typeof SHOPIFY_DESCRIPTION_BLOCK
+>;
+
+export function ShopifyDescriptionBlock(props: ShopifyDescriptionBlockProps) {
   const {product} = useProduct() as {product: ProductQuery['product']};
 
   return product ? (

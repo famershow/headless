@@ -9,7 +9,9 @@ import type {loader} from '~/routes/($locale).products.$productHandle';
 
 import {VariantPrice} from '../product/VariantPrice';
 
-export function PriceBlock(props: InferType<typeof PRICE_BLOCK>) {
+export type PriceBlockProps = InferType<typeof PRICE_BLOCK>;
+
+export function PriceBlock(props: PriceBlockProps) {
   const loaderData = useLoaderData<typeof loader>();
   const variantsPromise = loaderData.variants;
 
