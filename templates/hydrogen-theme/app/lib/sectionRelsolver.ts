@@ -37,6 +37,11 @@ export const sections: {
       }),
     ),
   ),
+  relatedProductsSection: lazy(() =>
+    import('../components/sections/RelatedProductsSection').then((module) => ({
+      default: module.RelatedProductsSection,
+    })),
+  ),
   socialLinksOnly: lazy(() =>
     import('../components/footers/SocialLinksOnly').then((module) => ({
       default: module.SocialLinksOnly,

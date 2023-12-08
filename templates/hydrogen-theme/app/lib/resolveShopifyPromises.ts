@@ -14,6 +14,7 @@ import {
   COLLECTIONS_QUERY,
   FEATURED_COLLECTION_QUERY,
   FEATURED_PRODUCT_QUERY,
+  RECOMMENDED_PRODUCTS_QUERY,
 } from '~/graphql/queries';
 
 type SanityPageData = InferType<typeof PAGE_QUERY>;
@@ -47,10 +48,16 @@ export function resolveShopifyPromises({
     storefront,
   });
 
+  const relatedProductsPromise = resolveRelatedProductsPromise({
+    document,
+    storefront,
+  });
+
   return {
     collectionListPromise,
     featuredCollectionPromise,
     featuredProductPromise,
+    relatedProductsPromise,
   };
 }
 
@@ -60,7 +67,7 @@ function resolveFeaturedCollectionPromise({
 }: PromiseResolverArgs) {
   const promises: Promise<FeaturedCollectionQuery>[] = [];
 
-  document.data?.sections?.forEach((section) => {
+  for (const section of document.data?.sections || []) {
     if (section._type === 'featuredCollectionSection') {
       const gid = section.collection?.store.gid;
       const first = section.maxProducts || 3;
@@ -80,7 +87,7 @@ function resolveFeaturedCollectionPromise({
 
       promises.push(promise);
     }
-  });
+  }
 
   /**
    * Promise.allSettled is used to resolve all promises even if one of them fails.
@@ -99,7 +106,7 @@ function resolveCollectionListPromise({
 }: PromiseResolverArgs) {
   const promises: Promise<CollectionsQuery>[] = [];
 
-  document.data?.sections?.forEach((section) => {
+  for (const section of document.data?.sections || []) {
     if (section._type === 'collectionListSection') {
       const first = section.collections?.length;
       const ids = section.collections?.map(
@@ -122,7 +129,7 @@ function resolveCollectionListPromise({
 
       promises.push(promise);
     }
-  });
+  }
 
   /**
    * Promise.allSettled is used to resolve all promises even if one of them fails.
@@ -141,7 +148,7 @@ function resolveFeaturedProductPromise({
 }: PromiseResolverArgs) {
   const promises: Promise<FeaturedProductQuery>[] = [];
 
-  document.data?.sections?.forEach((section) => {
+  for (const section of document.data?.sections || []) {
     if (section._type === 'featuredProductSection') {
       const gid = section.product?.store.gid;
 
@@ -159,7 +166,7 @@ function resolveFeaturedProductPromise({
 
       promises.push(promise);
     }
-  });
+  }
 
   /**
    * Promise.allSettled is used to resolve all promises even if one of them fails.
@@ -170,4 +177,32 @@ function resolveFeaturedProductPromise({
   const featuredProductPromise = Promise.allSettled(promises);
 
   return featuredProductPromise;
+}
+
+async function resolveRelatedProductsPromise({
+  document,
+  storefront,
+}: PromiseResolverArgs) {
+  let promise;
+
+  if (document.data?._type !== 'product') {
+    return undefined;
+  }
+
+  const productId = document.data?.store.gid;
+
+  for (const section of document.data?.sections || []) {
+    if (section._type === 'relatedProductsSection') {
+      promise = storefront.query(RECOMMENDED_PRODUCTS_QUERY, {
+        variables: {
+          count: section.maxProducts || 4,
+          country: storefront.i18n.country,
+          language: storefront.i18n.language,
+          productId,
+        },
+      });
+    }
+  }
+
+  return promise;
 }

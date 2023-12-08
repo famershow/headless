@@ -4,7 +4,7 @@ import {useLoaderData} from '@remix-run/react';
 import {flattenConnection, getPaginationVariables} from '@shopify/hydrogen';
 import {json} from '@shopify/remix-oxygen';
 
-import {ProductCardGrid} from '~/components/ProductCardGrid';
+import {ProductCardGrid} from '~/components/product/ProductCardGrid';
 import {ALL_PRODUCTS_QUERY} from '~/graphql/queries';
 
 const PAGE_BY = 8;

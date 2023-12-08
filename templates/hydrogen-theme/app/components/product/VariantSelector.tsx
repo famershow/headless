@@ -5,7 +5,7 @@ import type {
 import type {PartialDeep} from 'type-fest';
 
 import {Link} from '@remix-run/react';
-import {parseGid} from '@shopify/hydrogen-react';
+import {parseGid} from '@shopify/hydrogen';
 import {cx} from 'class-variance-authority';
 import {useMemo} from 'react';
 

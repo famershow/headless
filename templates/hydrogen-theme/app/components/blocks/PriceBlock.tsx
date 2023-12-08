@@ -1,7 +1,7 @@
 import type {InferType} from 'groqd';
 
 import {Await, useLoaderData} from '@remix-run/react';
-import {flattenConnection} from '@shopify/hydrogen-react';
+import {flattenConnection} from '@shopify/hydrogen';
 import {Suspense} from 'react';
 
 import type {PRICE_BLOCK} from '~/qroq/blocks';

@@ -1,11 +1,10 @@
-import type {ProductQuery} from 'storefrontapi.generated';
-
+import {useLoaderData} from '@remix-run/react';
 import {MediaFile, flattenConnection} from '@shopify/hydrogen';
-import {useProduct} from '@shopify/hydrogen-react';
+
+import type {loader} from '~/routes/($locale).products.$productHandle';
 
 export function MediaGallery() {
-  const {product} = useProduct() as {product: ProductQuery['product']};
-
+  const {product} = useLoaderData<typeof loader>();
   const medias = product?.media?.nodes.length
     ? flattenConnection(product.media)
     : [];

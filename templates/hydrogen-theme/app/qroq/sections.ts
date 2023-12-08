@@ -129,6 +129,20 @@ export const PRODUCT_INFORMATION_SECTION_FRAGMENT = {
 
 /*
 |--------------------------------------------------------------------------
+| Related Products Section
+|--------------------------------------------------------------------------
+*/
+export const RELATED_PRODUCTS_SECTION_FRAGMENT = {
+  _key: q.string().nullable(),
+  _type: q.literal('relatedProductsSection'),
+  desktopColumns: q.number().nullable(),
+  heading: [getIntValue('heading'), q.string()],
+  maxProducts: q.number().nullable(),
+  settings: SECTION_SETTINGS_FRAGMENT,
+} satisfies Selection;
+
+/*
+|--------------------------------------------------------------------------
 | Collection List Section
 |--------------------------------------------------------------------------
 */
@@ -185,6 +199,7 @@ export const PRODUCT_SECTIONS_FRAGMENT = q('sections[]', {isArray: true})
   .select({
     "_type == 'productInformationSection'":
       PRODUCT_INFORMATION_SECTION_FRAGMENT,
+    "_type == 'relatedProductsSection'": RELATED_PRODUCTS_SECTION_FRAGMENT,
     ...SECTIONS_LIST_SELECTION,
   })
   .nullable();
