@@ -17,8 +17,7 @@ export const INTERNAL_LINK_FRAGMENT = {
       documentType: ['_type', q.string()],
       slug: [
         `coalesce(
-            slug[_key == $language][0].value,
-            slug[_key == $defaultLanguage][0].value,
+            slug,
             store.slug
           )`,
         q.object({
