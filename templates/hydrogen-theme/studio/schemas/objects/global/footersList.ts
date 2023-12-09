@@ -1,6 +1,6 @@
-import {ArrayOfObjectsInputProps, defineField} from 'sanity'
+import {ArrayOfObjectsInputProps, defineField} from 'sanity';
 
-import SectionsListInput from '../../../components/SectionsListInput'
+import SectionsListInput from '../../../components/SectionsListInput';
 
 export default defineField({
   title: 'Footers',
@@ -13,7 +13,8 @@ export default defineField({
     },
   ],
   components: {
-    input: (props: ArrayOfObjectsInputProps) => SectionsListInput({type: 'footer', ...props}),
+    input: (props: ArrayOfObjectsInputProps) =>
+      SectionsListInput({type: 'footer', ...props}),
   },
   validation: (Rule: any) => Rule.max(1),
-})
+});

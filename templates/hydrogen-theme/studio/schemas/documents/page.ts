@@ -1,6 +1,4 @@
-import {defineField, defineType} from 'sanity'
-
-import {SlugInt, validateIntSlug} from '../../utils/slug'
+import {defineField, defineType} from 'sanity';
 
 export default defineType({
   name: 'page',
@@ -22,12 +20,9 @@ export default defineType({
     }),
     defineField({
       name: 'slug',
-      type: 'internationalizedArraySlug',
+      type: 'slug',
       title: 'Slug',
-      validation: (Rule) =>
-        Rule.required().custom((slugArray: SlugInt[], context) =>
-          validateIntSlug({slugArray, context})
-        ),
+      validation: (Rule) => Rule.required(),
     }),
   ],
   preview: {
@@ -37,7 +32,7 @@ export default defineType({
     prepare({title}) {
       return {
         title: title?.[0]?.value || 'No title',
-      }
+      };
     },
   },
-})
+});

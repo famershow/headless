@@ -16,6 +16,8 @@ import {projectDetails} from './project.details';
 import {getAllLanguages} from '../countries';
 import {customDocumentActions} from './plugins/customDocumentActions';
 import {singletonActions, singletonsTypes} from './desk/singletons';
+import {locate} from './presentation/locate';
+import {PreviewIcon} from './components/icons/Preview';
 
 const {projectId, dataset, apiVersion} = projectDetails;
 const localePreviewUrl = 'http://localhost:3000';
@@ -46,6 +48,9 @@ export default defineConfig({
     presentationTool({
       // Required: set the base URL to the preview location in the front end
       previewUrl: `${SANITY_STUDIO_PREVIEW_URL}/sanity/preview`,
+      locate,
+      icon: PreviewIcon,
+      title: 'Preview',
     }),
     internationalizedArray({
       languages: getAllLanguages(),

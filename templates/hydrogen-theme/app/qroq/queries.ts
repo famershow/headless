@@ -19,10 +19,8 @@ export const PAGE_QUERY = q('*')
   .filter(
     `(
       _type == "page" &&
-        ($handle != "home" && slug[_key == $language][0].value.current == $handle) ||
-        ($handle != "home" && slug[_key == $defaultLanguage][0].value.current == $handle)
-      ) ||
-      (
+        ($handle != "home" && slug.current == $handle)
+      ) || (
         _type == "home" &&
         $handle == "home"
       )
