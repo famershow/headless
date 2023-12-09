@@ -1,4 +1,4 @@
-import type {HistoryUpdate} from '@sanity/overlays';
+import type {HistoryAdapterNavigate} from '@sanity/overlays';
 
 import {useFetcher, useLocation, useNavigate} from '@remix-run/react';
 import {enableOverlays} from '@sanity/overlays';
@@ -15,9 +15,7 @@ export function VisualEditing() {
   const isInIframe = useIsInIframe();
   const navigateRemix = useNavigate();
   const location = useLocation();
-  const navigateComposerRef = useRef<((update: HistoryUpdate) => void) | null>(
-    null,
-  );
+  const navigateComposerRef = useRef<HistoryAdapterNavigate>();
   const sanityStudioUrl = env?.SANITY_STUDIO_URL!;
   const client = useSanityClient();
 
@@ -30,7 +28,7 @@ export function VisualEditing() {
         subscribe: (navigate) => {
           navigateComposerRef.current = navigate;
           return () => {
-            navigateComposerRef.current = null;
+            navigateComposerRef.current = undefined;
           };
         },
         update: (update) => {
@@ -43,12 +41,13 @@ export function VisualEditing() {
       },
       zIndex: 999999,
     });
+
     return () => disable();
   }, [navigateRemix, sanityStudioUrl]);
 
   useEffect(() => {
     if (navigateComposerRef.current) {
-      navigateComposerRef.current({
+      navigateComposerRef.current?.({
         type: 'push',
         url: `${location.pathname}${location.search}${location.hash}`,
       });

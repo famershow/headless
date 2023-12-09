@@ -151,8 +151,6 @@ export const locate: DocumentLocationResolver = (params, context) => {
           })
           .flat();
 
-        console.log(collectionsLocations);
-
         return {
           locations: [
             ...collectionsLocations,
