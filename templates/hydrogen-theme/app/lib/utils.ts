@@ -3,6 +3,8 @@ import type {SelectedOption} from '@shopify/hydrogen/storefront-api-types';
 import {useLocation} from '@remix-run/react';
 import {useMemo} from 'react';
 
+import type {I18nLocale} from './type';
+
 export function useVariantUrl(
   handle: string,
   selectedOptions: SelectedOption[],
@@ -73,4 +75,11 @@ export function isLocalPath(url: string) {
   }
 
   return false;
+}
+
+export function parseAsCurrency(value: number, locale: I18nLocale) {
+  return new Intl.NumberFormat(locale.language + '-' + locale.country, {
+    currency: locale.currency,
+    style: 'currency',
+  }).format(value);
 }
