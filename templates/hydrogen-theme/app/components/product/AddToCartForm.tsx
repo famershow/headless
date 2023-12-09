@@ -1,6 +1,7 @@
 import type {ProductVariantFragmentFragment} from 'storefrontapi.generated';
 
 import {CartForm, ShopPayButton} from '@shopify/hydrogen';
+import {vercelStegaSplit} from '@vercel/stega';
 import {cx} from 'class-variance-authority';
 import {useState} from 'react';
 import {Button} from 'react-aria-components';
@@ -14,6 +15,7 @@ import {
   QuantitySelectorButton,
   QuantitySelectorValue,
 } from '../QuantitySelector';
+import CleanString from '../sanity/CleanString';
 
 export function AddToCartForm(props: {
   showQuantitySelector?: boolean | null;
@@ -66,13 +68,14 @@ export function AddToCartForm(props: {
                   'inverted-color-scheme w-full rounded px-3 py-2',
                   isOutOfStock && 'opacity-50',
                 ])}
+                data-sanity-edit-target
                 isDisabled={isOutOfStock || fetcher.state !== 'idle'}
                 type="submit"
               >
                 {isOutOfStock ? (
-                  <span>{themeContent?.product?.soldOut}</span>
+                  <CleanString value={themeContent?.product?.soldOut} />
                 ) : (
-                  <span>{themeContent?.product?.addToCart}</span>
+                  <CleanString value={themeContent?.product?.addToCart} />
                 )}
               </Button>
               {showShopPay && (
