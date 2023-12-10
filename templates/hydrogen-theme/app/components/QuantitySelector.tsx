@@ -6,7 +6,7 @@ export function QuantitySelector(props: {children: React.ReactNode}) {
   );
 }
 
-export function QuantitySelectorButton(
+function Button(
   props: {
     children?: React.ReactNode;
     variant: 'decrease' | 'increase';
@@ -46,8 +46,11 @@ export function QuantitySelectorButton(
   );
 }
 
-export function QuantitySelectorValue(props: {children: React.ReactNode}) {
+function Value(props: {children: React.ReactNode}) {
   return (
     <div className="min-w-[2.5rem] px-2 text-center">{props.children}</div>
   );
 }
+
+QuantitySelector.Button = Button;
+QuantitySelector.Value = Value;

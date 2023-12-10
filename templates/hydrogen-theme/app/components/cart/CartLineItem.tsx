@@ -16,11 +16,7 @@ import {cx} from 'class-variance-authority';
 
 import {useLocalePath} from '~/hooks/useLocalePath';
 
-import {
-  QuantitySelector,
-  QuantitySelectorButton,
-  QuantitySelectorValue,
-} from '../QuantitySelector';
+import {QuantitySelector} from '../QuantitySelector';
 import {IconRemove} from '../icons/IconRemove';
 
 type OptimisticData = {
@@ -183,7 +179,7 @@ function CartLineQuantityAdjust({line}: {line: CartLine}) {
       </label>
       <QuantitySelector>
         <UpdateCartForm lines={[{id: lineId, quantity: prevQuantity}]}>
-          <QuantitySelectorButton
+          <QuantitySelector.Button
             disabled={optimisticQuantity <= 1}
             value={prevQuantity}
             variant="decrease"
@@ -192,16 +188,16 @@ function CartLineQuantityAdjust({line}: {line: CartLine}) {
               data={{quantity: prevQuantity}}
               id={optimisticId}
             />
-          </QuantitySelectorButton>
+          </QuantitySelector.Button>
         </UpdateCartForm>
-        <QuantitySelectorValue>{optimisticQuantity}</QuantitySelectorValue>
+        <QuantitySelector.Value>{optimisticQuantity}</QuantitySelector.Value>
         <UpdateCartForm lines={[{id: lineId, quantity: nextQuantity}]}>
-          <QuantitySelectorButton value={nextQuantity} variant="increase">
+          <QuantitySelector.Button value={nextQuantity} variant="increase">
             <OptimisticInput
               data={{quantity: nextQuantity}}
               id={optimisticId}
             />
-          </QuantitySelectorButton>
+          </QuantitySelector.Button>
         </UpdateCartForm>
       </QuantitySelector>
     </>
