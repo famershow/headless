@@ -28,7 +28,7 @@ function Badge(props: {count: number}) {
   const BadgeCounter = useMemo(
     () => (
       <>
-        <IconBag className="h-6 w-6" />
+        <IconBag className="size-6" />
         {isHydrated && count > 0 && (
           <div
             className={cx([
@@ -48,7 +48,7 @@ function Badge(props: {count: number}) {
 
   return (
     <Link
-      className="focus:ring-primary/5 relative flex h-8 w-8 items-center justify-center"
+      className="focus:ring-primary/5 relative flex size-8 items-center justify-center"
       prefetch="intent"
       to={path}
     >

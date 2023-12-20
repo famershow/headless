@@ -7,7 +7,7 @@ import {fontPicker} from '@headless.build/sanity-font-picker';
 import {colorPicker} from '@headless.build/sanity-color-picker';
 import {rangeSlider} from '@headless.build/sanity-plugin-range-slider';
 import {codeInput} from '@sanity/code-input';
-import {presentationTool} from 'sanity/presentation';
+import {presentationTool} from '@sanity/presentation';
 import {languageFilter} from '@sanity/language-filter';
 
 import {schemaTypes} from './schemas';

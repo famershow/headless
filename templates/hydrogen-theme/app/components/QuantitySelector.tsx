@@ -24,7 +24,7 @@ export function QuantitySelectorButton(
         variant === 'increase' && 'Increase quantity',
       ])}
       className={cx([
-        'h-10 w-10 transition',
+        'size-10 transition',
         variant === 'decrease' && 'disabled:opacity-30',
       ])}
       name={cx([

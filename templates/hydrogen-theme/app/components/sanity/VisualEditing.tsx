@@ -5,25 +5,19 @@ import {enableOverlays} from '@sanity/overlays';
 import {cx} from 'class-variance-authority';
 import {useEffect, useRef} from 'react';
 
-import {useEnvironmentVariables} from '~/hooks/useEnvironmentVariables';
 import {useIsInIframe} from '~/hooks/useIsInIframe';
 import {useSanityClient} from '~/hooks/useSanityClient';
 import {useLiveMode} from '~/lib/sanity/sanity.loader';
 
 export function VisualEditing() {
-  const env = useEnvironmentVariables();
   const isInIframe = useIsInIframe();
   const navigateRemix = useNavigate();
   const location = useLocation();
   const navigateComposerRef = useRef<HistoryAdapterNavigate>();
-  const sanityStudioUrl = env?.SANITY_STUDIO_URL!;
   const client = useSanityClient();
 
   useEffect(() => {
-    if (!sanityStudioUrl) return;
-
     const disable = enableOverlays({
-      allowStudioOrigin: sanityStudioUrl,
       history: {
         subscribe: (navigate) => {
           navigateComposerRef.current = navigate;
@@ -43,7 +37,7 @@ export function VisualEditing() {
     });
 
     return () => disable();
-  }, [navigateRemix, sanityStudioUrl]);
+  }, [navigateRemix]);
 
   useEffect(() => {
     if (navigateComposerRef.current) {
@@ -54,8 +48,8 @@ export function VisualEditing() {
     }
   }, [location.hash, location.pathname, location.search]);
 
-  // Enable live queries from the specified studio origin URL
-  useLiveMode({allowStudioOrigin: sanityStudioUrl, client});
+  // Enable live queries
+  useLiveMode({client});
 
   return !isInIframe ? <ExitBanner /> : null;
 }
