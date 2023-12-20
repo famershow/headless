@@ -17,7 +17,7 @@ export function Icon({
       viewBox="0 0 20 20"
       xmlns="http://www.w3.org/2000/svg"
       {...props}
-      className={twMerge(cx('h-5 w-5', className))}
+      className={twMerge(cx('size-5', className))}
       fill={fill}
       stroke={stroke}
     >
