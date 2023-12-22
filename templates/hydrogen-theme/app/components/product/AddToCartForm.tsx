@@ -10,11 +10,7 @@ import {useEnvironmentVariables} from '~/hooks/useEnvironmentVariables';
 import {useSanityThemeContent} from '~/hooks/useSanityThemeContent';
 import {useSelectedVariant} from '~/hooks/useSelectedVariant';
 
-import {
-  QuantitySelector,
-  QuantitySelectorButton,
-  QuantitySelectorValue,
-} from '../QuantitySelector';
+import {QuantitySelector} from '../QuantitySelector';
 import CleanString from '../sanity/CleanString';
 
 export function AddToCartForm(props: {
@@ -35,13 +31,13 @@ export function AddToCartForm(props: {
         {showQuantitySelector && (
           <div className="flex">
             <QuantitySelector>
-              <QuantitySelectorButton
+              <QuantitySelector.Button
                 disabled={isOutOfStock || quantity === 1}
                 onClick={() => setQuantity(quantity - 1)}
                 variant="decrease"
               />
-              <QuantitySelectorValue>{quantity}</QuantitySelectorValue>
-              <QuantitySelectorButton
+              <QuantitySelector.Value>{quantity}</QuantitySelector.Value>
+              <QuantitySelector.Button
                 disabled={isOutOfStock}
                 onClick={() => setQuantity(quantity + 1)}
                 variant="increase"
