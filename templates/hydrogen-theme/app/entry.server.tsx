@@ -2,7 +2,7 @@ import type {EntryContext} from '@shopify/remix-oxygen';
 
 import {RemixServer} from '@remix-run/react';
 import {createContentSecurityPolicy} from '@shopify/hydrogen';
-import isbot from 'isbot';
+import {isbot} from 'isbot';
 import {renderToReadableStream} from 'react-dom/server';
 
 export default async function handleRequest(
