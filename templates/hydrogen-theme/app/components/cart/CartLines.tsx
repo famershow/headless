@@ -22,7 +22,7 @@ export function CartLines({
   const className = cx([
     layout === 'page'
       ? 'flex-grow md:translate-y-4'
-      : 'px-6 pb-6 sm-max:pt-2 overflow-auto transition md:px-12',
+      : 'px-6 py-6 overflow-auto transition md:px-12',
   ]);
 
   return (

@@ -15,27 +15,36 @@ export function CartDetails({
   cart,
   layout,
 }: {
-  cart: CartType | null;
+  cart?: CartType | null;
   layout: CartLayouts;
 }) {
   // @todo: get optimistic cart cost
   const cartHasItems = !!cart && cart.totalQuantity > 0;
-  const container = {
-    drawer: cx('grid grid-cols-1 grid-rows-[1fr_auto]'),
-    page: cx(
-      'w-full pb-12 grid md:grid-cols-2 md:items-start gap-8 md:gap-8 lg:gap-12',
-    ),
-  };
 
   return (
-    <div className={cx(['container', container[layout]])}>
-      <CartLines layout={layout} lines={cart?.lines} />
+    <CartDetailsLayout layout={layout}>
+      <div className={cx([layout === 'drawer' && 'flex-1 overflow-y-scroll'])}>
+        <CartLines layout={layout} lines={cart?.lines} />
+      </div>
       {cartHasItems && (
         <CartSummary cost={cart.cost} layout={layout}>
           <CartDiscounts discountCodes={cart.discountCodes} />
           <CartCheckoutActions checkoutUrl={cart.checkoutUrl} />
         </CartSummary>
       )}
+    </CartDetailsLayout>
+  );
+}
+
+function CartDetailsLayout(props: {
+  children: React.ReactNode;
+  layout: CartLayouts;
+}) {
+  return props.layout === 'drawer' ? (
+    <>{props.children}</>
+  ) : (
+    <div className="container grid w-full gap-8 pb-12 md:grid-cols-2 md:items-start md:gap-8 lg:gap-12">
+      {props.children}
     </div>
   );
 }

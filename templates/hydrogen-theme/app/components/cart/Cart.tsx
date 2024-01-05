@@ -10,7 +10,7 @@ export function Cart({
   layout,
   onClose,
 }: {
-  cart: CartType | null;
+  cart?: CartType | null;
   layout: CartLayouts;
   onClose?: () => void;
 }) {
