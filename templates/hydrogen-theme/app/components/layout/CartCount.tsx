@@ -8,19 +8,21 @@ import {useRootLoaderData} from '~/hooks/useRootLoaderData';
 
 import {IconBag} from '../icons/IconBag';
 
-export function CartCount() {
+export function CartCount(props: {openCart: () => void}) {
   const rootData = useRootLoaderData();
 
   return (
-    <Suspense fallback={<Badge count={0} />}>
+    <Suspense fallback={<Badge count={0} openCart={props.openCart} />}>
       <Await resolve={rootData?.cart}>
-        {(cart) => <Badge count={cart?.totalQuantity || 0} />}
+        {(cart) => (
+          <Badge count={cart?.totalQuantity || 0} openCart={props.openCart} />
+        )}
       </Await>
     </Suspense>
   );
 }
 
-function Badge(props: {count: number}) {
+function Badge(props: {count: number; openCart: () => void}) {
   const {count} = props;
   const isHydrated = useIsHydrated();
   const path = useLocalePath({path: '/cart'});
@@ -46,12 +48,16 @@ function Badge(props: {count: number}) {
     [count, isHydrated],
   );
 
-  return (
-    <Link
-      className="focus:ring-primary/5 relative flex size-8 items-center justify-center"
-      prefetch="intent"
-      to={path}
-    >
+  const buttonClass = cx([
+    'relative flex size-8 items-center justify-center focus:ring-primary/5',
+  ]);
+
+  return isHydrated ? (
+    <button className={buttonClass} onClick={props.openCart}>
+      {BadgeCounter}
+    </button>
+  ) : (
+    <Link className={buttonClass} prefetch="intent" to={path}>
       {BadgeCounter}
     </Link>
   );
