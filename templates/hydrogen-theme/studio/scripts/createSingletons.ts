@@ -1,6 +1,6 @@
-import {getCliClient} from 'sanity/cli'
-import {SINGLETONS} from '../desk/singletons'
-import fs from 'fs'
+import {getCliClient} from 'sanity/cli';
+import {SINGLETONS} from '../desk/singletons';
+import fs from 'fs';
 
 /**
  * This script will create one or many "singleton" documents for each language
@@ -20,22 +20,22 @@ import fs from 'fs'
  * 5. Update your desk structure to use the new documents
  */
 
-const FLAG_FILE_PATH = './scripts/flag.txt'
+const FLAG_FILE_PATH = './scripts/flag.txt';
 
 // Check if the flag file exists
 if (fs.existsSync(FLAG_FILE_PATH)) {
-  console.log('✔ Singletons already created. Exiting...')
-  process.exit(0)
+  console.log('✔ Singletons already created. Exiting...');
+  process.exit(0);
 }
 
 // Create the flag file to indicate that the script has run
-fs.writeFileSync(FLAG_FILE_PATH, 'Singletons created: true')
+fs.writeFileSync(FLAG_FILE_PATH, 'Singletons created: true');
 
 // This will use the client configured in ./sanity.cli.ts
-const client = getCliClient()
+const client = getCliClient();
 
 async function createSingletons() {
-  const singletonsArray = Object.values(SINGLETONS)
+  const singletonsArray = Object.values(SINGLETONS);
 
   const documents = singletonsArray
     .map((singleton) => {
@@ -43,26 +43,27 @@ async function createSingletons() {
         {
           _id: `${singleton.id}`,
           _type: singleton._type,
+          ...singleton.initialValue,
         },
-      ]
+      ];
     })
-    .flat()
+    .flat();
 
-  const transaction = client.transaction()
+  const transaction = client.transaction();
 
   documents.forEach((doc: any) => {
-    transaction.createIfNotExists(doc)
-  })
+    transaction.createIfNotExists(doc);
+  });
 
   await transaction
     .commit()
     .then((res) => {
       // eslint-disable-next-line no-console
-      console.log('✔ Singletons created or updated successfully!')
+      console.log('✔ Singletons created or updated successfully!');
     })
     .catch((err) => {
-      console.error(err)
-    })
+      console.error(err);
+    });
 }
 
-createSingletons()
+createSingletons();

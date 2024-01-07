@@ -30,22 +30,22 @@ export function Fonts() {
 
 export function getFonts({fontsData}: {fontsData: FontsQuery}) {
   const headingFonts =
-    fontsData?.heading &&
-    fontsData.heading.length > 0 &&
-    fontsData.heading[0].fontAssets?.length > 0
-      ? fontsData.heading[0].fontAssets
+    fontsData?.heading?.font &&
+    fontsData.heading.font.length > 0 &&
+    fontsData.heading.font[0].fontAssets?.length > 0
+      ? fontsData.heading.font[0].fontAssets
       : [];
   const bodyFonts =
-    fontsData?.body &&
-    fontsData.body?.length > 0 &&
-    fontsData.body[0].fontAssets?.length > 0
-      ? fontsData.body[0].fontAssets
+    fontsData?.body.font &&
+    fontsData.body?.font.length > 0 &&
+    fontsData.body.font[0].fontAssets?.length > 0
+      ? fontsData.body.font[0].fontAssets
       : [];
   const extraFonts =
-    fontsData?.extra &&
-    fontsData.extra?.length > 0 &&
-    fontsData.extra[0]?.fontAssets?.length > 0
-      ? fontsData.extra[0]?.fontAssets
+    fontsData?.extra.font &&
+    fontsData.extra.font?.length > 0 &&
+    fontsData.extra.font[0]?.fontAssets?.length > 0
+      ? fontsData.extra.font[0]?.fontAssets
       : [];
 
   return [...headingFonts, ...bodyFonts, ...extraFonts];
@@ -86,28 +86,44 @@ function resolveFontAssetUrls(font: FontAssetsFragment[0]) {
 function generateCssFontVariables({fontsData}: {fontsData: FontsQuery}) {
   const fontCategories: Array<{
     antialiased: boolean | null;
+    baseSize: null | number;
+    capitalize: boolean | null;
     categoryName: string;
     fontName: string;
     fontType: string;
+    letterSpacing: null | number;
+    lineHeight: null | number;
   }> = [];
 
-  fontsData?.heading &&
-    fontsData.heading?.length > 0 &&
+  fontsData?.heading.font &&
+    fontsData.heading.font?.length > 0 &&
     fontCategories.push({
+      baseSize: fontsData.heading.baseSize,
+      capitalize: fontsData.heading.capitalize,
       categoryName: 'heading',
-      ...fontsData.heading[0],
+      letterSpacing: fontsData.heading.letterSpacing,
+      lineHeight: fontsData.heading.lineHeight,
+      ...fontsData.heading.font[0],
     });
-  fontsData?.body &&
-    fontsData.body?.length > 0 &&
+  fontsData?.body.font &&
+    fontsData.body.font?.length > 0 &&
     fontCategories.push({
+      baseSize: fontsData.body.baseSize,
+      capitalize: fontsData.body.capitalize,
       categoryName: 'body',
-      ...fontsData.body[0],
+      letterSpacing: fontsData.body.letterSpacing,
+      lineHeight: fontsData.body.lineHeight,
+      ...fontsData.body.font[0],
     });
-  fontsData?.extra &&
-    fontsData.extra?.length > 0 &&
+  fontsData?.extra.font &&
+    fontsData.extra.font?.length > 0 &&
     fontCategories.push({
+      baseSize: fontsData.extra.baseSize,
+      capitalize: fontsData.extra.capitalize,
       categoryName: 'extra',
-      ...fontsData.extra[0],
+      letterSpacing: fontsData.extra.letterSpacing,
+      lineHeight: fontsData.extra.lineHeight,
+      ...fontsData.extra.font[0],
     });
 
   if (fontCategories?.length > 0) {
@@ -124,6 +140,18 @@ function generateCssFontVariables({fontsData}: {fontsData: FontsQuery}) {
         return `
         --${fontCategory.categoryName}-font-family: "${fontCategory.fontName}";
         --${fontCategory.categoryName}-font-type: ${fontCategory.fontType};
+        --${fontCategory.categoryName}-line-height: ${
+          fontCategory.lineHeight ? fontCategory.lineHeight : 'unset'
+        };
+        --${fontCategory.categoryName}-letter-spacing: ${
+          fontCategory.letterSpacing ? fontCategory.letterSpacing : 'unset'
+        };
+        --${fontCategory.categoryName}-base-size: ${
+          fontCategory.baseSize ? fontCategory.baseSize : 'unset'
+        };
+        --${fontCategory.categoryName}-capitalize: ${
+          fontCategory.capitalize ? 'uppercase' : 'none'
+        };
         --${fontCategory.categoryName}-font-webkit-font-smoothing: ${
           fontCategory.antialiased ? 'antialiased' : 'unset'
         };

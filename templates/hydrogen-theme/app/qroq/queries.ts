@@ -3,7 +3,7 @@ import {q} from 'groqd';
 import {FOOTERS_FRAGMENT} from './footers';
 import {
   COLOR_SCHEME_FRAGMENT,
-  FONT_CATEGORY_FRAGMENT,
+  FONT_FRAGMENT,
   MENU_FRAGMENT,
   SETTINGS_FRAGMENT,
 } from './fragments';
@@ -58,13 +58,9 @@ export const PRODUCT_QUERY = q('*')
 export const FONTS_QUERY = q('*')
   .filter("_type == 'typography'")
   .grab({
-    body: q('body[]', {isArray: true}).grab(FONT_CATEGORY_FRAGMENT).nullable(),
-    extra: q('extra[]', {isArray: true})
-      .grab(FONT_CATEGORY_FRAGMENT)
-      .nullable(),
-    heading: q('heading[]', {isArray: true})
-      .grab(FONT_CATEGORY_FRAGMENT)
-      .nullable(),
+    body: q('body').grab(FONT_FRAGMENT),
+    extra: q('extra').grab(FONT_FRAGMENT),
+    heading: q('heading').grab(FONT_FRAGMENT),
   })
   .order('_createdAt asc')
   .slice(0)
