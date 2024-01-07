@@ -1,15 +1,22 @@
-import {CogIcon, EarthGlobeIcon, HomeIcon, InsertAboveIcon, InsertBelowIcon} from '@sanity/icons'
-import {StructureBuilder} from 'sanity/desk'
+import {
+  CogIcon,
+  EarthGlobeIcon,
+  HomeIcon,
+  InsertAboveIcon,
+  InsertBelowIcon,
+} from '@sanity/icons';
+import {StructureBuilder} from 'sanity/desk';
 
 type Singleton = {
-  id: string
-  _type: string
-  title: string
-  icon?: any
-}
+  id: string;
+  _type: string;
+  title: string;
+  icon?: any;
+  initialValue?: any;
+};
 
 export const SINGLETONS: {
-  [key: string]: Singleton
+  [key: string]: Singleton;
 } = {
   home: {
     id: 'home',
@@ -39,6 +46,23 @@ export const SINGLETONS: {
     id: 'typography',
     _type: 'typography',
     title: 'Typography',
+    initialValue: {
+      heading: {
+        baseSize: 50,
+        lineHeight: 1.2,
+        letterSpacing: 0,
+      },
+      body: {
+        baseSize: 16,
+        lineHeight: 1.2,
+        letterSpacing: 0,
+      },
+      extra: {
+        baseSize: 16,
+        lineHeight: 1.2,
+        letterSpacing: 0,
+      },
+    },
   },
   settings: {
     id: 'settings',
@@ -46,13 +70,17 @@ export const SINGLETONS: {
     title: 'Settings',
     icon: CogIcon,
   },
-}
+};
 
 export const singletonsTypes = new Set(
-  Object.values(SINGLETONS).map((singleton) => singleton._type)
-)
+  Object.values(SINGLETONS).map((singleton) => singleton._type),
+);
 // Define the actions that should be available for singleton documents
-export const singletonActions = new Set(['publish', 'discardChanges', 'restore'])
+export const singletonActions = new Set([
+  'publish',
+  'discardChanges',
+  'restore',
+]);
 
 export const singleton = (S: StructureBuilder, singleton: Singleton) =>
   S.documentTypeListItem(singleton._type)
@@ -62,5 +90,5 @@ export const singleton = (S: StructureBuilder, singleton: Singleton) =>
         .title(singleton.title)
         .schemaType(singleton._type)
         .documentId(singleton._type)
-        .views([S.view.form()])
-    )
+        .views([S.view.form()]),
+    );

@@ -114,3 +114,11 @@ export const FONT_CATEGORY_FRAGMENT = {
   fontName: q.string(),
   fontType: q.string(),
 } satisfies Selection;
+
+export const FONT_FRAGMENT = {
+  baseSize: q.number().nullable(),
+  capitalize: q.boolean().nullable(),
+  font: q('font[]', {isArray: true}).grab(FONT_CATEGORY_FRAGMENT).nullable(),
+  letterSpacing: q.number().nullable(),
+  lineHeight: q.number().nullable(),
+} satisfies Selection;
