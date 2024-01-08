@@ -71,6 +71,11 @@ export const COLOR_FRAGMENT = {
 
 export const COLOR_SCHEME_FRAGMENT = {
   background: q('background').grab(COLOR_FRAGMENT).nullable(),
+  outlineButton: q('outlineButton').grab(COLOR_FRAGMENT).nullable(),
+  primaryButtonBackground: q('primaryButtonBackground')
+    .grab(COLOR_FRAGMENT)
+    .nullable(),
+  primaryButtonLabel: q('primaryButtonLabel').grab(COLOR_FRAGMENT).nullable(),
   text: q('text').grab(COLOR_FRAGMENT).nullable(),
 } satisfies Selection;
 
@@ -80,6 +85,7 @@ export const COLOR_SCHEME_FRAGMENT = {
 |--------------------------------------------------------------------------
 */
 export const SETTINGS_FRAGMENT = {
+  colorScheme: q('colorScheme').deref().grab(COLOR_SCHEME_FRAGMENT),
   favicon: q('favicon').grab(IMAGE_FRAGMENT).nullable(),
   logo: q('logo').grab(IMAGE_FRAGMENT).nullable(),
   socialMedia: q('socialMedia').grab({

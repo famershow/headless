@@ -1,15 +1,14 @@
 import type {ProductVariantFragmentFragment} from 'storefrontapi.generated';
 
 import {CartForm, ShopPayButton} from '@shopify/hydrogen';
-import {vercelStegaSplit} from '@vercel/stega';
 import {cx} from 'class-variance-authority';
 import {useState} from 'react';
-import {Button} from 'react-aria-components';
 
 import {useEnvironmentVariables} from '~/hooks/useEnvironmentVariables';
 import {useSanityThemeContent} from '~/hooks/useSanityThemeContent';
 import {useSelectedVariant} from '~/hooks/useSelectedVariant';
 
+import {Button} from '../Button';
 import {QuantitySelector} from '../QuantitySelector';
 import CleanString from '../sanity/CleanString';
 
@@ -60,12 +59,9 @@ export function AddToCartForm(props: {
           {(fetcher) => (
             <div className="grid gap-3">
               <Button
-                className={cx([
-                  'inverted-color-scheme w-full rounded px-3 py-2',
-                  isOutOfStock && 'opacity-50',
-                ])}
+                className={cx([isOutOfStock && 'opacity-50'])}
                 data-sanity-edit-target
-                isDisabled={isOutOfStock || fetcher.state !== 'idle'}
+                disabled={isOutOfStock || fetcher.state !== 'idle'}
                 type="submit"
               >
                 {isOutOfStock ? (

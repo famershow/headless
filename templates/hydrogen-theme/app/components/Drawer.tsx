@@ -62,7 +62,7 @@ export function Drawer({
                 leaveFrom="translate-x-0"
                 leaveTo={offScreen[openFrom]}
               >
-                <div className="max-h-screen w-screen max-w-lg bg-white">
+                <div className="max-h-screen w-screen max-w-lg bg-color-scheme-bg">
                   <Dialog.Panel className="flex max-h-screen min-h-full flex-col">
                     <header className="flex items-start justify-between p-5 shadow-sm">
                       {heading !== null && (
@@ -71,7 +71,7 @@ export function Drawer({
                         </Dialog.Title>
                       )}
                       <button
-                        className="-m-4 p-4 text-primary transition hover:text-primary/50"
+                        className="text-primary hover:text-primary/50 -m-4 p-4 transition"
                         data-test="close-cart"
                         onClick={onClose}
                         type="button"

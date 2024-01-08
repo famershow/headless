@@ -15,6 +15,12 @@ export default {
       colors: {
         'color-scheme-bg': 'rgb(var(--backgroundColor) / <alpha-value>)',
         'color-scheme-text': 'rgb(var(--textColor) / <alpha-value>)',
+        'color-scheme-primary-button-bg':
+          'rgb(var(--primaryButtonBackground) / <alpha-value>)',
+        'color-scheme-primary-button-label':
+          'rgb(var(--primaryButtonLabel) / <alpha-value>)',
+        'color-scheme-outline-button':
+          'rgb(var(--outlineButton) / <alpha-value>)',
       },
     },
   },
@@ -24,12 +30,12 @@ export default {
     plugin(({addComponents}) => {
       addComponents({
         '.color-scheme': {
-          backgroundColor: 'rgb(var(--backgroundColor))',
-          color: 'rgb(var(--textColor))',
+          '@apply bg-color-scheme-bg': '',
+          '@apply text-color-scheme-text': '',
         },
         '.inverted-color-scheme': {
-          backgroundColor: 'rgb(var(--textColor))',
-          color: 'rgb(var(--backgroundColor))',
+          '@apply bg-color-scheme-text': '',
+          '@apply text-color-scheme-bg': '',
         },
         '.section-padding': {
           paddingBottom: 'calc(var(--paddingBottom) * .75)',

@@ -1,10 +1,11 @@
 import {Link} from '@remix-run/react';
 import {cx} from 'class-variance-authority';
-import {Button} from 'react-aria-components';
 
 import {useLocalePath} from '~/hooks/useLocalePath';
 
 import type {CartLayouts} from './Cart';
+
+import {Button} from '../Button';
 
 export function CartEmpty({
   hidden = false,
@@ -44,7 +45,7 @@ export function CartEmpty({
               {label}
             </Link>
           ) : (
-            <Button onPress={onClose}>{label}</Button>
+            <Button onClick={onClose}>{label}</Button>
           )}
         </div>
       </section>
