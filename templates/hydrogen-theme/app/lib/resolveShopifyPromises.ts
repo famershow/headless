@@ -186,7 +186,7 @@ async function resolveRelatedProductsPromise({
   let promise;
 
   if (document.data?._type !== 'product') {
-    return undefined;
+    return null;
   }
 
   const productId = document.data?.store.gid;
@@ -204,5 +204,5 @@ async function resolveRelatedProductsPromise({
     }
   }
 
-  return promise;
+  return promise || null;
 }

@@ -13,9 +13,11 @@ import {CartLineItem} from './CartLineItem';
 export function CartLines({
   layout = 'drawer',
   lines: cartLines,
+  onClose,
 }: {
   layout: CartLayouts;
   lines: CartType['lines'] | undefined;
+  onClose?: () => void;
 }) {
   const currentLines = cartLines ? flattenConnection(cartLines) : [];
 
@@ -29,7 +31,11 @@ export function CartLines({
     <section aria-labelledby="cart-contents" className={className}>
       <ul className="grid gap-6 md:gap-10">
         {currentLines.map((line) => (
-          <CartLineItem key={line.id} line={line as CartLine} />
+          <CartLineItem
+            key={line.id}
+            line={line as CartLine}
+            onClose={onClose}
+          />
         ))}
       </ul>
     </section>

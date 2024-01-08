@@ -19,7 +19,7 @@ export function Cart({
   return (
     <>
       <CartEmpty hidden={!empty} layout={layout} onClose={onClose} />
-      <CartDetails cart={cart} layout={layout} />
+      <CartDetails cart={cart} layout={layout} onClose={onClose} />
     </>
   );
 }

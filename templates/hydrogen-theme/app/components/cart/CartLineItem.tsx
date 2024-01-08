@@ -24,7 +24,13 @@ type OptimisticData = {
   quantity?: number;
 };
 
-export function CartLineItem({line}: {line: CartLine}) {
+export function CartLineItem({
+  line,
+  onClose,
+}: {
+  line: CartLine;
+  onClose?: () => void;
+}) {
   const optimisticData = useOptimisticData<OptimisticData>(line?.id);
   const {id, merchandise, quantity} = line;
   const variantId = parseGid(merchandise?.id)?.id;
@@ -62,7 +68,9 @@ export function CartLineItem({line}: {line: CartLine}) {
         <div className="grid gap-2">
           <h3 className="text-2xl">
             {merchandise?.product?.handle ? (
-              <Link to={productPath}>{merchandise?.product?.title || ''}</Link>
+              <Link onClick={onClose} to={productPath}>
+                {merchandise?.product?.title || ''}
+              </Link>
             ) : (
               <p>{merchandise?.product?.title || ''}</p>
             )}
