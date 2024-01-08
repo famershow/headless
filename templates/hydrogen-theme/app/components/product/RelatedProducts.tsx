@@ -2,9 +2,11 @@ import type {ProductRecommendationsQuery} from 'storefrontapi.generated';
 
 import {ProductCardGrid} from './ProductCardGrid';
 
-export function RelatedProducts(props: {data: ProductRecommendationsQuery}) {
+export function RelatedProducts(props: {
+  data: ProductRecommendationsQuery | null;
+}) {
   const {data} = props;
-  const products = getRecommendedProducts(data);
+  const products = data ? getRecommendedProducts(data) : [];
 
   return <ProductCardGrid products={products} />;
 }
