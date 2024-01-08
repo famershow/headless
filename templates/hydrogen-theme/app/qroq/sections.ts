@@ -175,10 +175,34 @@ export const CTA_SECTION_FRAGMENT = {
 
 /*
 |--------------------------------------------------------------------------
+| Carousel Section
+|--------------------------------------------------------------------------
+*/
+export const CAROUSEL_SECTION_FRAGMENT = {
+  _key: q.string().nullable(),
+  _type: q.literal('carouselSection'),
+  arrows: q.boolean().nullable(),
+  autoplay: q.boolean().nullable(),
+  loop: q.boolean().nullable(),
+  pagination: q.boolean().nullable(),
+  settings: SECTION_SETTINGS_FRAGMENT,
+  slides: q('slides[]', {isArray: true})
+    .grab({
+      _key: q.string(),
+      image: q('image').grab(IMAGE_FRAGMENT).nullable(),
+    })
+    .nullable(),
+  slidesPerViewDesktop: q.number().nullable(),
+  title: [getIntValue('title'), q.string()],
+} satisfies Selection;
+
+/*
+|--------------------------------------------------------------------------
 | List of sections
 |--------------------------------------------------------------------------
 */
 export const SECTIONS_LIST_SELECTION = {
+  "_type == 'carouselSection'": CAROUSEL_SECTION_FRAGMENT,
   "_type == 'collectionListSection'": COLLECTION_LIST_SECTION_FRAGMENT,
   "_type == 'ctaSection'": CTA_SECTION_FRAGMENT,
   "_type == 'featuredCollectionSection'": FEATURED_COLLECTION_SECTION_FRAGMENT,

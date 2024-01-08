@@ -1,7 +1,10 @@
 import type {SelectedOption} from '@shopify/hydrogen/storefront-api-types';
+import type {ClassValue} from 'class-variance-authority/types';
 
 import {useLocation} from '@remix-run/react';
+import {cx} from 'class-variance-authority';
 import {useMemo} from 'react';
+import {twMerge} from 'tailwind-merge';
 
 import type {I18nLocale} from './type';
 
@@ -82,4 +85,8 @@ export function parseAsCurrency(value: number, locale: I18nLocale) {
     currency: locale.currency,
     style: 'currency',
   }).format(value);
+}
+
+export function cn(...inputs: ClassValue[]) {
+  return twMerge(cx(inputs));
 }

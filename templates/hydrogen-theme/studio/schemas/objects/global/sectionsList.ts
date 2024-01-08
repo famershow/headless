@@ -18,6 +18,9 @@ const globalSections = [
   {
     type: 'ctaSection',
   },
+  {
+    type: 'carouselSection',
+  },
 ];
 
 const pdpSections = [

@@ -3,6 +3,11 @@ import {lazy} from 'react';
 export const sections: {
   [key: string]: React.FC<any>;
 } = {
+  carouselSection: lazy(() =>
+    import('../components/sections/CarouselSection').then((module) => ({
+      default: module.CarouselSection,
+    })),
+  ),
   collectionListSection: lazy(() =>
     import('../components/sections/CollectionListSection').then((module) => ({
       default: module.CollectionListSection,
