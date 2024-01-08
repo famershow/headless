@@ -35,6 +35,7 @@ import featuredProductSection from './objects/sections/featuredProductSection';
 import productInformationSection from './objects/sections/productInformationSection';
 import productRichtext from './objects/global/productRichtext';
 import relatedProductsSection from './objects/sections/relatedProductsSection';
+import carouselSection from './objects/sections/carouselSection';
 
 const singletons = [home, header, footer, settings, themeContent];
 const documents = [page, color, collection, product, blogPost, productVariant];
@@ -46,6 +47,7 @@ const sections = [
   productInformationSection,
   ctaSection,
   relatedProductsSection,
+  carouselSection,
 ];
 const footers = [socialLinksOnly];
 const objects = [

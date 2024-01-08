@@ -13,7 +13,7 @@ export function CtaSection(
 
   return title ? (
     <div className="container flex justify-center">
-      <h1>{title}</h1>
+      <h2>{title}</h2>
     </div>
   ) : null;
 }
