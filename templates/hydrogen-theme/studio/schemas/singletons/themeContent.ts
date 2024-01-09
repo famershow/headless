@@ -19,10 +19,12 @@ export default defineType({
           name: 'view',
           type: 'internationalizedArrayString',
         }),
+        defineField({
+          title: 'Heading',
+          name: 'heading',
+          type: 'internationalizedArrayString',
+        }),
       ],
-      initialValue: {
-        view: 'View cart',
-      },
     }),
     defineField({
       title: 'Product',
@@ -54,6 +56,12 @@ export default defineType({
         {
           _key: 'en',
           value: 'View cart',
+        },
+      ],
+      heading: [
+        {
+          _key: 'en',
+          value: 'Your Cart',
         },
       ],
     },
