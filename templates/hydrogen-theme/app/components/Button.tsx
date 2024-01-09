@@ -19,15 +19,15 @@ const buttonVariants = cva(
         sm: 'h-9 rounded-md px-3',
       },
       variant: {
-        default: 'bg-primary text-primary-foreground hover:bg-primary/90',
-        destructive:
-          'bg-destructive text-destructive-foreground hover:bg-destructive/90',
-        ghost: 'hover:bg-accent hover:text-accent-foreground',
-        link: 'text-primary underline-offset-4 hover:underline',
+        default:
+          'bg-color-scheme-primary-button-bg text-color-scheme-primary-button-label hover:bg-color-scheme-primary-button-bg/90',
+        destructive: 'bg-red-800 text-white hover:bg-red-800/90',
+        ghost:
+          'hover:bg-color-scheme-primary-button-bg hover:text-color-scheme-primary-button-label',
+        link: 'text-color-scheme-primary-button-bg underline-offset-4 hover:underline',
         outline:
-          'border border-input bg-background hover:bg-accent hover:text-accent-foreground',
-        secondary:
-          'bg-secondary text-secondary-foreground hover:bg-secondary/80',
+          'border border-color-scheme-outline-button bg-color-scheme-bg text-color-scheme-outline-button hover:bg-color-scheme-outline-button hover:text-color-scheme-bg',
+        secondary: 'inverted-color-scheme hover:bg-color-scheme-text/90',
       },
     },
   },

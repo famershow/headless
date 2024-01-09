@@ -3,6 +3,7 @@ import type {Cart as CartType} from '@shopify/hydrogen/storefront-api-types';
 import {CartForm} from '@shopify/hydrogen';
 import {cx} from 'class-variance-authority';
 
+import {Button} from '../Button';
 import {IconRemove} from '../icons/IconRemove';
 
 /**
@@ -46,10 +47,10 @@ export function CartDiscounts({
         <div className={cx('flex', 'items-center justify-between gap-4')}>
           {/* Todo => add theme content string */}
           <input name="discountCode" placeholder="Discount code" type="text" />
-          <button className="flex justify-end whitespace-nowrap font-medium">
+          <Button variant='outline'>
             {/* Todo => add theme content string */}
             Apply Discount
-          </button>
+          </Button>
         </div>
       </UpdateDiscountForm>
     </>

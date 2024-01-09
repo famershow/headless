@@ -1,6 +1,6 @@
-import {ObjectRule, StringRule, defineField, defineType} from 'sanity'
-import {IconPalette} from '../../components/icons/Palette'
-import {ColorSchemeMedia} from '../../components/ColorScheme'
+import {StringRule, defineField, defineType} from 'sanity';
+import {IconPalette} from '../../components/icons/Palette';
+import {ColorSchemeMedia} from '../../components/ColorScheme';
 
 export default defineType({
   name: 'colorScheme',
@@ -17,7 +17,7 @@ export default defineType({
       return {
         title,
         media: ColorSchemeMedia({background, text}),
-      }
+      };
     },
   },
   fields: [
@@ -37,5 +37,17 @@ export default defineType({
       title: 'Text',
       type: 'colorPicker',
     }),
+    defineField({
+      name: 'primaryButtonBackground',
+      type: 'colorPicker',
+    }),
+    defineField({
+      name: 'primaryButtonLabel',
+      type: 'colorPicker',
+    }),
+    defineField({
+      name: 'outlineButton',
+      type: 'colorPicker',
+    }),
   ],
-})
+});

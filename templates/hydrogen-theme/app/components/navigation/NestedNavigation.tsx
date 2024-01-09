@@ -43,7 +43,7 @@ export function NestedNavigation(props: {data?: SanityNestedNavigationProps}) {
               <li
                 className={cx([
                   'rounded px-2 py-1 transition-colors duration-100',
-                  'hover:inverted-color-scheme',
+                  'hover:bg-color-scheme-text/10',
                   '[&>*]:flex',
                 ])}
               >

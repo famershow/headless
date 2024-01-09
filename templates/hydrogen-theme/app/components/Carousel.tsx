@@ -253,7 +253,7 @@ CarouselPagination.displayName = 'CarouselDots';
 const CarouselPrevious = forwardRef<
   HTMLButtonElement,
   React.ComponentProps<typeof Button>
->(({className, size = 'icon', variant = 'outline', ...props}, ref) => {
+>(({className, size = 'icon', variant = 'ghost', ...props}, ref) => {
   const {canScrollPrev, orientation, scrollPrev} = useCarousel();
 
   return (
@@ -282,7 +282,7 @@ CarouselPrevious.displayName = 'CarouselPrevious';
 const CarouselNext = forwardRef<
   HTMLButtonElement,
   React.ComponentProps<typeof Button>
->(({className, size = 'icon', variant = 'outline', ...props}, ref) => {
+>(({className, size = 'icon', variant = 'ghost', ...props}, ref) => {
   const {canScrollNext, orientation, scrollNext} = useCarousel();
 
   return (

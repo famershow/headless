@@ -8,6 +8,7 @@ import {cx} from 'class-variance-authority';
 
 import type {CartLayouts} from './Cart';
 
+import {Button} from '../Button';
 import {CartDiscounts} from './CartDiscounts';
 import {CartLines} from './CartLines';
 
@@ -56,10 +57,12 @@ function CartCheckoutActions({checkoutUrl}: {checkoutUrl: string}) {
 
   return (
     <div className="mt-2 flex flex-col">
-      <a href={checkoutUrl} target="_self">
-        {/* Todo => add theme content string */}
-        Continue to Checkout
-      </a>
+      <Button asChild>
+        <a href={checkoutUrl} target="_self">
+          {/* Todo => add theme content string */}
+          Continue to Checkout
+        </a>
+      </Button>
       {/* @todo: <CartShopPayButton cart={cart} /> */}
     </div>
   );

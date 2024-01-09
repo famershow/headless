@@ -1,10 +1,17 @@
-import {defineField, defineType} from 'sanity'
+import {defineField, defineType} from 'sanity';
 
 export default defineType({
   title: 'Settings',
   name: 'settings',
   type: 'document',
   fields: [
+    defineField({
+      name: 'colorScheme',
+      title: 'Default Color Scheme',
+      description: 'The default color scheme used throughout the site.',
+      type: 'reference',
+      to: [{type: 'colorScheme'}],
+    }),
     defineField({
       title: 'Logo',
       name: 'logo',
@@ -57,4 +64,4 @@ export default defineType({
   preview: {
     prepare: () => ({title: 'Settings'}),
   },
-})
+});
