@@ -4,6 +4,8 @@ import {Link} from '@remix-run/react';
 import {Image, Money, flattenConnection} from '@shopify/hydrogen';
 import {cx} from 'class-variance-authority';
 
+export const cardClassName = cx('overflow-hidden rounded-lg border');
+
 export function ProductCard(props: {
   className?: string;
   columns?: null | number;
@@ -23,28 +25,32 @@ export function ProductCard(props: {
   ]);
 
   return (
-    <div className="overflow-hidden rounded-lg border">
+    <>
       {!skeleton && product && firstVariant ? (
         <Link prefetch="intent" to={`/products/${product.handle}`}>
-          {firstVariant?.image && (
-            <Image
-              aspectRatio="16/9"
-              className="h-auto w-full object-cover"
-              data={firstVariant.image}
-              sizes={sizes}
-            />
-          )}
-          <div className="p-3">
-            <div className="text-lg">{product.title}</div>
-            <div>
-              <Money data={firstVariant.price} />
+          <div className={cardClassName}>
+            {firstVariant?.image && (
+              <Image
+                aspectRatio="16/9"
+                className="h-auto w-full object-cover"
+                data={firstVariant.image}
+                sizes={sizes}
+              />
+            )}
+            <div className="p-3">
+              <div className="text-lg">{product.title}</div>
+              <div>
+                <Money data={firstVariant.price} />
+              </div>
             </div>
           </div>
         </Link>
       ) : skeleton ? (
-        <Skeleton />
+        <div className={cardClassName}>
+          <Skeleton />
+        </div>
       ) : null}
-    </div>
+    </>
   );
 }
 

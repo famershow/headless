@@ -1,9 +1,11 @@
 import type {TypeFromSelection} from 'groqd';
 
+import {CaretDownIcon} from '@radix-ui/react-icons';
 import * as NavigationMenu from '@radix-ui/react-navigation-menu';
 
 import type {INTERNAL_LINK_FRAGMENT} from '~/qroq/links';
 
+import {Button} from '../Button';
 import {SanityInternalLink} from '../sanity/link/SanityInternalLink';
 
 export function NavigationTrigger(props: {
@@ -16,9 +18,8 @@ export function NavigationTrigger(props: {
   return (
     <NavigationMenu.Trigger asChild className="group">
       {link ? (
-        <div>
+        <div className={className}>
           <SanityInternalLink
-            className={className}
             data={{
               _key: null,
               _type: 'internalLink',
@@ -29,10 +30,25 @@ export function NavigationTrigger(props: {
           >
             {props.children}
           </SanityInternalLink>
+          <ChevronButton />
         </div>
       ) : (
-        <button className={className}>{props.children}</button>
+        <button className={className}>
+          {props.children}
+          <ChevronButton />
+        </button>
       )}
     </NavigationMenu.Trigger>
+  );
+}
+
+function ChevronButton() {
+  return (
+    <Button size="primitive" variant="primitive">
+      <CaretDownIcon
+        aria-hidden
+        className="transition-transform duration-100 ease-in group-data-[state=open]:-rotate-180"
+      />
+    </Button>
   );
 }
