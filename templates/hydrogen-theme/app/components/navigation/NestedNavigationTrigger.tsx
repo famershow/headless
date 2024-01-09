@@ -5,8 +5,8 @@ import * as NavigationMenu from '@radix-ui/react-navigation-menu';
 
 import type {INTERNAL_LINK_FRAGMENT} from '~/qroq/links';
 
-import {Button} from '../Button';
 import {SanityInternalLink} from '../sanity/link/SanityInternalLink';
+import {Button} from '../ui/Button';
 
 export function NavigationTrigger(props: {
   children: React.ReactNode;

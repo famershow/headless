@@ -6,6 +6,7 @@ import {useMemo} from 'react';
 import type {SectionDefaultProps} from '~/lib/type';
 import type {CAROUSEL_SECTION_FRAGMENT} from '~/qroq/sections';
 
+import {SanityImage} from '../sanity/SanityImage';
 import {
   Carousel,
   CarouselContent,
@@ -13,8 +14,7 @@ import {
   CarouselNext,
   CarouselPagination,
   CarouselPrevious,
-} from '../Carousel';
-import {SanityImage} from '../sanity/SanityImage';
+} from '../ui/Carousel';
 
 type CarouselSectionProps = TypeFromSelection<typeof CAROUSEL_SECTION_FRAGMENT>;
 

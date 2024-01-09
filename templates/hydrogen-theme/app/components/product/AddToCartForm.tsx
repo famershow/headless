@@ -8,9 +8,9 @@ import {useEnvironmentVariables} from '~/hooks/useEnvironmentVariables';
 import {useSanityThemeContent} from '~/hooks/useSanityThemeContent';
 import {useSelectedVariant} from '~/hooks/useSelectedVariant';
 
-import {Button} from '../Button';
 import {QuantitySelector} from '../QuantitySelector';
 import CleanString from '../sanity/CleanString';
+import {Button} from '../ui/Button';
 
 export function AddToCartForm(props: {
   showQuantitySelector?: boolean | null;
