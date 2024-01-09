@@ -8,7 +8,7 @@ import {cx} from 'class-variance-authority';
 
 import type {CartLayouts} from './Cart';
 
-import {Button} from '../Button';
+import {Button} from '../ui/Button';
 import {CartDiscounts} from './CartDiscounts';
 import {CartLines} from './CartLines';
 

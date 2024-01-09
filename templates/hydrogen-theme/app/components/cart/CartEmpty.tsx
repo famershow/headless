@@ -5,7 +5,7 @@ import {useLocalePath} from '~/hooks/useLocalePath';
 
 import type {CartLayouts} from './Cart';
 
-import {Button} from '../Button';
+import {Button} from '../ui/Button';
 
 export function CartEmpty({
   hidden = false,

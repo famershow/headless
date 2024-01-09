@@ -11,16 +11,16 @@ import {useLocalePath} from '~/hooks/useLocalePath';
 import {useRootLoaderData} from '~/hooks/useRootLoaderData';
 import {useSanityThemeContent} from '~/hooks/useSanityThemeContent';
 
+import {Cart} from '../cart/Cart';
+import {IconBag} from '../icons/IconBag';
+import {IconLoader} from '../icons/IconLoader';
 import {
   Sheet,
   SheetContent,
   SheetHeader,
   SheetTitle,
   SheetTrigger,
-} from '../Sheet';
-import {Cart} from '../cart/Cart';
-import {IconBag} from '../icons/IconBag';
-import {IconLoader} from '../icons/IconLoader';
+} from '../ui/Sheet';
 
 export function CartCount() {
   const rootData = useRootLoaderData();

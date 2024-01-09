@@ -5,8 +5,6 @@ import type {
 } from '@shopify/hydrogen/storefront-api-types';
 import type {SyntheticEvent} from 'react';
 
-import {Disclosure, Menu} from '@headlessui/react';
-import {CaretDownIcon} from '@radix-ui/react-icons';
 import {
   Link,
   useLocation,
@@ -17,7 +15,21 @@ import {useMemo, useState} from 'react';
 import {useDebounce} from 'react-use';
 
 import {IconFilters} from '../icons/IconFilters';
+import {IconSort} from '../icons/IconSort';
 import {IconXMark} from '../icons/IconXMark';
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from '../ui/Accordion';
+import {Badge} from '../ui/Badge';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '../ui/DropdownMenu';
 
 export type AppliedFilter = {
   filter: ProductFilter;
@@ -111,48 +123,42 @@ export function FiltersDrawer({
   };
 
   return (
-    <>
-      <nav className="py-8">
-        {appliedFilters.length > 0 ? (
-          <div className="pb-8">
-            <AppliedFilters filters={appliedFilters} />
-          </div>
-        ) : null}
-
-        <span className="text-lg">Filter By</span>
-        <div className="divide-y">
-          {filters.map((filter: Filter) => (
-            <Disclosure as="div" className="w-full" key={filter.id}>
-              {({open}) => (
-                <>
-                  <Disclosure.Button className="flex w-full justify-between py-4">
-                    <span>{filter.label}</span>
-                    <CaretDownIcon />
-                  </Disclosure.Button>
-                  <Disclosure.Panel key={filter.id}>
-                    <ul className="py-2" key={filter.id}>
-                      {filter.values?.map((option) => {
-                        return (
-                          <li className="pb-4" key={option.id}>
-                            {filterMarkup(filter, option)}
-                          </li>
-                        );
-                      })}
-                    </ul>
-                  </Disclosure.Panel>
-                </>
-              )}
-            </Disclosure>
-          ))}
+    <nav className="py-8">
+      {appliedFilters.length > 0 ? (
+        <div className="pb-8">
+          <AppliedFilters filters={appliedFilters} />
         </div>
-      </nav>
-    </>
+      ) : null}
+      <span className="text-lg">
+        {/* Todo => add strings to themeContent */}
+        Filter By
+      </span>
+      <Accordion collapsible type="single">
+        {filters.map((filter: Filter) => (
+          <AccordionItem key={filter.id} value={filter.id}>
+            <AccordionTrigger>{filter.label}</AccordionTrigger>
+            <AccordionContent>
+              <ul className="py-2" key={filter.id}>
+                {filter.values?.map((option) => {
+                  return (
+                    <li className="pb-4" key={option.id}>
+                      {filterMarkup(filter, option)}
+                    </li>
+                  );
+                })}
+              </ul>
+            </AccordionContent>
+          </AccordionItem>
+        ))}
+      </Accordion>
+    </nav>
   );
 }
 
 function AppliedFilters({filters = []}: {filters: AppliedFilter[]}) {
   const [params] = useSearchParams();
   const location = useLocation();
+
   return (
     <>
       <span className="text-lg">Applied filters</span>
@@ -160,16 +166,17 @@ function AppliedFilters({filters = []}: {filters: AppliedFilter[]}) {
         {filters.map((filter: AppliedFilter) => {
           return (
             <Link
-              className="gap flex rounded-full border px-2"
               key={`${filter.label}-${JSON.stringify(filter.filter)}`}
               preventScrollReset
               replace
               to={getAppliedFilterLink(filter, params, location)}
             >
-              <span className="flex-grow">{filter.label}</span>
-              <span>
-                <IconXMark />
-              </span>
+              <Badge className="flex items-center gap-2" variant="outline">
+                <span className="flex-grow">{filter.label}</span>
+                <span>
+                  <IconXMark className="size-2" strokeWidth={2} />
+                </span>
+              </Badge>
             </Link>
           );
         })}
@@ -317,48 +324,53 @@ function filterInputToParams(
 }
 
 export default function SortMenu() {
-  const items: {key: SortParam; label: string}[] = [
-    {key: 'featured', label: 'Featured'},
-    {
-      key: 'price-low-high',
-      label: 'Price: Low - High',
-    },
-    {
-      key: 'price-high-low',
-      label: 'Price: High - Low',
-    },
-    {
-      key: 'best-selling',
-      label: 'Best Selling',
-    },
-    {
-      key: 'newest',
-      label: 'Newest',
-    },
-  ];
+  // Todo => add strings to themeContent
+  const items: {key: SortParam; label: string}[] = useMemo(
+    () => [
+      {key: 'featured', label: 'Featured'},
+      {
+        key: 'price-low-high',
+        label: 'Price: Low - High',
+      },
+      {
+        key: 'price-high-low',
+        label: 'Price: High - Low',
+      },
+      {
+        key: 'best-selling',
+        label: 'Best Selling',
+      },
+      {
+        key: 'newest',
+        label: 'Newest',
+      },
+    ],
+    [],
+  );
+
   const [params] = useSearchParams();
   const location = useLocation();
-  const activeItem = items.find((item) => item.key === params.get('sort'));
+  const search = location.search;
+  const activeItem = items.find((item) => search.includes(`?sort=${item.key}`));
 
   return (
-    <Menu as="div" className="relative z-40">
-      <Menu.Button className="flex items-center">
-        <span className="px-2">
-          <span className="px-2 font-medium">Sort by:</span>
+    <DropdownMenu>
+      <DropdownMenuTrigger className="flex items-center gap-1">
+        <IconSort strokeWidth={1} />
+        <span>
+          <span className="px-2 font-medium">
+            {/* Todo => add strings to themeContent */}
+            Sort by:
+          </span>
           <span>{(activeItem || items[0]).label}</span>
         </span>
-        <CaretDownIcon />
-      </Menu.Button>
-
-      <Menu.Items
-        as="nav"
-        className="absolute right-0 flex flex-col rounded-sm bg-white p-4 text-right"
-      >
-        {items.map((item) => (
-          <Menu.Item key={item.label}>
-            {() => (
+      </DropdownMenuTrigger>
+      <DropdownMenuContent asChild>
+        <nav>
+          {items.map((item) => (
+            <DropdownMenuItem asChild key={item.label}>
               <Link
-                className={`block px-3 pb-2 text-sm ${
+                className={`block cursor-pointer px-3 pb-2 text-sm ${
                   activeItem?.key === item.key ? 'font-bold' : 'font-normal'
                 }`}
                 preventScrollReset
@@ -367,10 +379,10 @@ export default function SortMenu() {
               >
                 {item.label}
               </Link>
-            )}
-          </Menu.Item>
-        ))}
-      </Menu.Items>
-    </Menu>
+            </DropdownMenuItem>
+          ))}
+        </nav>
+      </DropdownMenuContent>
+    </DropdownMenu>
   );
 }

@@ -6,7 +6,7 @@ import {forwardRef} from 'react';
 
 import {cn} from '~/lib/utils';
 
-import {IconClose} from './icons/IconClose';
+import {IconClose} from '../icons/IconClose';
 
 const Sheet = SheetPrimitive.Root;
 

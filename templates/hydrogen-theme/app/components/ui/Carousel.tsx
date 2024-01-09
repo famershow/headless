@@ -18,8 +18,8 @@ import {
 
 import {cn} from '~/lib/utils';
 
+import {IconArrow} from '../icons/IconArrow';
 import {Button} from './Button';
-import {IconArrow} from './icons/IconArrow';
 
 type CarouselProps = {
   opts?: CarouselOptions;
