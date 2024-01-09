@@ -14,7 +14,7 @@ export function Cart({
   layout: CartLayouts;
   onClose?: () => void;
 }) {
-  const empty = Boolean(cart?.totalQuantity === 0);
+  const empty = !cart || Boolean(cart?.totalQuantity === 0);
 
   return (
     <>

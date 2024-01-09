@@ -4,6 +4,7 @@ import type {Config} from 'tailwindcss';
 import formsPlugin from '@tailwindcss/forms';
 import typographyPlugin from '@tailwindcss/typography';
 import plugin from 'tailwindcss/plugin';
+import tailwindAnimatePlugin from 'tailwindcss-animate';
 
 export default {
   content: ['./app/**/*.{js,ts,jsx,tsx}'],
@@ -27,6 +28,7 @@ export default {
   plugins: [
     formsPlugin,
     typographyPlugin,
+    tailwindAnimatePlugin,
     plugin(({addComponents}) => {
       addComponents({
         '.color-scheme': {
