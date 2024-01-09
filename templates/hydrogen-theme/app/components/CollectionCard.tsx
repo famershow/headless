@@ -4,6 +4,8 @@ import {Link} from '@remix-run/react';
 import {Image} from '@shopify/hydrogen';
 import {cx} from 'class-variance-authority';
 
+import {cardClassName} from './product/ProductCard';
+
 export function CollectionCard(props: {
   className?: string;
   collection: CollectionsQuery['collections']['nodes'][0];
@@ -17,8 +19,8 @@ export function CollectionCard(props: {
   ]);
 
   return (
-    <div className="overflow-hidden rounded-lg border">
-      <Link prefetch="intent" to={`/collections/${collection.handle}`}>
+    <Link prefetch="intent" to={`/collections/${collection.handle}`}>
+      <div className={cardClassName}>
         {collection.image && (
           <Image
             aspectRatio="16/9"
@@ -30,7 +32,7 @@ export function CollectionCard(props: {
         <div className="p-3">
           <div className="text-lg">{collection.title}</div>
         </div>
-      </Link>
-    </div>
+      </div>
+    </Link>
   );
 }

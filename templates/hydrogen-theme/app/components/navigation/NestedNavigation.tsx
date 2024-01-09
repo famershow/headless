@@ -1,6 +1,5 @@
 import type {TypeFromSelection} from 'groqd';
 
-import {CaretDownIcon} from '@radix-ui/react-icons';
 import * as NavigationMenu from '@radix-ui/react-navigation-menu';
 import {cx} from 'class-variance-authority';
 
@@ -24,13 +23,7 @@ export function NestedNavigation(props: {data?: SanityNestedNavigationProps}) {
 
   return data.name && childLinks && childLinks.length > 0 ? (
     <>
-      <NavigationTrigger link={data.link}>
-        {data.name}
-        <CaretDownIcon
-          aria-hidden
-          className="transition-transform duration-100 ease-in group-data-[state=open]:-rotate-180"
-        />
-      </NavigationTrigger>
+      <NavigationTrigger link={data.link}>{data.name}</NavigationTrigger>
       <NestedNavigationContent>
         <ul
           className={cx([
