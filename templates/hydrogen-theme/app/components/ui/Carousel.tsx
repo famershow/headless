@@ -228,13 +228,15 @@ const CarouselPagination = forwardRef<
   const {scrollSnaps, scrollTo, selectedIndex} = useCarousel();
 
   return (
-    <div className="flex justify-center gap-2">
+    <div className="mt-3 flex justify-center gap-2">
       {scrollSnaps.map((_, index) => (
         <Button
           className={cn(className, 'p-1')}
           key={index}
           onClick={() => scrollTo(index)}
           ref={ref}
+          size="primitive"
+          variant="primitive"
           {...props}
         >
           <span
