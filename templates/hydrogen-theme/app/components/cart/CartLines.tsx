@@ -29,7 +29,7 @@ export function CartLines({
 
   return (
     <section aria-labelledby="cart-contents" className={className}>
-      <ul className="grid gap-6 md:gap-10">
+      <ul className="grid">
         {currentLines.map((line) => (
           <CartLineItem
             key={line.id}
