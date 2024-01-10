@@ -6,6 +6,7 @@ export default defineType({
   name: 'colorScheme',
   title: 'Color schemes',
   type: 'document',
+  __experimental_formPreviewTitle: false,
   icon: IconPalette,
   preview: {
     select: {

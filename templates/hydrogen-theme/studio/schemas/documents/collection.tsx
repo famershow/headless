@@ -32,6 +32,7 @@ export default defineType({
   name: 'collection',
   title: 'Collection',
   type: 'document',
+  __experimental_formPreviewTitle: false,
   icon: PackageIcon,
   groups: GROUPS,
   fields: [

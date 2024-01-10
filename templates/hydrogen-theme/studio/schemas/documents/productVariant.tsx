@@ -1,13 +1,14 @@
-import {CopyIcon} from '@sanity/icons'
-import {defineField, defineType} from 'sanity'
-import {ShopifyIcon} from '../../components/icons/ShopifyIcon'
-import {ProductVariantHiddenInput} from '../../components/shopify/ProductVariantInput'
-import {ShopifyDocumentStatus} from '../../components/shopify/ShopifyDocumentStatus'
+import {CopyIcon} from '@sanity/icons';
+import {defineField, defineType} from 'sanity';
+import {ShopifyIcon} from '../../components/icons/ShopifyIcon';
+import {ProductVariantHiddenInput} from '../../components/shopify/ProductVariantInput';
+import {ShopifyDocumentStatus} from '../../components/shopify/ShopifyDocumentStatus';
 
 export default defineType({
   name: 'productVariant',
   title: 'Product variant',
   type: 'document',
+  __experimental_formPreviewTitle: false,
   icon: CopyIcon,
   groups: [
     {
@@ -25,9 +26,9 @@ export default defineType({
         field: ProductVariantHiddenInput,
       },
       hidden: ({parent}) => {
-        const isDeleted = parent?.store?.isDeleted
+        const isDeleted = parent?.store?.isDeleted;
 
-        return !isDeleted
+        return !isDeleted;
       },
     }),
     // Title (proxy)
@@ -55,7 +56,7 @@ export default defineType({
       title: 'store.title',
     },
     prepare(selection) {
-      const {isDeleted, previewImageUrl, sku, status, title} = selection
+      const {isDeleted, previewImageUrl, sku, status, title} = selection;
 
       return {
         media: (
@@ -69,7 +70,7 @@ export default defineType({
         ),
         subtitle: sku,
         title,
-      }
+      };
     },
   },
-})
+});

@@ -1,5 +1,5 @@
 import {getCliClient} from 'sanity/cli';
-import {SINGLETONS} from '../desk/singletons';
+import {SINGLETONS} from '../structure/singletons';
 import fs from 'fs';
 
 /**

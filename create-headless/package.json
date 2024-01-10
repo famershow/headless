@@ -30,7 +30,7 @@
     "picocolors": "^1.0.0",
     "proxy-agent": "^6.3.1",
     "recursive-readdir": "^2.2.3",
-    "sanity": "^3.23.4",
+    "sanity": "^3.24.1",
     "tar-fs": "^3.0.4"
   }
 }

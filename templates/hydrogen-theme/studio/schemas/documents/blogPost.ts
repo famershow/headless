@@ -1,10 +1,11 @@
-import {defineField, defineType} from 'sanity'
-import {SlugInt, validateIntSlug} from '../../utils/slug'
+import {defineField, defineType} from 'sanity';
+import {SlugInt, validateIntSlug} from '../../utils/slug';
 
 export default defineType({
   name: 'blogPost',
   title: 'Blog posts',
   type: 'document',
+  __experimental_formPreviewTitle: false,
   fields: [
     defineField({
       name: 'title',
@@ -21,7 +22,7 @@ export default defineType({
       title: 'Slug',
       validation: (Rule) =>
         Rule.required().custom((slugArray: SlugInt[], context) =>
-          validateIntSlug({slugArray, context})
+          validateIntSlug({slugArray, context}),
         ),
     }),
   ],
@@ -32,7 +33,7 @@ export default defineType({
     prepare({title}) {
       return {
         title: title?.[0]?.value || 'No title',
-      }
+      };
     },
   },
-})
+});

@@ -4,6 +4,7 @@ export default defineType({
   title: 'Settings',
   name: 'settings',
   type: 'document',
+  __experimental_formPreviewTitle: false,
   fields: [
     defineField({
       name: 'colorScheme',
