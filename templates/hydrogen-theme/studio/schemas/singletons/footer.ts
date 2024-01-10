@@ -1,8 +1,9 @@
-import {defineField, defineType} from 'sanity'
+import {defineField, defineType} from 'sanity';
 
 export default defineType({
   name: 'footer',
   type: 'document',
+  __experimental_formPreviewTitle: false,
   fields: [
     defineField({
       name: 'sections',
@@ -20,4 +21,4 @@ export default defineType({
   preview: {
     prepare: () => ({title: 'Footer'}),
   },
-})
+});

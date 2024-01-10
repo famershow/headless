@@ -1,4 +1,4 @@
-import {defineField, defineType} from 'sanity'
+import {defineField, defineType} from 'sanity';
 
 const GROUPS = [
   {
@@ -10,11 +10,12 @@ const GROUPS = [
     name: 'settings',
     title: 'Settings',
   },
-]
+];
 
 export default defineType({
   name: 'header',
   type: 'document',
+  __experimental_formPreviewTitle: false,
   groups: GROUPS,
   fields: [
     defineField({
@@ -59,4 +60,4 @@ export default defineType({
   preview: {
     prepare: () => ({title: 'Header'}),
   },
-})
+});

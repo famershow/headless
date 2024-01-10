@@ -1,5 +1,5 @@
 import {defineConfig, isDev} from 'sanity';
-import {deskTool} from 'sanity/desk';
+import {structureTool} from 'sanity/structure';
 import {visionTool} from '@sanity/vision';
 import {internationalizedArray} from 'sanity-plugin-internationalized-array';
 import {media, mediaAssetSource} from 'sanity-plugin-media';
@@ -11,11 +11,11 @@ import {presentationTool} from '@sanity/presentation';
 import {languageFilter} from '@sanity/language-filter';
 
 import {schemaTypes} from './schemas';
-import {defaultDocumentNode, structure} from './desk';
+import {defaultDocumentNode, structure} from './structure';
 import {projectDetails} from './project.details';
 import {getAllLanguages} from '../countries';
 import {customDocumentActions} from './plugins/customDocumentActions';
-import {singletonActions, singletonsTypes} from './desk/singletons';
+import {singletonActions, singletonsTypes} from './structure/singletons';
 import {locate} from './presentation/locate';
 import {PreviewIcon} from './components/icons/Preview';
 
@@ -42,7 +42,7 @@ export default defineConfig({
     rangeSlider(),
     colorPicker(),
     codeInput(),
-    deskTool({structure, defaultDocumentNode}),
+    structureTool({structure, defaultDocumentNode}),
     customDocumentActions(),
     media(),
     presentationTool({

@@ -3,6 +3,7 @@ import {defineField, defineType} from 'sanity';
 export default defineType({
   name: 'themeContent',
   type: 'document',
+  __experimental_formPreviewTitle: false,
   groups: [
     {name: 'general', title: 'General'},
     {name: 'products', title: 'Products'},

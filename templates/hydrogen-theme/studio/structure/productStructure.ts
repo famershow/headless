@@ -1,10 +1,10 @@
-import {ListItemBuilder} from 'sanity/desk'
-import defineStructure from '../utils/defineStructure'
-import {InfoOutlineIcon} from '@sanity/icons'
-import {IconTag} from '../components/icons/Tag'
-import {projectDetails} from '../project.details'
+import {ListItemBuilder} from 'sanity/structure';
+import defineStructure from '../utils/defineStructure';
+import {InfoOutlineIcon} from '@sanity/icons';
+import {IconTag} from '../components/icons/Tag';
+import {projectDetails} from '../project.details';
 
-const {apiVersion} = projectDetails
+const {apiVersion} = projectDetails;
 
 export const products = defineStructure<ListItemBuilder>((S) =>
   S.listItem()
@@ -18,7 +18,8 @@ export const products = defineStructure<ListItemBuilder>((S) =>
           S.list()
             .title('Product')
             .canHandleIntent(
-              (intentName, params) => intentName === 'edit' && params.type === 'product'
+              (intentName, params) =>
+                intentName === 'edit' && params.type === 'product',
             )
             .items([
               // Details
@@ -40,7 +41,7 @@ export const products = defineStructure<ListItemBuilder>((S) =>
                       `
                       _type == "productVariant"
                       && store.productId == $productId
-                    `
+                    `,
                     )
                     .apiVersion(apiVersion)
                     .params({
@@ -48,10 +49,11 @@ export const products = defineStructure<ListItemBuilder>((S) =>
                     })
                     .canHandleIntent(
                       (intentName, params) =>
-                        intentName === 'edit' && params.type === 'productVariant'
-                    )
+                        intentName === 'edit' &&
+                        params.type === 'productVariant',
+                    ),
                 ),
-            ])
-        )
-    )
-)
+            ]),
+        ),
+    ),
+);

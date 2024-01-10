@@ -24,6 +24,7 @@ export default defineType({
   name: 'product',
   title: 'Product',
   type: 'document',
+  __experimental_formPreviewTitle: false,
   groups: GROUPS,
   fields: [
     defineField({

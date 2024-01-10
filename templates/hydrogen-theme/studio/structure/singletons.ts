@@ -5,7 +5,7 @@ import {
   InsertAboveIcon,
   InsertBelowIcon,
 } from '@sanity/icons';
-import {StructureBuilder} from 'sanity/desk';
+import {StructureBuilder} from 'sanity/structure';
 
 type Singleton = {
   id: string;

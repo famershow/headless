@@ -4,6 +4,7 @@ export default defineType({
   name: 'page',
   title: 'Pages',
   type: 'document',
+  __experimental_formPreviewTitle: false,
   fields: [
     defineField({
       name: 'title',
