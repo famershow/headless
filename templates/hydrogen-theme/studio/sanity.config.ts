@@ -61,6 +61,7 @@ export default defineConfig({
         'slug',
         'headerNavigation',
         'productRichtext',
+        'richtext',
       ],
       buttonLocations: ['field'],
     }),

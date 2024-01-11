@@ -21,6 +21,9 @@ const globalSections = [
   {
     type: 'carouselSection',
   },
+  {
+    type: 'richtextSection',
+  },
 ];
 
 const pdpSections = [

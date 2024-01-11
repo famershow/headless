@@ -7,26 +7,28 @@ import {q} from 'groqd';
 | Links Fragments
 |--------------------------------------------------------------------------
 */
+export const LINK_REFERENCE_FRAGMENT = q('link')
+  .deref()
+  .grab({
+    documentType: ['_type', q.string()],
+    slug: [
+      `coalesce(
+        slug,
+        store.slug
+      )`,
+      q.object({
+        _type: q.string(),
+        current: q.string(),
+      }),
+    ],
+  })
+  .nullable();
+
 export const INTERNAL_LINK_FRAGMENT = {
   _key: q.string().nullable(),
   _type: q.literal('internalLink'),
   anchor: q.string().nullable(),
-  link: q('link')
-    .deref()
-    .grab({
-      documentType: ['_type', q.string()],
-      slug: [
-        `coalesce(
-            slug,
-            store.slug
-          )`,
-        q.object({
-          _type: q.string(),
-          current: q.string(),
-        }),
-      ],
-    })
-    .nullable(),
+  link: LINK_REFERENCE_FRAGMENT,
   name: q.string().nullable(),
 } satisfies Selection;
 
