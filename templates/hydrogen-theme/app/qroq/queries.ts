@@ -42,9 +42,11 @@ export const PRODUCT_QUERY = q('*')
   .filter(`_type == "product" && store.slug.current == $productHandle`)
   .grab({
     _type: q.literal('product'),
-    sections: PRODUCT_SECTIONS_FRAGMENT,
     store: q('store').grab({
       gid: q.string(),
+    }),
+    template: q('template').deref().grab({
+      sections: PRODUCT_SECTIONS_FRAGMENT,
     }),
   })
   .slice(0)
@@ -67,10 +69,25 @@ export const FONTS_QUERY = q('*')
   .nullable();
 
 export const DEFAULT_COLOR_SCHEME_QUERY = q('*')
-  .filter("_type == 'colorScheme'")
+  .filter("_type == 'colorScheme' && default == true")
   .grab(COLOR_SCHEME_FRAGMENT)
-  .order('_createdAt asc')
-  .slice(0);
+  .slice(0)
+  .nullable();
+
+export const DEFAULT_PRODUCT_TEMPLATE = q('*')
+  .filter("_type == 'productTemplate' && default == true")
+  .grab({
+    _type: q.literal('productTemplate'),
+    name: q.string().nullable(),
+    sections: PRODUCT_SECTIONS_FRAGMENT,
+  })
+  .slice(0)
+  .nullable();
+
+export const DEFAULT_COLLECTION_TEMPLATE = q('*')
+  .filter("_type == 'collectionTemplate' && default == true")
+  .slice(0)
+  .nullable();
 
 export const SETTINGS_QUERY = q('*')
   .filter("_type == 'settings'")
@@ -112,7 +129,9 @@ export const THEME_CONTENT_QUERY = q('*')
 
 export const ROOT_QUERY = q('')
   .grab({
+    defaultCollectionTemplate: DEFAULT_COLLECTION_TEMPLATE,
     defaultColorScheme: DEFAULT_COLOR_SCHEME_QUERY,
+    defaultProductTemplate: DEFAULT_PRODUCT_TEMPLATE,
     fonts: FONTS_QUERY,
     footer: FOOTER_QUERY,
     header: HEADER_QUERY,

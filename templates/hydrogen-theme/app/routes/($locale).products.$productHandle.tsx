@@ -10,6 +10,7 @@ import invariant from 'tiny-invariant';
 import {CmsSection} from '~/components/CmsSection';
 import {PRODUCT_QUERY, VARIANTS_QUERY} from '~/graphql/queries';
 import {useSanityData} from '~/hooks/useSanityData';
+import {useSanityRoot} from '~/hooks/useSanityRoot';
 import {resolveShopifyPromises} from '~/lib/resolveShopifyPromises';
 import {sanityPreviewPayload} from '~/lib/sanity/sanity.payload.server';
 import {PRODUCT_QUERY as CMS_PRODUCT_QUERY} from '~/qroq/queries';
@@ -91,11 +92,13 @@ export async function loader({context, params, request}: LoaderFunctionArgs) {
 
 export default function Product() {
   const {cmsProduct} = useLoaderData<typeof loader>();
+  const {data: rootData} = useSanityRoot();
   const {data, encodeDataAttribute} = useSanityData(cmsProduct);
 
-  // Todo => Add a template mechanism to CMS products so we can attach a same template to multiple products
-  return data?.sections && data.sections.length > 0
-    ? data.sections.map((section) => (
+  const template = data?.template || rootData?.defaultProductTemplate;
+
+  return template?.sections && template.sections.length > 0
+    ? template.sections.map((section) => (
         <CmsSection
           data={section}
           encodeDataAttribute={encodeDataAttribute}

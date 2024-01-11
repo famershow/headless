@@ -7,13 +7,6 @@ export default defineType({
   __experimental_formPreviewTitle: false,
   fields: [
     defineField({
-      name: 'colorScheme',
-      title: 'Default Color Scheme',
-      description: 'The default color scheme used throughout the site.',
-      type: 'reference',
-      to: [{type: 'colorScheme'}],
-    }),
-    defineField({
       title: 'Logo',
       name: 'logo',
       type: 'image',
