@@ -1,15 +1,15 @@
-import type {InferType} from 'groqd';
+import type {TypeFromSelection} from 'groqd';
 
 import {Await, useLoaderData} from '@remix-run/react';
 import {flattenConnection} from '@shopify/hydrogen';
 import {Suspense} from 'react';
 
-import type {PRICE_BLOCK} from '~/qroq/blocks';
+import type {PRICE_BLOCK_FRAGMENT} from '~/qroq/blocks';
 import type {loader} from '~/routes/($locale).products.$productHandle';
 
 import {VariantPrice} from '../product/VariantPrice';
 
-export type PriceBlockProps = InferType<typeof PRICE_BLOCK>;
+export type PriceBlockProps = TypeFromSelection<typeof PRICE_BLOCK_FRAGMENT>;
 
 export function PriceBlock(props: PriceBlockProps) {
   const loaderData = useLoaderData<typeof loader>();

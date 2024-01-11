@@ -1,9 +1,9 @@
-import type {InferType} from 'groqd';
+import type {TypeFromSelection} from 'groqd';
 import type {ProductVariantFragmentFragment} from 'storefrontapi.generated';
 
 import {useLoaderData} from '@remix-run/react';
 
-import type {ADD_TO_CART_BUTTON_BLOCK} from '~/qroq/blocks';
+import type {ADD_TO_CART_BUTTON_BLOCK_FRAGMENT} from '~/qroq/blocks';
 import type {loader} from '~/routes/($locale).products.$productHandle';
 
 import {AddToCartForm} from './AddToCartForm';
@@ -12,7 +12,7 @@ import {VariantSelector} from './VariantSelector';
 export function ProductForm(
   props: {
     variants: ProductVariantFragmentFragment[];
-  } & InferType<typeof ADD_TO_CART_BUTTON_BLOCK>,
+  } & TypeFromSelection<typeof ADD_TO_CART_BUTTON_BLOCK_FRAGMENT>,
 ) {
   const {product} = useLoaderData<typeof loader>();
   const showQuantitySelector = props.quantitySelector;

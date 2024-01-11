@@ -1,5 +1,13 @@
-import {BadgeDollarSign, ShoppingCart, Text, Type} from 'lucide-react';
+import {
+  BadgeDollarSign,
+  ExternalLink,
+  Link,
+  ShoppingCart,
+  Text,
+  Type,
+} from 'lucide-react';
 import {defineField} from 'sanity';
+import {internalLinkFields} from './richtext';
 
 export default defineField({
   name: 'productRichtext',
@@ -7,6 +15,39 @@ export default defineField({
   of: [
     {
       type: 'block',
+      marks: {
+        decorators: [
+          {title: 'Strong', value: 'strong'},
+          {title: 'Emphasis', value: 'em'},
+          {title: 'Underline', value: 'underline'},
+          {title: 'Strike-through', value: 'strike-through'},
+        ],
+        annotations: [
+          {
+            name: 'internalLink',
+            type: 'object',
+            title: 'Internal link',
+            icon: () => <Link size="1em" strokeWidth={1} />,
+            fields: [...internalLinkFields],
+          },
+          {
+            name: 'externalLink',
+            type: 'object',
+            title: 'External link',
+            icon: () => <ExternalLink size="1em" strokeWidth={1} />,
+            fields: [
+              defineField({
+                name: 'link',
+                type: 'url',
+              }),
+              defineField({
+                name: 'openInNewTab',
+                type: 'boolean',
+              }),
+            ],
+          },
+        ],
+      },
     },
     {
       name: 'shopifyTitle',

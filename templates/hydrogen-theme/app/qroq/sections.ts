@@ -2,12 +2,7 @@ import type {Selection} from 'groqd';
 
 import {q, z} from 'groqd';
 
-import {
-  ADD_TO_CART_BUTTON_BLOCK,
-  PRICE_BLOCK,
-  SHOPIFY_DESCRIPTION_BLOCK,
-  SHOPIFY_TITLE_BLOCK,
-} from './blocks';
+import {PRODUCT_RICHTEXT_BLOCKS, RICHTEXT_BLOCKS} from './blocks';
 import {COLOR_SCHEME_FRAGMENT, IMAGE_FRAGMENT} from './fragments';
 import {getIntValue} from './utils';
 
@@ -21,6 +16,12 @@ export const contentAlignmentValues = [
   'bottom_left',
   'bottom_center',
   'bottom_right',
+] as const;
+
+export const simpleContentAlignmentValues = [
+  'left',
+  'center',
+  'right',
 ] as const;
 
 /*
@@ -110,20 +111,16 @@ export const FEATURED_PRODUCT_SECTION_FRAGMENT = {
 export const PRODUCT_INFORMATION_SECTION_FRAGMENT = {
   _key: q.string().nullable(),
   _type: q.literal('productInformationSection'),
-  richtext: [
-    getIntValue('richtext'),
-    q
-      .array(
-        q.union([
-          SHOPIFY_TITLE_BLOCK,
-          SHOPIFY_DESCRIPTION_BLOCK,
-          ADD_TO_CART_BUTTON_BLOCK,
-          PRICE_BLOCK,
-          q.contentBlock(),
-        ]),
-      )
-      .nullable(),
-  ],
+  richtext: q(
+    `coalesce(
+      richtext[_key == $language][0].value[],
+      richtext[_key == $defaultLanguage][0].value[],
+    )[]`,
+    {isArray: true},
+  )
+    .filter()
+    .select(PRODUCT_RICHTEXT_BLOCKS)
+    .nullable(),
   settings: SECTION_SETTINGS_FRAGMENT,
 } satisfies Selection;
 
@@ -198,6 +195,30 @@ export const CAROUSEL_SECTION_FRAGMENT = {
 
 /*
 |--------------------------------------------------------------------------
+| Richtext Section
+|--------------------------------------------------------------------------
+*/
+export const RICHTEXT_SECTION_FRAGMENT = {
+  _key: q.string().nullable(),
+  _type: q.literal('richtextSection'),
+  contentAlignment: z.enum(simpleContentAlignmentValues).nullable(),
+  desktopContentPosition: z.enum(simpleContentAlignmentValues).nullable(),
+  maxWidth: q.number().nullable(),
+  richtext: q(
+    `coalesce(
+      richtext[_key == $language][0].value[],
+      richtext[_key == $defaultLanguage][0].value[],
+    )[]`,
+    {isArray: true},
+  )
+    .filter()
+    .select(RICHTEXT_BLOCKS)
+    .nullable(),
+  settings: SECTION_SETTINGS_FRAGMENT,
+} satisfies Selection;
+
+/*
+|--------------------------------------------------------------------------
 | List of sections
 |--------------------------------------------------------------------------
 */
@@ -208,6 +229,7 @@ export const SECTIONS_LIST_SELECTION = {
   "_type == 'featuredCollectionSection'": FEATURED_COLLECTION_SECTION_FRAGMENT,
   "_type == 'featuredProductSection'": FEATURED_PRODUCT_SECTION_FRAGMENT,
   "_type == 'imageBannerSection'": IMAGE_BANNER_SECTION_FRAGMENT,
+  "_type == 'richtextSection'": RICHTEXT_SECTION_FRAGMENT,
 };
 
 /*
