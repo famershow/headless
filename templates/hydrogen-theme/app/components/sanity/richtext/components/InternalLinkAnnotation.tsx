@@ -11,7 +11,7 @@ export type InternalLinkAnnotationProps = TypeFromSelection<
 >;
 
 export const richTextLinkClassName = cx(
-  'text-color-scheme-primary-button-bg underline-offset-4 hover:underline',
+  'text-color-scheme-primary-button-bg font-medium underline-offset-4 hover:underline',
 );
 
 export function InternalLinkAnnotation(
