@@ -60,6 +60,7 @@ export function CollectionProductGridSection(
             searchParams,
           });
 
+          // Todo => add enableFiltering and enableSorting settings
           return (
             <div className="container">
               <SortFilter

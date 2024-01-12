@@ -5,6 +5,7 @@ import {cx} from 'class-variance-authority';
 
 import {IconRemove} from '../icons/IconRemove';
 import {Button} from '../ui/Button';
+import {Input} from '../ui/Input';
 
 /**
  * Temporary discount UI
@@ -46,7 +47,7 @@ export function CartDiscounts({
       <UpdateDiscountForm discountCodes={codes}>
         <div className={cx('flex', 'items-center justify-between gap-4')}>
           {/* Todo => add theme content string */}
-          <input name="discountCode" placeholder="Discount code" type="text" />
+          <Input name="discountCode" placeholder="Discount code" type="text" />
           <Button variant="outline">
             {/* Todo => add theme content string */}
             Apply Discount

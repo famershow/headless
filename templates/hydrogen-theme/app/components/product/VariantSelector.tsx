@@ -11,6 +11,8 @@ import {useMemo} from 'react';
 
 import {useSelectedVariant} from '~/hooks/useSelectedVariant';
 
+import {Button} from '../ui/Button';
+
 export type VariantOptionValue = {
   isActive: boolean;
   isAvailable: boolean;
@@ -90,20 +92,17 @@ export function VariantSelector(props: {
       <div>{option.name}</div>
       <div className="mt-1 flex gap-3">
         {option.values?.map(({isActive, isAvailable, search, value}) => (
-          <Link
-            className={cx([
-              'rounded-full border-[1px] border-[rgb(var(--textColor))] px-3 py-1',
-              isActive && 'inverted-color-scheme',
-              !isAvailable && 'opacity-50',
-            ])}
+          <Button
+            asChild
+            className={cx(!isAvailable && 'opacity-50')}
             key={option.name + value}
-            prefetch="intent"
-            preventScrollReset
-            replace
-            to={search}
+            size="sm"
+            variant={isActive ? 'secondary' : 'secondaryOutline'}
           >
-            {value}
-          </Link>
+            <Link prefetch="intent" preventScrollReset replace to={search}>
+              {value}
+            </Link>
+          </Button>
         ))}
       </div>
     </div>
