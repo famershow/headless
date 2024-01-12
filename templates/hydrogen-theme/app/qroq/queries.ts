@@ -7,8 +7,37 @@ import {
   MENU_FRAGMENT,
   SETTINGS_FRAGMENT,
 } from './fragments';
-import {PRODUCT_SECTIONS_FRAGMENT, SECTIONS_FRAGMENT} from './sections';
+import {
+  COLLECTION_SECTIONS_FRAGMENT,
+  PRODUCT_SECTIONS_FRAGMENT,
+  SECTIONS_FRAGMENT,
+} from './sections';
 import {THEME_CONTENT_FRAGMENT} from './themeContent';
+
+/*
+|--------------------------------------------------------------------------
+| Template Queries
+|--------------------------------------------------------------------------
+*/
+export const DEFAULT_PRODUCT_TEMPLATE = q('*')
+  .filter("_type == 'productTemplate' && default == true")
+  .grab({
+    _type: q.literal('productTemplate'),
+    name: q.string().nullable(),
+    sections: PRODUCT_SECTIONS_FRAGMENT,
+  })
+  .slice(0)
+  .nullable();
+
+export const DEFAULT_COLLECTION_TEMPLATE = q('*')
+  .filter("_type == 'collectionTemplate' && default == true")
+  .grab({
+    _type: q.literal('collectionTemplate'),
+    name: q.string().nullable(),
+    sections: COLLECTION_SECTIONS_FRAGMENT,
+  })
+  .slice(0)
+  .nullable();
 
 /*
 |--------------------------------------------------------------------------
@@ -27,7 +56,7 @@ export const PAGE_QUERY = q('*')
     `,
   )
   .grab({
-    _type: q.literal('page'),
+    _type: q.literal('page').or(q.literal('home')),
     sections: SECTIONS_FRAGMENT,
   })
   .slice(0)
@@ -38,19 +67,44 @@ export const PAGE_QUERY = q('*')
 | Product Query
 |--------------------------------------------------------------------------
 */
-export const PRODUCT_QUERY = q('*')
-  .filter(`_type == "product" && store.slug.current == $productHandle`)
-  .grab({
-    _type: q.literal('product'),
-    store: q('store').grab({
-      gid: q.string(),
-    }),
-    template: q('template').deref().grab({
-      sections: PRODUCT_SECTIONS_FRAGMENT,
-    }),
-  })
-  .slice(0)
-  .nullable();
+export const PRODUCT_QUERY = q('').grab({
+  _type: ['"product"', q.literal('product')],
+  defaultProductTemplate: DEFAULT_PRODUCT_TEMPLATE,
+  product: q('*')
+    .filter(`_type == "product" && store.slug.current == $productHandle`)
+    .grab({
+      store: q('store').grab({
+        gid: q.string(),
+      }),
+      template: q('template').deref().grab({
+        sections: PRODUCT_SECTIONS_FRAGMENT,
+      }),
+    })
+    .slice(0)
+    .nullable(),
+});
+
+/*
+|--------------------------------------------------------------------------
+| Collection Query
+|--------------------------------------------------------------------------
+*/
+export const COLLECTION_QUERY = q('').grab({
+  _type: ['"collection"', q.literal('collection')],
+  collection: q('*')
+    .filter(`_type == "collection" && store.slug.current == $collectionHandle`)
+    .grab({
+      store: q('store').grab({
+        gid: q.string(),
+      }),
+      template: q('template').deref().grab({
+        sections: COLLECTION_SECTIONS_FRAGMENT,
+      }),
+    })
+    .slice(0)
+    .nullable(),
+  defaultCollectionTemplate: DEFAULT_COLLECTION_TEMPLATE,
+});
 
 /*
 |--------------------------------------------------------------------------
@@ -71,21 +125,6 @@ export const FONTS_QUERY = q('*')
 export const DEFAULT_COLOR_SCHEME_QUERY = q('*')
   .filter("_type == 'colorScheme' && default == true")
   .grab(COLOR_SCHEME_FRAGMENT)
-  .slice(0)
-  .nullable();
-
-export const DEFAULT_PRODUCT_TEMPLATE = q('*')
-  .filter("_type == 'productTemplate' && default == true")
-  .grab({
-    _type: q.literal('productTemplate'),
-    name: q.string().nullable(),
-    sections: PRODUCT_SECTIONS_FRAGMENT,
-  })
-  .slice(0)
-  .nullable();
-
-export const DEFAULT_COLLECTION_TEMPLATE = q('*')
-  .filter("_type == 'collectionTemplate' && default == true")
   .slice(0)
   .nullable();
 
@@ -129,9 +168,7 @@ export const THEME_CONTENT_QUERY = q('*')
 
 export const ROOT_QUERY = q('')
   .grab({
-    defaultCollectionTemplate: DEFAULT_COLLECTION_TEMPLATE,
     defaultColorScheme: DEFAULT_COLOR_SCHEME_QUERY,
-    defaultProductTemplate: DEFAULT_PRODUCT_TEMPLATE,
     fonts: FONTS_QUERY,
     footer: FOOTER_QUERY,
     header: HEADER_QUERY,

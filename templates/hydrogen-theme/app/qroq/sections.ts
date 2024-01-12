@@ -219,6 +219,35 @@ export const RICHTEXT_SECTION_FRAGMENT = {
 
 /*
 |--------------------------------------------------------------------------
+| Collection Banner Section
+|--------------------------------------------------------------------------
+*/
+export const COLLECTION_BANNER_SECTION_FRAGMENT = {
+  _key: q.string().nullable(),
+  _type: q.literal('collectionBannerSection'),
+  settings: SECTION_SETTINGS_FRAGMENT,
+  showDescription: q.boolean().nullable(),
+  showImage: q.boolean().nullable(),
+} satisfies Selection;
+
+/*
+|--------------------------------------------------------------------------
+| Collection Banner Section
+|--------------------------------------------------------------------------
+*/
+export const COLLECTION_PRODUCT_GRID_SECTION_FRAGMENT = {
+  _key: q.string().nullable(),
+  _type: q.literal('collectionProductGridSection'),
+  desktopColumns: q.number().nullable(),
+  enableFiltering: q.boolean().nullable(),
+  enableSorting: q.boolean().nullable(),
+  mobileColumns: q.number().nullable(),
+  productsPerPage: q.number().nullable(),
+  settings: SECTION_SETTINGS_FRAGMENT,
+} satisfies Selection;
+
+/*
+|--------------------------------------------------------------------------
 | List of sections
 |--------------------------------------------------------------------------
 */
@@ -232,20 +261,34 @@ export const SECTIONS_LIST_SELECTION = {
   "_type == 'richtextSection'": RICHTEXT_SECTION_FRAGMENT,
 };
 
-/*
-|--------------------------------------------------------------------------
-| Sections Fragment
-|--------------------------------------------------------------------------
-*/
 export const SECTIONS_FRAGMENT = q('sections[]', {isArray: true})
   .select(SECTIONS_LIST_SELECTION)
   .nullable();
 
+/*
+|--------------------------------------------------------------------------
+| Product Sections Fragment
+|--------------------------------------------------------------------------
+*/
 export const PRODUCT_SECTIONS_FRAGMENT = q('sections[]', {isArray: true})
   .select({
     "_type == 'productInformationSection'":
       PRODUCT_INFORMATION_SECTION_FRAGMENT,
     "_type == 'relatedProductsSection'": RELATED_PRODUCTS_SECTION_FRAGMENT,
+    ...SECTIONS_LIST_SELECTION,
+  })
+  .nullable();
+
+/*
+|--------------------------------------------------------------------------
+| Collection Sections Fragment
+|--------------------------------------------------------------------------
+*/
+export const COLLECTION_SECTIONS_FRAGMENT = q('sections[]', {isArray: true})
+  .select({
+    "_type == 'collectionBannerSection'": COLLECTION_BANNER_SECTION_FRAGMENT,
+    "_type == 'collectionProductGridSection'":
+      COLLECTION_PRODUCT_GRID_SECTION_FRAGMENT,
     ...SECTIONS_LIST_SELECTION,
   })
   .nullable();

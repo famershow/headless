@@ -36,6 +36,16 @@ const pdpSections = [
   ...globalSections,
 ];
 
+const collectionSectionsList = [
+  {
+    type: 'collectionBannerSection',
+  },
+  {
+    type: 'collectionProductGridSection',
+  },
+  ...globalSections,
+];
+
 export default defineField({
   title: 'Sections',
   name: 'sections',
@@ -54,6 +64,18 @@ export const productSections = defineField({
   type: 'array',
   group: 'pagebuilder',
   of: pdpSections,
+  components: {
+    input: (props: ArrayOfObjectsInputProps) =>
+      SectionsListInput({type: 'section', ...props}),
+  },
+});
+
+export const collectionSections = defineField({
+  title: 'Sections',
+  name: 'collectionSections',
+  type: 'array',
+  group: 'pagebuilder',
+  of: collectionSectionsList,
   components: {
     input: (props: ArrayOfObjectsInputProps) =>
       SectionsListInput({type: 'section', ...props}),

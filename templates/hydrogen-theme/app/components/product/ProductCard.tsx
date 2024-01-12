@@ -8,7 +8,10 @@ export const cardClassName = cx('overflow-hidden rounded-lg border');
 
 export function ProductCard(props: {
   className?: string;
-  columns?: null | number;
+  columns?: {
+    desktop?: null | number;
+    mobile?: null | number;
+  };
   product?: ProductCardFragment;
   skeleton?: {
     cardsNumber?: number;
@@ -20,8 +23,8 @@ export function ProductCard(props: {
     : null;
   const sizes = cx([
     '(min-width: 1024px)',
-    columns ? `${100 / columns}vw,` : '33vw,',
-    '100vw',
+    columns?.desktop ? `${100 / columns.desktop}vw,` : '33vw,',
+    columns?.mobile ? `${100 / columns.mobile}vw` : '100vw',
   ]);
 
   return (
