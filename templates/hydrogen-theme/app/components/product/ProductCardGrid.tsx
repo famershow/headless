@@ -6,7 +6,10 @@ import {cx} from 'class-variance-authority';
 import {ProductCard} from './ProductCard';
 
 export function ProductCardGrid(props: {
-  columns?: null | number;
+  columns?: {
+    desktop?: null | number;
+    mobile?: null | number;
+  };
   products?: ProductCardFragment[];
   skeleton?: {
     cardsNumber?: number;
@@ -14,13 +17,16 @@ export function ProductCardGrid(props: {
 }) {
   const {products, skeleton} = props;
   const columnsVar = {
-    '--columns': props.columns ?? 3,
+    '--columns': props.columns?.desktop ?? 3,
+    '--mobileColumns': props.columns?.mobile ?? 1,
   } as CSSProperties;
 
   return (
     <ul
       className={cx([
         'grid gap-6',
+        'grid-cols-[repeat(var(--mobileColumns),_minmax(0,_1fr))]',
+        'sm:grid-cols-2',
         'lg:grid-cols-[repeat(var(--columns),_minmax(0,_1fr))]',
       ])}
       style={columnsVar}
@@ -28,14 +34,23 @@ export function ProductCardGrid(props: {
       {!skeleton && products && products.length > 0
         ? products.map((product) => (
             <li key={product.id}>
-              <ProductCard columns={props.columns} product={product} />
+              <ProductCard
+                columns={{
+                  desktop: props.columns?.desktop,
+                  mobile: props.columns?.mobile,
+                }}
+                product={product}
+              />
             </li>
           ))
         : skeleton
           ? [...Array(skeleton.cardsNumber ?? 3)].map((_, i) => (
               <li key={i}>
                 <ProductCard
-                  columns={props.columns}
+                  columns={{
+                    desktop: props.columns?.desktop,
+                    mobile: props.columns?.mobile,
+                  }}
                   skeleton={{
                     cardsNumber: skeleton.cardsNumber,
                   }}

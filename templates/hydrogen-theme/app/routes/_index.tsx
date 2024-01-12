@@ -9,7 +9,7 @@ import {PAGE_QUERY} from '~/qroq/queries';
 
 import PageRoute from './($locale).$';
 
-export async function loader({context}: LoaderFunctionArgs) {
+export async function loader({context, request}: LoaderFunctionArgs) {
   const {locale, sanity, storefront} = context;
   const language = locale?.language.toLowerCase();
   const queryParams = {
@@ -29,6 +29,7 @@ export async function loader({context}: LoaderFunctionArgs) {
     featuredProductPromise,
   } = resolveShopifyPromises({
     document: page,
+    request,
     storefront,
   });
 

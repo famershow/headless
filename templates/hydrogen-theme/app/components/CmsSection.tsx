@@ -5,6 +5,7 @@ import {Suspense, useMemo} from 'react';
 
 import type {FOOTERS_FRAGMENT} from '~/qroq/footers';
 import type {
+  COLLECTION_SECTIONS_FRAGMENT,
   PRODUCT_SECTIONS_FRAGMENT,
   SECTIONS_FRAGMENT,
 } from '~/qroq/sections';
@@ -14,6 +15,7 @@ import {useSettingsCssVars} from '~/hooks/useSettingsCssVars';
 import {sections} from '~/lib/sectionRelsolver';
 
 type CmsSectionsProps =
+  | NonNullable<InferType<typeof COLLECTION_SECTIONS_FRAGMENT>>[0]
   | NonNullable<InferType<typeof FOOTERS_FRAGMENT>>
   | NonNullable<InferType<typeof PRODUCT_SECTIONS_FRAGMENT>>[0]
   | NonNullable<InferType<typeof SECTIONS_FRAGMENT>>[0];

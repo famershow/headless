@@ -10,7 +10,10 @@ import home from './singletons/home';
 import collection from './documents/collection';
 import product from './documents/product';
 import blogPost from './documents/blogPost';
-import sectionsList, {productSections} from './objects/global/sectionsList';
+import sectionsList, {
+  productSections,
+  collectionSections,
+} from './objects/global/sectionsList';
 import seo from './objects/global/seo';
 import sectionSettings from './objects/global/sectionSettings';
 import headerNavigation from './objects/global/headerNavigation';
@@ -40,6 +43,8 @@ import richtextSection from './objects/sections/richtextSection';
 import richtext from './objects/global/richtext';
 import productTemplate from './documents/productTemplate';
 import collectionTemplate from './documents/collectionTemplate';
+import collectionBanner from './objects/sections/collectionBanner';
+import collectionProductGrid from './objects/sections/collectionProductGrid';
 
 const singletons = [home, header, footer, settings, themeContent];
 const documents = [
@@ -62,12 +67,15 @@ const sections = [
   relatedProductsSection,
   carouselSection,
   richtextSection,
+  collectionBanner,
+  collectionProductGrid,
 ];
 const footers = [socialLinksOnly];
 const objects = [
   footersList,
   sectionsList,
   productSections,
+  collectionSections,
   productRichtext,
   seo,
   sectionSettings,

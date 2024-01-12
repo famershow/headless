@@ -8,10 +8,22 @@ export const sections: {
       default: module.CarouselSection,
     })),
   ),
+  collectionBannerSection: lazy(() =>
+    import('../components/sections/CollectionBannerSection').then((module) => ({
+      default: module.CollectionBannerSection,
+    })),
+  ),
   collectionListSection: lazy(() =>
     import('../components/sections/CollectionListSection').then((module) => ({
       default: module.CollectionListSection,
     })),
+  ),
+  collectionProductGridSection: lazy(() =>
+    import('../components/sections/CollectionProductGridSection').then(
+      (module) => ({
+        default: module.CollectionProductGridSection,
+      }),
+    ),
   ),
   ctaSection: lazy(() =>
     import('../components/sections/CtaSection').then((module) => ({

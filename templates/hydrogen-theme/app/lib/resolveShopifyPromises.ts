@@ -6,21 +6,26 @@ import type {
   FeaturedProductQuery,
 } from 'storefrontapi.generated';
 
-import {parseGid} from '@shopify/hydrogen';
+import {getPaginationVariables, parseGid} from '@shopify/hydrogen';
 
-import type {PAGE_QUERY, PRODUCT_QUERY} from '~/qroq/queries';
+import type {COLLECTION_QUERY, PAGE_QUERY, PRODUCT_QUERY} from '~/qroq/queries';
 
 import {
+  COLLECTION_PRODUCT_GRID_QUERY,
   COLLECTIONS_QUERY,
   FEATURED_COLLECTION_QUERY,
   FEATURED_PRODUCT_QUERY,
   RECOMMENDED_PRODUCTS_QUERY,
 } from '~/graphql/queries';
 
+import {getFiltersFromParam} from './shopifyCollection';
+
 type SanityPageData = InferType<typeof PAGE_QUERY>;
 type SanityProductData = InferType<typeof PRODUCT_QUERY>;
+type SanityCollectionData = InferType<typeof COLLECTION_QUERY>;
 type PromiseResolverArgs = {
-  document: {data: SanityPageData | SanityProductData};
+  document: {data: SanityCollectionData | SanityPageData | SanityProductData};
+  request: Request;
   storefront: Storefront;
 };
 
@@ -31,34 +36,70 @@ type PromiseResolverArgs = {
  */
 export function resolveShopifyPromises({
   document,
+  request,
   storefront,
 }: PromiseResolverArgs) {
   const featuredCollectionPromise = resolveFeaturedCollectionPromise({
     document,
+    request,
     storefront,
   });
 
   const collectionListPromise = resolveCollectionListPromise({
     document,
+    request,
     storefront,
   });
 
   const featuredProductPromise = resolveFeaturedProductPromise({
     document,
+    request,
     storefront,
   });
 
   const relatedProductsPromise = resolveRelatedProductsPromise({
     document,
+    request,
+    storefront,
+  });
+
+  const collectionProductGridPromise = resolveCollectionProductGridPromise({
+    document,
+    request,
     storefront,
   });
 
   return {
     collectionListPromise,
+    collectionProductGridPromise,
     featuredCollectionPromise,
     featuredProductPromise,
     relatedProductsPromise,
   };
+}
+
+function getSections(document: {
+  data: SanityCollectionData | SanityPageData | SanityProductData;
+}) {
+  if (document?.data?._type === 'page' || document?.data?._type === 'home') {
+    return document.data.sections;
+  }
+
+  if (document?.data?._type === 'product') {
+    return (
+      document.data?.product?.template?.sections ||
+      document.data?.defaultProductTemplate?.sections
+    );
+  }
+
+  if (document?.data?._type === 'collection') {
+    return (
+      document.data?.collection?.template?.sections ||
+      document.data?.defaultCollectionTemplate?.sections
+    );
+  }
+
+  return [];
 }
 
 function resolveFeaturedCollectionPromise({
@@ -67,7 +108,9 @@ function resolveFeaturedCollectionPromise({
 }: PromiseResolverArgs) {
   const promises: Promise<FeaturedCollectionQuery>[] = [];
 
-  for (const section of document.data?.sections || []) {
+  const sections = getSections(document);
+
+  for (const section of sections || []) {
     if (section._type === 'featuredCollectionSection') {
       const gid = section.collection?.store.gid;
       const first = section.maxProducts || 3;
@@ -106,7 +149,9 @@ function resolveCollectionListPromise({
 }: PromiseResolverArgs) {
   const promises: Promise<CollectionsQuery>[] = [];
 
-  for (const section of document.data?.sections || []) {
+  const sections = getSections(document);
+
+  for (const section of sections || []) {
     if (section._type === 'collectionListSection') {
       const first = section.collections?.length;
       const ids = section.collections?.map(
@@ -148,7 +193,9 @@ function resolveFeaturedProductPromise({
 }: PromiseResolverArgs) {
   const promises: Promise<FeaturedProductQuery>[] = [];
 
-  for (const section of document.data?.sections || []) {
+  const sections = getSections(document);
+
+  for (const section of sections || []) {
     if (section._type === 'featuredProductSection') {
       const gid = section.product?.store.gid;
 
@@ -189,9 +236,14 @@ async function resolveRelatedProductsPromise({
     return null;
   }
 
-  const productId = document.data?.store.gid;
+  const productId = document.data?.product?.store.gid;
+  const sections = getSections(document);
 
-  for (const section of document.data?.sections || []) {
+  if (!productId) {
+    return null;
+  }
+
+  for (const section of sections || []) {
     if (section._type === 'relatedProductsSection') {
       promise = storefront.query(RECOMMENDED_PRODUCTS_QUERY, {
         variables: {
@@ -199,6 +251,50 @@ async function resolveRelatedProductsPromise({
           country: storefront.i18n.country,
           language: storefront.i18n.language,
           productId,
+        },
+      });
+    }
+  }
+
+  return promise || null;
+}
+
+async function resolveCollectionProductGridPromise({
+  document,
+  request,
+  storefront,
+}: PromiseResolverArgs) {
+  let promise;
+
+  if (document.data?._type !== 'collection') {
+    return null;
+  }
+
+  const collectionId = document.data?.collection?.store.gid;
+
+  if (!collectionId) {
+    return null;
+  }
+
+  const sections = getSections(document);
+  const searchParams = new URL(request.url).searchParams;
+  const {filters, reverse, sortKey} = getFiltersFromParam(searchParams);
+
+  for (const section of sections || []) {
+    if (section._type === 'collectionProductGridSection') {
+      const paginationVariables = getPaginationVariables(request, {
+        pageBy: section.productsPerPage || 8,
+      });
+
+      promise = storefront.query(COLLECTION_PRODUCT_GRID_QUERY, {
+        variables: {
+          ...paginationVariables,
+          country: storefront.i18n.country,
+          filters,
+          id: collectionId,
+          language: storefront.i18n.language,
+          reverse,
+          sortKey,
         },
       });
     }

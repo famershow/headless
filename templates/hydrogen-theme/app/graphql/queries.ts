@@ -186,13 +186,6 @@ export const COLLECTION_QUERY = `#graphql
     $handle: String!
     $country: CountryCode
     $language: LanguageCode
-    $filters: [ProductFilter!]
-    $sortKey: ProductCollectionSortKeys!
-    $reverse: Boolean
-    $first: Int
-    $last: Int
-    $startCursor: String
-    $endCursor: String
   ) @inContext(country: $country, language: $language) {
     collection(handle: $handle) {
       id
@@ -206,6 +199,26 @@ export const COLLECTION_QUERY = `#graphql
         height
         altText
       }
+    }
+  }
+` as const;
+
+export const COLLECTION_PRODUCT_GRID_QUERY = `#graphql
+  query CollectionProductGrid(
+    $id: ID!
+    $country: CountryCode
+    $language: LanguageCode
+    $filters: [ProductFilter!]
+    $sortKey: ProductCollectionSortKeys!
+    $reverse: Boolean
+    $first: Int
+    $last: Int
+    $startCursor: String
+    $endCursor: String
+  ) @inContext(country: $country, language: $language) {
+    collection(id: $id) {
+      id
+      handle
       products(
         first: $first,
         last: $last,
@@ -234,14 +247,6 @@ export const COLLECTION_QUERY = `#graphql
           hasNextPage
           endCursor
           startCursor
-        }
-      }
-    }
-    collections(first: 100) {
-      edges {
-        node {
-          title
-          handle
         }
       }
     }

@@ -35,6 +35,7 @@ export async function loader({context, params, request}: LoaderFunctionArgs) {
     featuredProductPromise,
   } = resolveShopifyPromises({
     document: page,
+    request,
     storefront,
   });
 

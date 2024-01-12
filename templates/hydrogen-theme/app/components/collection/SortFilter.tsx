@@ -46,17 +46,11 @@ export type SortParam =
 type Props = {
   appliedFilters?: AppliedFilter[];
   children: React.ReactNode;
-  collections?: Array<{handle: string; title: string}>;
   filters: Filter[];
 };
 export const FILTER_URL_PREFIX = 'filter.';
 
-export function SortFilter({
-  appliedFilters = [],
-  children,
-  collections = [],
-  filters,
-}: Props) {
+export function SortFilter({appliedFilters = [], children, filters}: Props) {
   const [isOpen, setIsOpen] = useState(false);
   return (
     <>
@@ -71,7 +65,7 @@ export function SortFilter({
         </button>
         <SortMenu />
       </div>
-      <div className="flex flex-col flex-wrap md:flex-row">
+      <div className="flex flex-row flex-wrap">
         <div
           className={`transition-all duration-200 ${
             isOpen

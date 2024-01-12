@@ -71,6 +71,7 @@ export async function loader({context, params, request}: LoaderFunctionArgs) {
     relatedProductsPromise,
   } = resolveShopifyPromises({
     document: cmsProduct,
+    request,
     storefront,
   });
 
@@ -92,10 +93,8 @@ export async function loader({context, params, request}: LoaderFunctionArgs) {
 
 export default function Product() {
   const {cmsProduct} = useLoaderData<typeof loader>();
-  const {data: rootData} = useSanityRoot();
   const {data, encodeDataAttribute} = useSanityData(cmsProduct);
-
-  const template = data?.template || rootData?.defaultProductTemplate;
+  const template = data?.product?.template || data?.defaultProductTemplate;
 
   return template?.sections && template.sections.length > 0
     ? template.sections.map((section) => (

@@ -23,6 +23,10 @@ export default defineType({
         ),
       initialValue: false,
     }),
+    defineField({
+      name: 'sections',
+      type: 'collectionSections',
+    }),
   ],
   preview: {
     select: {
