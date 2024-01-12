@@ -23,15 +23,19 @@ const buttonVariants = cva(
       },
       variant: {
         default:
-          'bg-color-scheme-primary-button-bg text-color-scheme-primary-button-label ring-color-scheme-primary-button-bg hover:bg-color-scheme-primary-button-bg/90',
-        destructive: 'bg-red-800 text-white hover:bg-red-800/90',
+          'border border-color-scheme-primary-button-bg bg-color-scheme-primary-button-bg text-color-scheme-primary-button-label ring-color-scheme-primary-button-bg hover:bg-color-scheme-primary-button-bg/90 hover:border-color-scheme-primary-button-bg/90',
+        destructive:
+          'border border-red-800 bg-red-800 text-white hover:bg-red-800/90',
         ghost:
           'hover:bg-color-scheme-primary-button-bg hover:text-color-scheme-primary-button-label',
         link: 'text-color-scheme-primary-button-bg underline-offset-4 hover:underline',
         outline:
           'border border-color-scheme-outline-button ring-color-scheme-outline-button bg-color-scheme-bg text-color-scheme-outline-button hover:bg-color-scheme-outline-button hover:text-color-scheme-bg',
         primitive: '',
-        secondary: 'inverted-color-scheme hover:bg-color-scheme-text/90',
+        secondary:
+          'border border-color-scheme-text inverted-color-scheme ring-color-scheme-text hover:bg-color-scheme-text/90 hover:border-color-scheme-text/90',
+        secondaryOutline:
+          'border border-color-scheme-text ring-color-scheme-text bg-color-scheme-bg text-color-scheme-text hover:bg-color-scheme-text hover:text-color-scheme-bg',
       },
     },
   },

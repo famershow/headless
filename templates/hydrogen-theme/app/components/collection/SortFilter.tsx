@@ -30,6 +30,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '../ui/DropdownMenu';
+import {Input} from '../ui/Input';
 
 export type AppliedFilter = {
   filter: ProductFilter;
@@ -269,8 +270,7 @@ function PriceRangeFilter({max, min}: {max?: number; min?: number}) {
     <div className="flex flex-col">
       <label className="mb-4">
         <span>from</span>
-        <input
-          className="text-black"
+        <Input
           name="minPrice"
           onChange={onChangeMin}
           placeholder={'$'}
@@ -280,8 +280,7 @@ function PriceRangeFilter({max, min}: {max?: number; min?: number}) {
       </label>
       <label>
         <span>to</span>
-        <input
-          className="text-black"
+        <Input
           name="maxPrice"
           onChange={onChangeMax}
           placeholder={'$'}
