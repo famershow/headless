@@ -91,11 +91,11 @@ export function CartLineItem({
             {merchandise.image && (
               <Image
                 alt={merchandise.title}
-                className="size-24 rounded border object-cover object-center md:size-28"
+                aspectRatio="1/1"
+                className="size-24 rounded border object-cover object-center"
                 data={merchandise.image}
-                height={110}
-                sizes="110px"
-                width={110}
+                loading="eager"
+                sizes="96px"
               />
             )}
           </div>
