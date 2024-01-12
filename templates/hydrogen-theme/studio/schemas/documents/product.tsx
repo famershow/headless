@@ -40,10 +40,13 @@ export default defineType({
         return !parent?.store || (isActive && !isDeleted);
       },
     }),
-    // Sections
+    // Template
     defineField({
-      name: 'sections',
-      type: 'productSections',
+      name: 'template',
+      description:
+        'Select a template to use for this product. If no template is selected, the default template will be used.',
+      type: 'reference',
+      to: [{type: 'productTemplate'}],
       group: 'editorial',
     }),
     // Title (proxy)

@@ -1,10 +1,11 @@
 import {DefaultDocumentNodeResolver, StructureResolver} from 'sanity/structure';
 
 import {SINGLETONS, singleton} from './singletons';
-import {IconPage} from '../components/icons/Page';
+
 import {IconBlog} from '../components/icons/Blog';
 import {products} from './productStructure';
 import {collections} from './collectionStructure';
+import {LayoutTemplate, PanelsTopLeft} from 'lucide-react';
 
 export const defaultDocumentNode: DefaultDocumentNodeResolver = (S) => {
   return S.document().views([S.view.form()]);
@@ -15,7 +16,7 @@ export const structure: StructureResolver = (S, context) => {
     .title('Content')
     .items([
       singleton(S, SINGLETONS.home),
-      S.documentTypeListItem('page').icon(IconPage),
+      S.documentTypeListItem('page').icon(PanelsTopLeft),
       products(S, context),
       collections(S, context),
       S.documentTypeListItem('blogPost').icon(IconBlog),
@@ -24,6 +25,23 @@ export const structure: StructureResolver = (S, context) => {
       singleton(S, SINGLETONS.footer),
       S.divider(),
       singleton(S, SINGLETONS.settings),
+      S.listItem()
+        .title('Templates')
+        .icon(LayoutTemplate)
+        .child(
+          S.list()
+            .title('Templates')
+            .items([
+              S.listItem()
+                .title('Products')
+                .icon(false)
+                .child(S.documentTypeList('productTemplate')),
+              S.listItem()
+                .title('Collections')
+                .icon(false)
+                .child(S.documentTypeList('collectionTemplate')),
+            ]),
+        ),
       S.documentTypeListItem('colorScheme').showIcon(true),
       singleton(S, SINGLETONS.typography),
       singleton(S, SINGLETONS.themeContent),

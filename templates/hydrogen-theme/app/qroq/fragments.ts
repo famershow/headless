@@ -85,7 +85,6 @@ export const COLOR_SCHEME_FRAGMENT = {
 |--------------------------------------------------------------------------
 */
 export const SETTINGS_FRAGMENT = {
-  colorScheme: q('colorScheme').deref().grab(COLOR_SCHEME_FRAGMENT),
   favicon: q('favicon').grab(IMAGE_FRAGMENT).nullable(),
   logo: q('logo').grab(IMAGE_FRAGMENT).nullable(),
   socialMedia: q('socialMedia').grab({

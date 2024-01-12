@@ -23,8 +23,6 @@ import type {HydrogenSession} from './lib/hydrogen.session.server';
 import favicon from '../public/favicon.svg';
 import {Fonts} from './components/Fonts';
 import {useLocale} from './hooks/useLocale';
-import {useSanityRoot} from './hooks/useSanityRoot';
-import {useSanityThemeContent} from './hooks/useSanityThemeContent';
 import {useSettingsCssVars} from './hooks/useSettingsCssVars';
 import {generateFontsPreloadLinks} from './lib/fonts';
 import {sanityPreviewPayload} from './lib/sanity/sanity.payload.server';
@@ -141,10 +139,7 @@ export async function loader({context}: LoaderFunctionArgs) {
 export default function App() {
   const nonce = useNonce();
   const locale = useLocale();
-  const themeSettings = useSanityRoot()?.data?.settings;
-  const cssVars = useSettingsCssVars({
-    settings: themeSettings,
-  });
+  const cssVars = useSettingsCssVars({});
 
   return (
     <html lang={locale?.language}>

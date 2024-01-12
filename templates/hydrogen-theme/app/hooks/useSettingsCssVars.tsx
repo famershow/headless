@@ -53,10 +53,8 @@ const fallbackScheme = {
   },
 };
 
-export function useSettingsCssVars({
-  settings,
-}: {
-  settings?: CmsSectionSettings | HeaderQuery | SettingsQuery;
+export function useSettingsCssVars(props: {
+  settings?: CmsSectionSettings | HeaderQuery;
 }): CSSProperties & {
   '--backgroundColor'?: string;
   '--outlineButton'?: string;
@@ -66,6 +64,7 @@ export function useSettingsCssVars({
   '--primaryButtonLabel'?: string;
   '--textColor'?: string;
 } {
+  const {settings} = props;
   const sanityRoot = useSanityRoot();
   const defaultColorScheme = sanityRoot?.data?.defaultColorScheme;
 

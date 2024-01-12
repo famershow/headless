@@ -62,10 +62,13 @@ export default defineType({
       type: 'proxyString',
       options: {field: 'store.slug.current'},
     }),
-    // Sections
+    // Template
     defineField({
-      name: 'sections',
-      type: 'sections',
+      name: 'template',
+      description:
+        'Select a template to use for this collection. If no template is selected, the default template will be used.',
+      type: 'reference',
+      to: [{type: 'collectionTemplate'}],
       group: 'editorial',
     }),
     // Vector

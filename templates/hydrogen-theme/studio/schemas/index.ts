@@ -38,9 +38,20 @@ import relatedProductsSection from './objects/sections/relatedProductsSection';
 import carouselSection from './objects/sections/carouselSection';
 import richtextSection from './objects/sections/richtextSection';
 import richtext from './objects/global/richtext';
+import productTemplate from './documents/productTemplate';
+import collectionTemplate from './documents/collectionTemplate';
 
 const singletons = [home, header, footer, settings, themeContent];
-const documents = [page, color, collection, product, blogPost, productVariant];
+const documents = [
+  page,
+  color,
+  collection,
+  product,
+  productTemplate,
+  collectionTemplate,
+  blogPost,
+  productVariant,
+];
 const sections = [
   imageBannerSection,
   featuredCollection,
